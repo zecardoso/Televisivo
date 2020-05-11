@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Detalhes do usuário</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Detalhes</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/usuario/lista}">Pesquisar usuário</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:object="${usuario}" th:text="*{nome} + ' ' + *{sobrenome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${usuario}">
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Nome</label>
+								<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Username</label>
+								<h4 th:text="*{username}"></h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Email</label>
+								<h4 th:text="*{email}"></h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Gênero</label>
+								<h4 th:text="*{genero.descricao}"></h4>
+							</div>
+						</div>
+                        <fieldset>
+							<div class="row">
+								<div class="col-md-1 mb-3">
+									<div class="make-switch switch-large">
+										<label class="control-label">Situação</label>
+										<input disabled type="checkbox" class="form-control js-status" data-off-color="danger" data-on-text="Ativo" data-off-text="Inativo" id="ativo" name="ativo" th:field="*{ativo}">
+                                    </div>
+								</div>
+							</div>
+							<label class="control-label">Roles</label>
+							<th:block th:each="role : ${roles}">
+								<div class="row">
+                                	<div class="col-md-1 mb-3">
+										<label th:text="${role.nome}"></label>
+										<div class="make-switch switch-large">
+											<input disabled type="checkbox" th:value="${role.id}" th:field="*{roles}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+										</div>
+									</div>
+								</div>
+							</th:block>
+                        </fieldset>
+                        <div class="tile-footer">
+							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/usuario/alterar/{id}(id=${usuario.id})}" aria-hidden="true" role="button"></a>
+							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/usuario/remover/{id}(id=${usuario.id})}" aria-hidden="true" role="button"></a>
+							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/usuario/lista}" aria-hidden="true" role="button"></a>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</section>
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script>
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
+</body>
+</html>

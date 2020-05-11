@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Detalhes do artista</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Detalhes</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/artista/lista}">Pesquisar artista</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:object="${artista}" th:text="*{nome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${artista}">
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Nome</label>
+								<h4 th:text="*{nome}"></h4>
+							</div>
+						</div>
+                        <div class="tile-footer">
+							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/artista/alterar/{id}(id=${artista.id})}" aria-hidden="true" artista="button"></a>
+							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/artista/remover/{id}(id=${artista.id})}" aria-hidden="true" artista="button"></a>
+							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/artista/lista}" aria-hidden="true" artista="button"></a>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</section>
+</body>
+</html>

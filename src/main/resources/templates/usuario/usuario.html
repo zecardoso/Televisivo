@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title th:text="*{usuario.id == null} ? 'Registrar usuário' : 'Alterar usuário'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/usuario/lista}">Pesquisar usuário</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:text="*{usuario.id == null} ? 'Novo usuário' : *{usuario.nome} + ' ' + *{usuario.sobrenome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${usuario}" th:action="${usuario.id == null} ? @{/usuario/adicionar} : @{/usuario/alterar}" method="post" autocomplete="off">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/validation :: validation"></div>
+								<div th:replace="fragments/alert"></div>
+							</div>
+                        </div>
+						<input type="hidden" th:field="*{id}">
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="nome">Nome</label>
+								<Input class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{nome}"></span>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="sobrenome">Sobrenome</label>
+								<Input class="form-control" type="text" placeholder="Sobrenome" required th:field="*{sobrenome}" id="sobrenome" name="sobrenome" th:classappend="${#fields.hasErrors('sobrenome')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{sobrenome}"></span>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="username">Username</label>
+								<div class="input-group">
+							        <div class="input-group-prepend">
+							          	<span class="input-group-text" id="input_username">@</span>
+							        </div>
+									<Input class="form-control" type="text" placeholder="Username" aria-describedby="input_username" required th:field="*{username}" id="username" name="username" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+							    </div>
+								<div class="invalid-feedback">
+									<span th:errors="*{username}"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="email">Email</label>
+								<Input class="form-control" type="email" placeholder="E-mail" required th:field="*{email}" id="email" name="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{email}"></span>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label>Gênero</label>
+								<select class="form-control" required th:field="*{genero}" id="genero" name="genero">
+									<option value="">Selecione uma opção</option>
+									<option th:each="genero : ${generos}" th:value="${genero}" th:text="${genero.descricao}" th:classappend="${#fields.hasErrors('genero')} ? 'is-invalid'"></option>
+								</select>
+								<div class="invalid-feedback">
+									<span th:errors="*{genero}"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="senha">Senha</label>
+								<Input class="form-control" type="password" placeholder="Senha" required th:field="*{password}" id="password" name="senha" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{password}"></span>
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="contraSenha">Confirmar senha</label>
+								<Input class="form-control" type="password" placeholder="Confirme a senha" required th:field="*{contraSenha}" id="contraSenha" name="contraSenha" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{contraSenha}"></span>
+								</div>
+							</div>
+                        </div>
+                        <fieldset>
+							<div class="row">
+								<div class="col-md-1 mb-3">
+									<div class="make-switch switch-large">
+										<label class="control-label">Situação</label>
+										<input type="checkbox" class="form-control js-status" data-off-color="danger" data-on-text="Ativo" data-off-text="Inativo" id="ativo" name="ativo" th:field="*{ativo}">
+                                    </div>
+								</div>
+							</div>
+							<label class="control-label">Roles</label>
+							<th:block th:each="role : ${roles}">
+								<div class="row">
+                                	<div class="col-md-1 mb-3">
+										<label th:text="${role.nome}"></label>
+										<div class="make-switch switch-large">
+											<input type="checkbox" th:value="${role.id}" th:field="*{roles}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+										</div>
+									</div>
+								</div>
+							</th:block>
+                        </fieldset>
+                        <div class="tile-footer">
+							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script>
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
+</body>
+</html>

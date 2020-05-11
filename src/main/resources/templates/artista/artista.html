@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title th:text="*{artista.id == null} ? 'Registrar artista' : 'Alterar artista'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/artista/lista}">Pesquisar artista</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:text="*{artista.id == null} ? 'Novo artista' : *{artista.nome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${artista}" th:action="${artista.id == null} ? @{/artista/adicionar} : @{/artista/alterar}" method="post" autocomplete="off">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/validation :: validation"></div>
+								<div th:replace="fragments/alert"></div>
+							</div>
+                        </div>
+						<input type="hidden" th:field="*{id}">
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="nome">Nome</label>
+								<Input class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{nome}"></span>
+								</div>
+							</div>
+						</div>
+                        <div class="tile-footer">
+							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

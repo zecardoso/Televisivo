@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Lista de usuários</title>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Lista</h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/direitos/lista}">Pesquisar usuário</a></li>
+            </ul>
+		</div>
+		<div class="container">
+			<div class="tile">
+                <div class="tile-body">
+					<form class="form-inline" method="GET" th:object="${rolePermissaoFilter}">
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label">Grupo</label>
+								<input type="text" class="form-control" id="nome" name="nome" th:field="*{roleNome}" placeholder="Digite o nome do grupo para pesquisa">
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label">Permissão</label>
+								<input type="text" class="form-control" id="permissao" name="permissao" th:field="*{permissaoNome}" placeholder="Digite o nome da permissão para pesquisa">
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-4">
+							<div class="form-group">
+								<label class="control-label">Escopo</label>
+								<input type="text" class="form-control" id="escopo" name="escopo" th:field="*{escopoNome}" placeholder="Digite o nome do escopo para pesquisa">
+							</div>
+						</div>
+						<div class="col-md-1">
+							<button type="submit" class="btn btn-sm btn-primary">Pesquisar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+        <div class="container">
+			<div class="tile">
+                <div class="tile-body">
+					<div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/alert"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered table-hover" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+									<thead>
+										<tr>
+											<th scope="col">Username</th>
+											<th scope="col">Name</th>
+											<th scope="col" style="text-align: center;">Detalhes</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="rolePermissao :${lista}">
+											<td data-tile="Grupo" th:text="*{rolePermissao.role.nome}"></td>
+											<td data-tile="Permissão" th:text="*{rolePermissao.permissao.nome}"></td>
+											<td data-tile="Detalhes" style="text-align: center;">
+												<a title="Detalhes" th:href="@{/direitos/excluir/{role_id/permissao_id/escopo_id}(role_id=${rolePermissao.role.id}, permissao_id=${rolePermissao.permissao.id}, escopo_id=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm btn-block"><i class="fa fa-trash-plus"></i>Detalhes</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<!-- <div th:replace="fragments/pagination :: pagination"></div> -->
+								<a title="Adicionar" class="btn btn-success" th:href="@{/direitos/adicionar}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+	</section>
+	<th:block layout:fragment="javascript-extra">
+		<script>
+			$(document).ready(function(){
+				changePageAndSize();
+			});
+			
+			function changePageAndSize(){
+				$('#pageSizeSelect').change(function(e){
+					window.location.replace("/usuario/lista?size="+this.value+"&page=0");
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title th:text="*{rolePermissao.id == null} ? 'Registrar direitos' : 'Alterar direitos'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/direitos/lista}">Pesquisar direitos</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:text="*{rolePermissao.id == null} ? 'Novos direitos' : *{rolePermissao.nome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${rolePermissao}" th:action="${rolePermissao.id == null} ? @{/direitos/adicionar} : @{/direitos/alterar}" method="post" autocomplete="off">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/validation :: validation"></div>
+								<div th:replace="fragments/alert"></div>
+							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <label for="roleid" class="control-label">Grupo</label>
+                                    <select class="form-control" required th:field="*{role}" id="roleid" name="roleid">
+                                        <option value="">Selecione uma opção</option>
+                                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.nome}" th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <span th:errors="*{role}"></span>
+                                    </div>
+                                </div>
+							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <label for="permissaoid" class="control-label">Grupo</label>
+                                    <select class="form-control" required th:field="*{permissao}" id="permissaoid" name="permissaoid">
+                                        <option value="">Selecione uma opção</option>
+                                        <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" th:classappend="${#fields.hasErrors('permissao')} ? 'is-invalid'"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <span th:errors="*{permissao}"></span>
+                                    </div>
+                                </div>
+							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <label for="escopoid" class="control-label">Grupo</label>
+                                    <select class="form-control" required th:field="*{escopo}" id="escopoid" name="escopoid">
+                                        <option value="">Selecione uma opção</option>
+                                        <option th:each="escopo : ${escopos}" th:value="${escopo.id}" th:text="${escopo.nome}" th:classappend="${#fields.hasErrors('escopo')} ? 'is-invalid'"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <span th:errors="*{escopo}"></span>
+                                    </div>
+                                </div>
+							</div>
+                        </div>
+                        <div class="tile-footer">
+							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
