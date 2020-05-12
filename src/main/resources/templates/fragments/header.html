@@ -2,12 +2,6 @@
     <a class="app-header__logo" th:href="@{/}">Televisivo</a>
     <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
     <div class="app-nav">
-        <div class="dropdown">
-            <div class="dropdown-menu settings-menu dropdown-menu-right">
-                <div>
-                    <a class="dropdown-item" th:href="@{/logout}"><i class="fa fa-sign-out fa-lg"></i>Sair</a>
-                </div>
-            </div>
-        </div>
+        <a style="float: right; padding: 15px; color: #212529; text-decoration: none;" th:href="@{/logout}"><i class="fa fa-sign-out fa-lg"></i>Sair</a>
     </div>
 </header>
