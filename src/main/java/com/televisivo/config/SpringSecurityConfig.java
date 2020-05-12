@@ -50,11 +50,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .failureUrl("/login?error=true")
             .permitAll();
         http.logout()
-            .logoutSuccessUrl("/login")
+            .logoutSuccessUrl("/login?logout=true")
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
-            .clearAuthentication(true);
+            .clearAuthentication(true)
+            .permitAll();
         http.csrf().disable();
     }
     

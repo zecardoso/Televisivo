@@ -16,14 +16,19 @@ public class HomeController {
     }
 
     @GetMapping(value = {"/", "/login"})
-    public String loginPage(@AuthenticationPrincipal User user, @RequestParam(value = "error", required = false) String error, Model model) {
+    public String loginPage(@AuthenticationPrincipal User user, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout, Model model) {
         if (user != null) {
             return "redirect:/home";
         }
 
         if (error != null) {
-            model.addAttribute(error, true);
+            model.addAttribute("acao", true);
             model.addAttribute("mensagem", "Usuário inválido, ou senha errada!");
+        }
+
+        if (logout != null) {
+            model.addAttribute("acao", true);
+            model.addAttribute("mensagem", "Logout realizao com sucesso!");
         }
 
         return "login";
