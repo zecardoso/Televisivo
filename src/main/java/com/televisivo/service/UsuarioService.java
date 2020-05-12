@@ -19,6 +19,7 @@ public interface UsuarioService {
     List<Usuario> listar();
     Optional<Usuario> buscarEmail(String email);
     Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFiltro, Pageable pageable);
+    Optional<Usuario> loginUsuarioByEmail(String email);
     
     // void salvarCategoria(Usuario usuario);
     // Usuario adicionarCategoria(Usuario usuario);

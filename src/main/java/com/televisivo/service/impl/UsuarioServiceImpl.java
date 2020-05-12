@@ -103,4 +103,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFilter, Pageable pageable) {
         return usuarioRepository.listaComPaginacao(usuarioFilter, pageable);
     }
+
+    @Override
+    public Optional<Usuario> loginUsuarioByEmail(String email) {
+        return usuarioRepository.loginUsuarioByEmail(email);
+    }
 }

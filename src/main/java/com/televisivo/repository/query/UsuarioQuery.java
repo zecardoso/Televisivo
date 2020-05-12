@@ -11,5 +11,8 @@ import org.springframework.data.domain.Pageable;
 public interface UsuarioQuery {
 
     Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFilter, Pageable pageable);
+    
     Optional<Usuario> buscarAtivoPorEmail(String email);
+
+    Optional<Usuario> loginUsuarioByEmail(String email);    
 }
