@@ -15,4 +15,8 @@ public class UsuarioSistema extends User {
         super(usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), usuario.isAccountNonExpired(), usuario.isCredentialsNonExpired(), usuario.isAccountNonLocked(), usuario.getAuthorities());
         this.usuario = usuario;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
 }
