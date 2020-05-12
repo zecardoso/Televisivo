@@ -126,24 +126,24 @@ public class Usuario implements UserDetails, Serializable {
     @Override
     @Transient
     public boolean isAccountNonExpired() {
-        return false;
+        return ativo;
     }
 
     @Override
     @Transient
     public boolean isAccountNonLocked() {
-        return false;
+        return ativo;
     }
 
     @Override
     @Transient
     public boolean isCredentialsNonExpired() {
-        return false;
+        return ativo;
     }
 
     @Override
     @Transient
     public boolean isEnabled() {
-        return false;
+        return ativo;
     }
 }
