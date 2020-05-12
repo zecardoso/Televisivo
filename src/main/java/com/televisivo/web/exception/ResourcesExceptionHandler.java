@@ -1,4 +1,4 @@
-package com.televisivo.web;
+package com.televisivo.web.exception;
 
 import com.televisivo.security.UsuarioSistema;
 
