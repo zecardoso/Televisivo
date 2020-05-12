@@ -24,7 +24,7 @@ public class HomeController {
         } else if (logout != null) {
             model.addAttribute("mensagem", "Logout realizao com sucesso!");
         } else {
-            model.addAttribute("mensagem", "Sessão expirada, faça o login novamente!")
+            model.addAttribute("mensagem", "Sessão expirada, faça o login novamente!");
         }
         model.addAttribute("acao", true);
         return "login";
