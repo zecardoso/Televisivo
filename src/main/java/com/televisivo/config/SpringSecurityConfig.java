@@ -49,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login/**").permitAll() // tirar
             .antMatchers("/roles/**").permitAll() // tirar
             .antMatchers("/usuarios/**").permitAll() // .hasAnyRole("ADMINISTRADOR", "USUARIO")
+            .antMatchers("/usuario/**").hasRole("ADMINISTRADOR")
             .anyRequest().authenticated();
         http.formLogin()
             .loginPage("/login")
@@ -66,13 +67,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .clearAuthentication(true)
             .permitAll();
         http.sessionManagement()
-            .invalidSessionUrl("/login")
+            .invalidSessionUrl("/?expirado=true")
             .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             .maximumSessions(1)
             .sessionRegistry(SessionRegistry())
             .and()
             .sessionFixation()
             .none();
+        http.exceptionHandling()
+            .accessDeniedPage("/403");
         http.csrf().disable();
     }
 

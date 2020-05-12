@@ -29,4 +29,9 @@ public class HomeController {
         model.addAttribute("acao", true);
         return "login";
     }
+
+    @GetMapping("/403")
+    public String accessDaniedHandler() {
+        return "403";
+    }
 }
