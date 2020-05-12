@@ -76,6 +76,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
     }
 
+    @Bean
     public SessionRegistry SessionRegistry() {
         return new SessionRegistryImpl();
     }
