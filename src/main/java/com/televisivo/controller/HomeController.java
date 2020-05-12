@@ -19,18 +19,14 @@ public class HomeController {
     public String loginPage(@AuthenticationPrincipal User user, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout, Model model) {
         if (user != null) {
             return "redirect:/home";
-        }
-
-        if (error != null) {
-            model.addAttribute("acao", true);
+        } else if (error != null) {
             model.addAttribute("mensagem", "Usuário inválido, ou senha errada!");
-        }
-
-        if (logout != null) {
-            model.addAttribute("acao", true);
+        } else if (logout != null) {
             model.addAttribute("mensagem", "Logout realizao com sucesso!");
+        } else {
+            model.addAttribute("mensagem", "Sessão expirada, faça o login novamente!")
         }
-
+        model.addAttribute("acao", true);
         return "login";
     }
 }

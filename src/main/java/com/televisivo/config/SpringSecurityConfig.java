@@ -1,5 +1,7 @@
 package com.televisivo.config;
 
+import com.televisivo.security.LoginSucessHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +24,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private LoginSucessHandler loginSucessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
@@ -46,7 +54,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login")
             .usernameParameter("email")
             .passwordParameter("senha")
-            .defaultSuccessUrl("/home", true)
+            // .defaultSuccessUrl("/home", true)
+            .successHandler(loginSucessHandler)
             .failureUrl("/login?error=true")
             .permitAll();
         http.logout()
@@ -56,7 +65,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .invalidateHttpSession(true)
             .clearAuthentication(true)
             .permitAll();
+        http.sessionManagement()
+            .invalidSessionUrl("/login")
+            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+            .maximumSessions(1)
+            .sessionRegistry(SessionRegistry())
+            .and()
+            .sessionFixation()
+            .none();
         http.csrf().disable();
+    }
+
+    public SessionRegistry SessionRegistry() {
+        return new SessionRegistryImpl();
     }
     
     @Override
