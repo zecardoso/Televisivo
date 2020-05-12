@@ -47,7 +47,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .usernameParameter("email")
             .passwordParameter("senha")
             .defaultSuccessUrl("/home", true)
-            .failureUrl("/login")
+            .failureUrl("/login?error=true")
             .permitAll();
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
         http.csrf().disable();
