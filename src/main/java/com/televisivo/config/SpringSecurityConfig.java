@@ -32,8 +32,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
         // String senha = passwordEncoder().encode("123456");
 		// System.out.println("senha: [" + senha + "]");
-		authentication.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 		// authentication.inMemoryAuthentication().withUser("admin").password(senha).roles("USUARIO");
+		authentication.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
 	@Override
@@ -49,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login/**").permitAll() // tirar
             .antMatchers("/roles/**").permitAll() // tirar
             .antMatchers("/usuarios/**").permitAll() // .hasAnyRole("ADMINISTRADOR", "USUARIO")
-            .antMatchers("/usuario/**").hasRole("ADMINISTRADOR")
+            // .antMatchers("/usuario/**").hasRole("ADMINISTRADOR")
             .anyRequest().authenticated();
         http.formLogin()
             .loginPage("/login")
@@ -76,7 +76,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .none();
         http.exceptionHandling()
             .accessDeniedPage("/403");
-        http.csrf().disable();
+        // http.csrf().disable();
     }
 
     @Bean

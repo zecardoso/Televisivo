@@ -40,8 +40,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Secured("hasRole('ROLE_ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('CADASTRO_USUARIO', 'ESCRITA')")
+    // @Secured("hasRole('ROLE_ADMINISTRADOR')")
+    // @PreAuthorize("hasPermission('CADASTRO_USUARIO', 'ESCRITA')")
     @Override
     public Usuario adicionar(Usuario usuario) {
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {

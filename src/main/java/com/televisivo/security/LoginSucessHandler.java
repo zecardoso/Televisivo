@@ -19,7 +19,7 @@ public class LoginSucessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        request.getSession().setMaxInactiveInterval(15);
+        request.getSession().setMaxInactiveInterval(60*60);
         RedirectStrategy.sendRedirect(request, response, "/home");
     }
 }

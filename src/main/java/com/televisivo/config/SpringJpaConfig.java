@@ -9,7 +9,6 @@ import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -43,17 +42,17 @@ public class SpringJpaConfig {
 
     @Bean
     public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource);
-        factoryBean.setPackagesToScan(Usuario.class.getPackage().getName());
-        factoryBean.setJpaVendorAdapter(JpaVendorAdapter());
-        factoryBean.setJpaProperties(JpaProperties());
-        factoryBean.afterPropertiesSet();
-        return factoryBean.getObject();
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setPackagesToScan(Usuario.class.getPackage().getName());
+        factory.setJpaVendorAdapter(jpaVendorAdapter());
+        factory.setJpaProperties(jpaProperties());
+        factory.afterPropertiesSet();
+        return factory.getObject();
     }
 
     @Bean
-    public JpaVendorAdapter JpaVendorAdapter() {
+    public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.MYSQL);
         adapter.setGenerateDdl(true);
@@ -67,7 +66,7 @@ public class SpringJpaConfig {
         return transactionManager;
     }
 
-    private Properties JpaProperties() {
+    private Properties jpaProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
         properties.setProperty("hibernate.dialect", environment.getProperty("spring.jpa.properties.hibernate.dialect"));
