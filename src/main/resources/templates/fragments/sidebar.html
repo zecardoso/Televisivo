@@ -6,6 +6,7 @@
             <div>
                 <p class="app-sidebar__user-name" th:text="${usuario_logado.getUsuario().getNome()} + ' ' + ${usuario_logado.getUsuario().getSobrenome()}"></p>
                 <p class="app-sidebar__user-designation">Java Developers</p>
+                <!-- <a th:href="@{/usuario/detalhes/{id}(id=${usuario_logado.getUsuario().getId()}"></a> -->
             </div>
         </div>
         <ul class="app-menu">
@@ -29,7 +30,7 @@
             </li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-key"></i><span class="app-menu__label">Alterar Senha</span><i class="treeview-indicator fa fa-angle-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a class="treeview-item" href="#"><i class="icon fa fa-circle-o"></i>Trocar Senha</a></li>
+                    <!-- <li><a class="treeview-item" th:href="@{/usuario/alterar/{id}(id=${usuario_logado.getUsuario().getId()}"><i class="icon fa fa-circle-o"></i>Trocar Senha</a></li> -->
                 </ul>
             </li>
             <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-file-text"></i><span class="app-menu__label">Pages</span><i class="treeview-indicator fa fa-angle-right"></i></a>
