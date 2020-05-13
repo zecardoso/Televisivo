@@ -1,24 +1,18 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html layout:decorate="~{layout}">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Home</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
-<body>
-    <section layout:fragment="corpo">
-		<div class="app-title">
-			<div>
-				<h1>
-					<i class="fa fa-dashboard"></i>Página Principal
-				</h1>
-			</div>
-			<ul class="app-breadcrumb breadcrumd">
-				<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-				<li class="breadcrumb-item"><a href="#">Página Principal</a></li>
-			</ul>
+<section layout:fragment="body">
+	<div class="app-title">
+		<div>
+			<h1>
+				</i>Página Principal
+			</h1>
 		</div>
-	</section>
-</body>
+		<ul class="app-breadcrumb breadcrumd">
+			<li class="breadcrumb-item"><a href="#">Página Principal</a></li>
+		</ul>
+	</div>
+</section>
 </html>

@@ -1,35 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html layout:decorate="~{layout}">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/css/font-awesome.min.css}"/>
+    <title>Error 403</title>
 </head>
-<body class="app sidebar-mini rtl sidenav-toggled">
-	<header class="app-header">
-        <a class="app-header__logo"></a>
-        <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
-    </header>
-	<div class="app-content">
-        <div class="h3 mb-3 font-weight-normal">
-            <h1>
-                <i class="fa fa-exclamation-triangle"></i>
-                <span>
-                    <p>Desculpe, voce nao esta autorizado a acessar a pagina que solicitou.</p>
-                    <p>Se voce acha que isso e um engano, entre em contato com o administrador.</p>
-                </span>
-            </h1>
-            <div>
-                <a href="javascript:history.back()">Voltar a pagina anterior</a>
-            </div>
-        </div>
+<section layout:fragment="body">
+    <div class="page-error tile">
+        <h1><i class="fa fa-exclamation-triangle"></i> Error 403: Sem permissão de acesso</h1>
+        <p>Você não está autorizado a acessar a página que solicitou.</p>
+        <p><a class="btn btn-primary" href="javascript:window.history.back();">Voltar a pagina anterior</a></p>
     </div>
-	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}"></script>
-	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/main.js}"></script>
-	<script type="text/javascript" th:src="@{/js/plugins/jquery.mask.min.js}"></script>
-	<th:block layout:fragment="javascript-extra"></th:block>
-</body>
+</section>
 </html>
