@@ -18,12 +18,16 @@ public class CustomPermission implements PermissionEvaluator {
     }
 
     @Override
-    public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
-        return false;
+    public boolean hasPermission(Authentication usuarioLogado, Object permissao, Object escopo) {
+        if (usuarioLogado == null || !usuarioLogado.isAuthenticated()) {
+            return false;
+        } else {
+            return permissionService.hasPermission(usuarioLogado, permissao, escopo);
+        }
     }
 
     @Override
-    public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
+    public boolean hasPermission(Authentication usuarioLogado, Serializable id, String permissao, Object escopo) {
         return false;
     }
 }
