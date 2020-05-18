@@ -6,12 +6,14 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.televisivo.model.Permission;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.Usuario_;
 import com.televisivo.repository.filters.UsuarioFilter;
@@ -100,9 +102,24 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
 		return query.setParameter("email", email).setParameter("ativo", ativo).setMaxResults(1).getResultList().stream().findFirst();
     }
 
+    // @Override
+    // public Usuario findRolePermissaoByUsuarioId(Long id) {
+    //     TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles r LEFT JOIN r.rolePermissoes rp LEFT JOIN rp.permissao LEFT JOIN rp.escopo WHERE u.id =:id", Usuario.class).setParameter("id", id);
+    //     return query.getSingleResult();
+    // }
+
     @Override
-    public Usuario findRolePermissaoByUsuarioId(Long id) {
-        TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles r LEFT JOIN r.rolePermissoes rp LEFT JOIN rp.permissao LEFT JOIN rp.escopo WHERE u.id =:id", Usuario.class).setParameter("id", id);
-        return query.getSingleResult();
+    public List<Permission> findRolePermissaoByUsuarioId(Long id) {
+        List<Permission> lista = new ArrayList<>();
+        Query query = entityManager.createNativeQuery("select role.nome r_nome, permissao.nome p_nome, escopo.nome e_nome from usuario inner join usuario_role on usuario_role.usuario_id = usuario.usuario_id inner join role on role.role_id = usuario_role.role_id inner join role_permissao on role_permissao.role_id = role.role_id inner join permissao on role_permissao.permissao_id = permissao.permissao_id inner join escopo on role_permissao.escopo_id = escopo.escopo_id where usuario.usuario_id =:id").setParameter("id", id);
+        List<Object[]> mylista = query.getResultList();
+        for (int i = 0; i < mylista.size(); i++) {
+            Permission permission = new Permission();
+            permission.setRole(mylista.get(i)[0].toString());
+            permission.setPermissao(mylista.get(i)[1].toString());
+            permission.setEscopo(mylista.get(i)[2].toString());
+            lista.add(permission);
+        }
+        return lista;
     }
 }

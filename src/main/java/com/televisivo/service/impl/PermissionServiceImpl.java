@@ -1,5 +1,8 @@
 package com.televisivo.service.impl;
 
+import java.util.List;
+
+import com.televisivo.model.Permission;
 import com.televisivo.model.Role;
 import com.televisivo.model.RolePermissao;
 import com.televisivo.model.Usuario;
@@ -24,25 +27,22 @@ public class PermissionServiceImpl implements PermissionService {
         boolean true_escopo = false;
 
         UsuarioSistema usuarioSistema = (UsuarioSistema) usuarioLogado.getPrincipal();
-        Usuario usuario = this.findRolePermissaoByUsuarioId(usuarioSistema.getUsuario().getId());
-        for (Role role : usuario.getRoles()) {
-            for (RolePermissao rolePermissao : role.getRolePermissoes()) {
-                true_permissao = permissao.equals(rolePermissao.getPermissao().getNome().toUpperCase()) ? true : false;
-                true_escopo = escopo.equals(rolePermissao.getEscopo().getNome().toUpperCase()) ? true : false;
-                if (true_permissao && true_escopo) {
-                    toReturn = true;
-                    break;
-                }
-            }
-            if (toReturn == true) {
+        List<Permission> lista = this.findRolePermissaoByUsuarioId(usuarioSistema.getUsuario().getId());
+        for (Permission p : lista) {
+            true_permissao = permissao.equals(p.getPermissao().toUpperCase()) ? true : false;
+            true_escopo = escopo.equals(p.getEscopo().toUpperCase()) ? true : false;
+            if (true_permissao == true && true_escopo == true) {
+                toReturn = true;
                 break;
             }
+            true_permissao = false;
+            true_escopo = false;
         }
         return toReturn;
     }
 
     @Override
-    public Usuario findRolePermissaoByUsuarioId(Long id) {
+    public List<Permission> findRolePermissaoByUsuarioId(Long id) {
         return usuarioRepository.findRolePermissaoByUsuarioId(id);
     }
 }

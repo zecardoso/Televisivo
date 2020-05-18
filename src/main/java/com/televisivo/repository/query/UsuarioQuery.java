@@ -1,7 +1,9 @@
 package com.televisivo.repository.query;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.televisivo.model.Permission;
 import com.televisivo.model.Usuario;
 import com.televisivo.repository.filters.UsuarioFilter;
 
@@ -16,5 +18,5 @@ public interface UsuarioQuery {
 
     Optional<Usuario> loginUsuarioByEmail(String email);
 
-    Usuario findRolePermissaoByUsuarioId(Long id);
+    List<Permission> findRolePermissaoByUsuarioId(Long id);
 }

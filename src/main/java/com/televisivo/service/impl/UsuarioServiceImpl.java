@@ -41,7 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private PasswordEncoder passwordEncoder;
 
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'ESCRITA')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'ESCRITA')")
     @Override
     public Usuario adicionar(Usuario usuario) {
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
@@ -61,7 +61,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'ESCRITA')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'ESCRITA')")
     public Usuario alterar(Usuario usuario) {
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
@@ -72,7 +72,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'EXCLUIR')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'EXCLUIR')")
     public void remover(Usuario usuario) {
         try {
             usuarioRepository.deleteById(usuario.getId());
@@ -84,7 +84,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional(readOnly = true)
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
     public Usuario buscarId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
@@ -92,14 +92,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional(readOnly = true)
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
     }
 
     @Override
     @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
+    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
     public List<Usuario> buscarNome(String nome) {
         return usuarioRepository.buscarNome(nome);
     }
