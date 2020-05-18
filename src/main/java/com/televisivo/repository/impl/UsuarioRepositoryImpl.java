@@ -99,4 +99,10 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
 		TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.email =:email AND u.ativo =:ativo", Usuario.class);
 		return query.setParameter("email", email).setParameter("ativo", ativo).setMaxResults(1).getResultList().stream().findFirst();
     }
+
+    @Override
+    public Usuario findRolePermissaoByUsuarioId(Long id) {
+        TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles r LEFT JOIN r.rolePermissoes rp LEFT JOIN rp.permissao LEFT JOIN rp.escopo WHERE u.id =:id", Usuario.class).setParameter("id", id);
+        return query.getSingleResult();
+    }
 }

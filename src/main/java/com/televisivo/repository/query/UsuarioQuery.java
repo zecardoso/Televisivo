@@ -14,5 +14,7 @@ public interface UsuarioQuery {
     
     Optional<Usuario> buscarAtivoPorEmail(String email);
 
-    Optional<Usuario> loginUsuarioByEmail(String email);    
+    Optional<Usuario> loginUsuarioByEmail(String email);
+
+    Usuario findRolePermissaoByUsuarioId(Long id);
 }

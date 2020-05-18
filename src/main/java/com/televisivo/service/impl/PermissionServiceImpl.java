@@ -3,12 +3,19 @@ package com.televisivo.service.impl;
 import com.televisivo.model.Role;
 import com.televisivo.model.RolePermissao;
 import com.televisivo.model.Usuario;
+import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.PermissionService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PermissionServiceImpl implements PermissionService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public boolean hasPermission(Authentication usuarioLogado, Object permissao, Object escopo) {
@@ -36,6 +43,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Usuario findRolePermissaoByUsuarioId(Long id) {
-        return null;
+        return usuarioRepository.findRolePermissaoByUsuarioId(id);
     }
 }

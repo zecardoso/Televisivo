@@ -40,8 +40,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // @Secured("hasRole('ROLE_ADMINISTRADOR')")
-    // @PreAuthorize("hasPermission('CADASTRO_USUARIO', 'ESCRITA')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'ESCRITA')")
     @Override
     public Usuario adicionar(Usuario usuario) {
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
@@ -60,6 +60,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'ESCRITA')")
     public Usuario alterar(Usuario usuario) {
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
@@ -69,6 +71,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'EXCLUIR')")
     public void remover(Usuario usuario) {
         try {
             usuarioRepository.deleteById(usuario.getId());
@@ -79,17 +83,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
     public Usuario buscarId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
     }
 
     @Override
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO', 'LEITURA')")
     public List<Usuario> buscarNome(String nome) {
         return usuarioRepository.buscarNome(nome);
     }
