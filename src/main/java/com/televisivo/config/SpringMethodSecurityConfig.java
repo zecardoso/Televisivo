@@ -1,7 +1,7 @@
 package com.televisivo.config;
 
-import com.televisivo.security.CustomPermissionEvaluator;
-import com.televisivo.service.UsuarioService;
+import com.televisivo.security.CustomPermission;
+import com.televisivo.service.PermissionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +17,13 @@ public class SpringMethodSecurityConfig extends GlobalMethodSecurityConfiguratio
 
     @Lazy
     @Autowired
-    private UsuarioService usuarioService;
+    private PermissionService permissionService;
 
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
-        CustomPermissionEvaluator customPermissionEvaluator = new CustomPermissionEvaluator(usuarioService);
+        CustomPermission customPermission = new CustomPermission(permissionService);
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(customPermissionEvaluator);
+        expressionHandler.setPermissionEvaluator(customPermission);
         return expressionHandler;
     }
 }
