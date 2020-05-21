@@ -8,13 +8,8 @@ import com.televisivo.repository.filters.CategoriaFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CategoriaService {
+public interface CategoriaService extends GenericService<Categoria, Long> {
 
-    Categoria adicionar(Categoria categoria);
-    Categoria alterar(Categoria categoria);
-    void remover(Categoria categoria);
-    Categoria buscarId(Long id);
     List<Categoria> buscarNome(String nome);
-    List<Categoria> listar();
     Page<Categoria> listaComPaginacao(CategoriaFilter categoriaFilter, Pageable pageable);
 }

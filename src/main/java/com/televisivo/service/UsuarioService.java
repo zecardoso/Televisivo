@@ -9,14 +9,9 @@ import com.televisivo.repository.filters.UsuarioFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface UsuarioService {
+public interface UsuarioService extends GenericService<Usuario, Long> {
 
-    Usuario adicionar(Usuario usuario);
-    Usuario alterar(Usuario usuario);
-    void remover(Usuario usuario);
-    Usuario buscarId(Long id);
     List<Usuario> buscarNome(String nome);
-    List<Usuario> listar();
     Optional<Usuario> buscarEmail(String email);
     Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFiltro, Pageable pageable);
     Optional<Usuario> loginUsuarioByEmail(String email);

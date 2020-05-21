@@ -6,8 +6,8 @@ import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
 import com.televisivo.service.EpisodioService;
-import com.televisivo.service.exceptions.NegocioException;
 import com.televisivo.service.exceptions.EpisodioNaoCadastradoException;
+import com.televisivo.service.exceptions.NegocioException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/episodios")
+@RequestMapping(value = "/api/episodio")
 public class EpisodioRestController {
 
     @Autowired
     private EpisodioService episodioService;
 
+    @GetMapping(value = "/listar")
+    public List<Episodio> listar() {
+        return episodioService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Episodio registrar(@RequestBody @Valid Episodio episodio) {
-        return episodioService.adicionar(episodio);
+        return episodioService.save(episodio);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Episodio> alterar(@PathVariable Long id, @RequestBody Episodio episodio) {
         try {
-            Episodio episodio2 = episodioService.buscarId(id);
+            Episodio episodio2 = episodioService.findById(id);
             if (episodio2 != null) {
                 BeanUtils.copyProperties(episodio, episodio2);
-                episodio2 = episodioService.alterar(episodio2);
+                episodio2 = episodioService.update(episodio2);
                 return ResponseEntity.ok(episodio2);
             }
         } catch (EpisodioNaoCadastradoException e) {
@@ -53,22 +58,16 @@ public class EpisodioRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Episodio episodio = episodioService.buscarId(id);
-        episodioService.remover(episodio);
+        episodioService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Episodio> buscar(@PathVariable Long id) {
-        Episodio episodio = episodioService.buscarId(id);
+        Episodio episodio = episodioService.findById(id);
         if (episodio != null) {
             return ResponseEntity.ok(episodio);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Episodio> listar() {
-        return episodioService.listar();
     }
 }

@@ -8,14 +8,9 @@ import com.televisivo.repository.filters.ArtistaFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ArtistaService {
+public interface ArtistaService extends GenericService<Artista, Long> {
 
-    Artista adicionar(Artista artista);
-    Artista alterar(Artista artista);
-    void remover(Artista artista);
-    Artista buscarId(Long id);
     List<Artista> buscarNome(String nome);
-    List<Artista> listar();
     Page<Artista> listaComPaginacao(ArtistaFilter artistaFilter, Pageable pageable);
 
     // void salvarCategoria(Artista artista);

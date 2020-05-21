@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +31,7 @@ public class PermissaoController {
     @Autowired
     private PermissaoService permissaoService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(PermissaoFilter permissaoFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Permissao> paginaWrapper = new PaginaWrapper(permissaoService.listaComPaginacao(permissaoFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -41,9 +42,33 @@ public class PermissaoController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Permissao permissao) {
         ModelAndView modelAndView = new ModelAndView("/permissao/permissao");
+        modelAndView.addObject("permissao", permissao);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/permissao/detalhes");
+        Permissao permissao = permissaoService.getOne(id);
+        modelAndView.addObject("permissao", permissao);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView buscar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/permissao/permissao");
+        Permissao permissao = permissaoService.getOne(id);
+        modelAndView.addObject("permissao", permissao);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/permissao/remover");
+        Permissao permissao = permissaoService.getOne(id);
         modelAndView.addObject("permissao", permissao);
         return modelAndView;
     }
@@ -53,7 +78,7 @@ public class PermissaoController {
         if (result.hasErrors()) {
             return cadastro(permissao);
         }
-        permissao = permissaoService.adicionar(permissao);
+        permissaoService.save(permissao);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/permissao/lista");
     }
@@ -63,41 +88,16 @@ public class PermissaoController {
         if (result.hasErrors()) {
             return cadastro(permissao);
         }
-        permissaoService.alterar(permissao);
+        permissaoService.update(permissao);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/permissao/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Permissao permissao, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(permissao);
-        }
-        permissaoService.remover(permissao);
+        permissaoService.deleteById(permissao.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/permissao/lista");
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Permissao permissao = permissaoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/permissao/detalhes");
-        modelAndView.addObject("permissao", permissao);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Permissao permissao = permissaoService.buscarId(id);
-        return cadastro(permissao);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Permissao permissao = permissaoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/permissao/remover");
-        modelAndView.addObject("permissao", permissao);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

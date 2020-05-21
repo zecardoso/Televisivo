@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/servicos")
+@RequestMapping(value = "/api/servico")
 public class ServicoRestController {
 
     @Autowired
     private ServicoService servicoService;
 
+    @GetMapping(value = "/listar")
+    public List<Servico> listar() {
+        return servicoService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Servico registrar(@RequestBody @Valid Servico servico) {
-        return servicoService.adicionar(servico);
+        return servicoService.save(servico);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Servico> alterar(@PathVariable Long id, @RequestBody Servico servico) {
         try {
-            Servico servico2 = servicoService.buscarId(id);
+            Servico servico2 = servicoService.findById(id);
             if (servico2 != null) {
                 BeanUtils.copyProperties(servico, servico2);
-                servico2 = servicoService.alterar(servico2);
+                servico2 = servicoService.update(servico2);
                 return ResponseEntity.ok(servico2);
             }
         } catch (ServicoNaoCadastradoException e) {
@@ -53,22 +58,16 @@ public class ServicoRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Servico servico = servicoService.buscarId(id);
-        servicoService.remover(servico);
+        servicoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Servico> buscar(@PathVariable Long id) {
-        Servico servico = servicoService.buscarId(id);
+        Servico servico = servicoService.findById(id);
         if (servico != null) {
             return ResponseEntity.ok(servico);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Servico> listar() {
-        return servicoService.listar();
     }
 }

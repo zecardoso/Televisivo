@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +31,7 @@ public class EscopoController {
     @Autowired
     private EscopoService escopoService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(EscopoFilter escopoFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Escopo> paginaWrapper = new PaginaWrapper(escopoService.listaComPaginacao(escopoFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -41,9 +42,33 @@ public class EscopoController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Escopo escopo) {
         ModelAndView modelAndView = new ModelAndView("/escopo/escopo");
+        modelAndView.addObject("escopo", escopo);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/escopo/detalhes");
+        Escopo escopo = escopoService.getOne(id);
+        modelAndView.addObject("escopo", escopo);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView buscar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/escopo/escopo");
+        Escopo escopo = escopoService.getOne(id);
+        modelAndView.addObject("escopo", escopo);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/escopo/remover");
+        Escopo escopo = escopoService.getOne(id);
         modelAndView.addObject("escopo", escopo);
         return modelAndView;
     }
@@ -53,7 +78,7 @@ public class EscopoController {
         if (result.hasErrors()) {
             return cadastro(escopo);
         }
-        escopo = escopoService.adicionar(escopo);
+        escopoService.save(escopo);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/escopo/lista");
     }
@@ -63,41 +88,16 @@ public class EscopoController {
         if (result.hasErrors()) {
             return cadastro(escopo);
         }
-        escopoService.alterar(escopo);
+        escopoService.update(escopo);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/escopo/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Escopo escopo, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(escopo);
-        }
-        escopoService.remover(escopo);
+        escopoService.deleteById(escopo.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/escopo/lista");
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Escopo escopo = escopoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/escopo/detalhes");
-        modelAndView.addObject("escopo", escopo);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Escopo escopo = escopoService.buscarId(id);
-        return cadastro(escopo);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Escopo escopo = escopoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/escopo/remover");
-        modelAndView.addObject("escopo", escopo);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

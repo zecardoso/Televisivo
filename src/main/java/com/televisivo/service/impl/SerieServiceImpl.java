@@ -2,14 +2,8 @@ package com.televisivo.service.impl;
 
 import java.util.List;
 
-import com.televisivo.model.Artista;
-import com.televisivo.model.Categoria;
-import com.televisivo.model.Elenco;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
-import com.televisivo.repository.ArtistaRepository;
-import com.televisivo.repository.CategoriaRepository;
-import com.televisivo.repository.ElencoRepository;
 import com.televisivo.repository.SerieRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.repository.filters.SerieFilter;
@@ -18,6 +12,7 @@ import com.televisivo.service.exceptions.EntidadeEmUsoException;
 import com.televisivo.service.exceptions.SerieNaoCadastradaException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,39 +28,41 @@ public class SerieServiceImpl implements SerieService {
 
     @Autowired
     private TemporadaRepository temporadaRepository;
-
-    // @Autowired
-    // private ElencoRepository elencoRepository;
-
-    // @Autowired
-    // private CategoriaRepository categoriaRepository;
-
-    // @Autowired
-    // private ArtistaRepository artistaRepository;
+    
+    @Override
+    public List<Serie> findAll() {
+        return serieRepository.findAll();
+    }
 
     @Override
-    public Serie adicionar(Serie serie) {
+    public Serie save(Serie serie) {
         return serieRepository.save(serie);
     }
 
     @Override
-    public Serie alterar(Serie serie) {
+    public Serie update(Serie serie) {
         return serieRepository.save(serie);
     }
 
     @Override
-    public void remover(Serie serie) {
-		try {
-			serieRepository.deleteById(serie.getId());
-		} catch (EmptyResultDataAccessException e){
-			throw new SerieNaoCadastradaException(String.format("A serie com o código %d não foi encontrada!", serie.getId()));
-		}
+    public Serie getOne(Long id) {
+        return serieRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Serie buscarId(Long id) {
+    public Serie findById(Long id) {
         return serieRepository.findById(id).orElseThrow(() -> new SerieNaoCadastradaException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+		try {
+			serieRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("A serie de código %d não pode ser removida!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new SerieNaoCadastradaException(String.format("A serie com o código %d não foi encontrada!", id));
+		}
     }
 
     @Override
@@ -74,16 +71,10 @@ public class SerieServiceImpl implements SerieService {
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public List<Serie> listar() {
-        return serieRepository.findAll();
-    }
-
-    @Override
     public Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable) {
         return serieRepository.listaComPaginacao(serieFilter, pageable);
     }
-
+    
     @Override
     public void salvarTemporada(Serie serie) {
         if (serie.getTemporadas().size() != -1) {

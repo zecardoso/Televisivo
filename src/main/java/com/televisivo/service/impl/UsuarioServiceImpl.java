@@ -3,10 +3,7 @@ package com.televisivo.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import com.televisivo.model.Categoria;
 import com.televisivo.model.Usuario;
-import com.televisivo.repository.CategoriaRepository;
-import com.televisivo.repository.SerieRepository;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.filters.UsuarioFilter;
 import com.televisivo.service.UsuarioService;
@@ -18,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,75 +26,57 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // @Autowired
-    // private CategoriaRepository categoriaRepository;
-
-    // @Autowired
-    // private SerieRepository serieRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'ESCRITA')")
-    @Override
-    public Usuario adicionar(Usuario usuario) {
-        if (!usuario.getPassword().equals(usuario.getContraSenha())) {
-            throw new SenhaError("Senha incorreta.");
-        }
-        Optional<Usuario> optional = buscarEmail(usuario.getEmail());
-        if (optional.isPresent()) {
-            throw new EmailExistente("Email já cadastrado.");
-        }
-        usuario.setPassword(criptografarSenha(usuario.getPassword()));
-        return usuarioRepository.save(usuario);
-    }
 
     private String criptografarSenha(String password) {
         return passwordEncoder.encode(password);
     }
-
+    
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'ESCRITA')")
-    public Usuario alterar(Usuario usuario) {
-        if (!usuario.getPassword().equals(usuario.getContraSenha())) {
-            throw new SenhaError("Senha incorreta.");
-        }
-        usuario.setPassword(criptografarSenha(usuario.getPassword()));
-        return usuarioRepository.save(usuario);
-    }
-
-    @Override
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'EXCLUIR')")
-    public void remover(Usuario usuario) {
-        try {
-            usuarioRepository.deleteById(usuario.getId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new UsuarioNaoCadastradoException(String.format("O usuario com o código %d não foi encontrado!", usuario.getId()));
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
-    public Usuario buscarId(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
-    public List<Usuario> listar() {
+    public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
-    @PreAuthorize("hasPermission('USUÁRIO', 'LEITURA')")
+    public Usuario save(Usuario usuario) {
+        Optional<Usuario> usuarioCadastrado  = buscarEmail(usuario.getEmail());
+        if (usuarioCadastrado .isPresent() && !usuarioCadastrado.get().equals(usuario)) {
+            throw new EmailExistente(String.format("O E-mail %s já está cadastrado no sistema ", usuario.getEmail()));
+        }
+        if (!usuario.getPassword().equals(usuario.getContraSenha())) {
+            throw new SenhaError("Senha incorreta.");
+        }
+        usuario.setPassword(criptografarSenha(usuario.getPassword()));
+        usuario.setAtivo(Boolean.TRUE);
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Usuario update(Usuario usuario) {
+        return this.save(usuario);
+    }
+
+    @Override
+    public Usuario getOne(Long id) {
+		return usuarioRepository.getOne(id);
+    }
+
+    @Override
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try {
+            usuarioRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new UsuarioNaoCadastradoException(String.format("O usuario com o código %d não foi encontrado!", id));
+        }
+    }
+
+    @Override
     public List<Usuario> buscarNome(String nome) {
         return usuarioRepository.buscarNome(nome);
     }

@@ -8,13 +8,8 @@ import com.televisivo.repository.filters.RoleFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface RoleService {
+public interface RoleService extends GenericService<Role, Long> {
 
-    Role adicionar(Role role);
-    Role alterar(Role role);
-    void remover(Role role);
-    Role buscarId(Long id);
     List<Role> buscarNome(String nome);
-    List<Role> listar();
     Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable);
 }

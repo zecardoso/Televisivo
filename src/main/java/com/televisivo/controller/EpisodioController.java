@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +31,7 @@ public class EpisodioController {
     @Autowired
     private EpisodioService episodioService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(EpisodioFilter episodioFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Episodio> paginaWrapper = new PaginaWrapper(episodioService.listaComPaginacao(episodioFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -41,9 +42,33 @@ public class EpisodioController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Episodio episodio) {
         ModelAndView modelAndView = new ModelAndView("/episodio/episodio");
+        modelAndView.addObject("episodio", episodio);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/episodio/detalhes");
+        Episodio episodio = episodioService.getOne(id);
+        modelAndView.addObject("episodio", episodio);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView buscar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/episodio/episodio");
+        Episodio episodio = episodioService.getOne(id);
+        modelAndView.addObject("episodio", episodio);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/episodio/remover");
+        Episodio episodio = episodioService.getOne(id);
         modelAndView.addObject("episodio", episodio);
         return modelAndView;
     }
@@ -53,7 +78,7 @@ public class EpisodioController {
         if (result.hasErrors()) {
             return cadastro(episodio);
         }
-        episodio = episodioService.adicionar(episodio);
+        episodioService.save(episodio);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/episodio/lista");
     }
@@ -63,41 +88,16 @@ public class EpisodioController {
         if (result.hasErrors()) {
             return cadastro(episodio);
         }
-        episodioService.alterar(episodio);
+        episodioService.update(episodio);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/episodio/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Episodio episodio, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(episodio);
-        }
-        episodioService.remover(episodio);
+        episodioService.deleteById(episodio.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/episodio/lista");
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Episodio episodio = episodioService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/episodio/detalhes");
-        modelAndView.addObject("episodio", episodio);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Episodio episodio = episodioService.buscarId(id);
-        return cadastro(episodio);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Episodio episodio = episodioService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/episodio/remover");
-        modelAndView.addObject("episodio", episodio);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

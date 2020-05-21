@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/permissaos")
+@RequestMapping(value = "/api/permissao")
 public class PermissaoRestController {
 
     @Autowired
     private PermissaoService permissaoService;
 
+    @GetMapping(value = "/listar")
+    public List<Permissao> listar() {
+        return permissaoService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Permissao registrar(@RequestBody @Valid Permissao permissao) {
-        return permissaoService.adicionar(permissao);
+        return permissaoService.save(permissao);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Permissao> alterar(@PathVariable Long id, @RequestBody Permissao permissao) {
         try {
-            Permissao permissao2 = permissaoService.buscarId(id);
+            Permissao permissao2 = permissaoService.findById(id);
             if (permissao2 != null) {
                 BeanUtils.copyProperties(permissao, permissao2);
-                permissao2 = permissaoService.alterar(permissao2);
+                permissao2 = permissaoService.update(permissao2);
                 return ResponseEntity.ok(permissao2);
             }
         } catch (PermissaoNaoCadastradaException e) {
@@ -53,22 +58,16 @@ public class PermissaoRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Permissao permissao = permissaoService.buscarId(id);
-        permissaoService.remover(permissao);
+        permissaoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Permissao> buscar(@PathVariable Long id) {
-        Permissao permissao = permissaoService.buscarId(id);
+        Permissao permissao = permissaoService.findById(id);
         if (permissao != null) {
             return ResponseEntity.ok(permissao);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Permissao> listar() {
-        return permissaoService.listar();
     }
 }

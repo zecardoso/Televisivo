@@ -18,30 +18,36 @@ public class RolePermissaoServiceImpl implements RolePermissaoService {
 
     @Autowired
     private RolePermissaoRepository rolePermissaoRepository;
-
+    
     @Override
-    public RolePermissao adicionar(RolePermissao entity) {
-        return rolePermissaoRepository.save(entity);
+    public List<RolePermissao> findAll() {
+        return rolePermissaoRepository.findAll();
     }
 
     @Override
-    public RolePermissao alterar(RolePermissao entity) {
-        return this.adicionar(entity);
+    public RolePermissao save(RolePermissao rolePermissao) {
+        return rolePermissaoRepository.save(rolePermissao);
     }
 
     @Override
-    public RolePermissao buscarId(RolePermissaoId id) {
+    public RolePermissao update(RolePermissao rolePermissao) {
+        return rolePermissaoRepository.save(rolePermissao);
+    }
+
+    @Override
+    public RolePermissao getOne(RolePermissaoId id) {
         return rolePermissaoRepository.getOne(id);
     }
 
     @Override
-    public void remover(RolePermissaoId id) {
-        rolePermissaoRepository.deleteById(id);
+    public RolePermissao findById(RolePermissaoId id) {
+        return rolePermissaoRepository.getOne(id);
     }
 
     @Override
-    public List<RolePermissao> listar() {
-        return rolePermissaoRepository.findAll();
+    public void deleteById(RolePermissaoId id) {
+        rolePermissaoRepository.deleteById(id);
+
     }
 
     @Override

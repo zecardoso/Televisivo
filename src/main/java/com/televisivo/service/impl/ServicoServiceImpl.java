@@ -23,43 +23,46 @@ public class ServicoServiceImpl implements ServicoService {
 
     @Autowired
     private ServicoRepository servicoRepository;
+    
+    @Override
+    public List<Servico> findAll() {
+        return servicoRepository.findAll();
+    }
 
     @Override
-    public Servico adicionar(Servico servico) {
+    public Servico save(Servico servico) {
         return servicoRepository.save(servico);
     }
 
     @Override
-    public Servico alterar(Servico servico) {
+    public Servico update(Servico servico) {
         return servicoRepository.save(servico);
     }
 
     @Override
-    public void remover(Servico servico) {
-		try {
-			servicoRepository.deleteById(servico.getId());
-		} catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("A Role de código %d não pode ser removida!", servico.getId()));
-		} catch (EmptyResultDataAccessException e){
-			throw new ServicoNaoCadastradoException(String.format("A serviço com o código %d não foi encontrada!", servico.getId()));
-		}
+    public Servico getOne(Long id) {
+        return servicoRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Servico buscarId(Long id) {
+    public Servico findById(Long id) {
         return servicoRepository.findById(id).orElseThrow(() -> new ServicoNaoCadastradoException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+		try {
+			servicoRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O serviço de código %d não pode ser removida!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new ServicoNaoCadastradoException(String.format("O serviço com o código %d não foi encontrada!", id));
+		}
     }
 
     @Override
     public List<Servico> buscarNome(String nome) {
         return servicoRepository.buscarNome(nome);
-    }
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Servico> listar() {
-        return servicoRepository.findAll();
     }
 
     @Override

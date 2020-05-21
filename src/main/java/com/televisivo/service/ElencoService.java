@@ -8,13 +8,8 @@ import com.televisivo.repository.filters.ElencoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ElencoService {
+public interface ElencoService extends GenericService<Elenco, Long>{
 
-    Elenco adicionar(Elenco elenco);
-    Elenco alterar(Elenco elenco);
-    void remover(Elenco elenco);
-    Elenco buscarId(Long id);
     List<Elenco> buscarPersonagem(String personagem);
-    List<Elenco> listar();
     Page<Elenco> listaComPaginacao(ElencoFilter elencoFilter, Pageable pageable);
 }

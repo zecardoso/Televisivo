@@ -6,8 +6,8 @@ import javax.validation.Valid;
 
 import com.televisivo.model.Elenco;
 import com.televisivo.service.ElencoService;
-import com.televisivo.service.exceptions.NegocioException;
 import com.televisivo.service.exceptions.ElencoNaoCadastradoException;
+import com.televisivo.service.exceptions.NegocioException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/elencos")
+@RequestMapping(value = "/api/elenco")
 public class ElencoRestController {
 
     @Autowired
     private ElencoService elencoService;
 
+    @GetMapping(value = "/listar")
+    public List<Elenco> listar() {
+        return elencoService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Elenco registrar(@RequestBody @Valid Elenco elenco) {
-        return elencoService.adicionar(elenco);
+        return elencoService.save(elenco);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Elenco> alterar(@PathVariable Long id, @RequestBody Elenco elenco) {
         try {
-            Elenco elenco2 = elencoService.buscarId(id);
+            Elenco elenco2 = elencoService.findById(id);
             if (elenco2 != null) {
                 BeanUtils.copyProperties(elenco, elenco2);
-                elenco2 = elencoService.alterar(elenco2);
+                elenco2 = elencoService.update(elenco2);
                 return ResponseEntity.ok(elenco2);
             }
         } catch (ElencoNaoCadastradoException e) {
@@ -53,22 +58,16 @@ public class ElencoRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Elenco elenco = elencoService.buscarId(id);
-        elencoService.remover(elenco);
+        elencoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Elenco> buscar(@PathVariable Long id) {
-        Elenco elenco = elencoService.buscarId(id);
+        Elenco elenco = elencoService.findById(id);
         if (elenco != null) {
             return ResponseEntity.ok(elenco);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Elenco> listar() {
-        return elencoService.listar();
     }
 }

@@ -6,8 +6,8 @@ import javax.validation.Valid;
 
 import com.televisivo.model.Artista;
 import com.televisivo.service.ArtistaService;
-import com.televisivo.service.exceptions.NegocioException;
 import com.televisivo.service.exceptions.ArtistaNaoCadastradoException;
+import com.televisivo.service.exceptions.NegocioException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/artistas")
+@RequestMapping(value = "/api/artista")
 public class ArtistaRestController {
 
     @Autowired
     private ArtistaService artistaService;
 
+    @GetMapping(value = "/listar")
+    public List<Artista> listar() {
+        return artistaService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Artista registrar(@RequestBody @Valid Artista artista) {
-        return artistaService.adicionar(artista);
+        return artistaService.save(artista);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Artista> alterar(@PathVariable Long id, @RequestBody Artista artista) {
         try {
-            Artista artista2 = artistaService.buscarId(id);
+            Artista artista2 = artistaService.findById(id);
             if (artista2 != null) {
                 BeanUtils.copyProperties(artista, artista2);
-                artista2 = artistaService.alterar(artista2);
+                artista2 = artistaService.update(artista2);
                 return ResponseEntity.ok(artista2);
             }
         } catch (ArtistaNaoCadastradoException e) {
@@ -53,22 +58,16 @@ public class ArtistaRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Artista artista = artistaService.buscarId(id);
-        artistaService.remover(artista);
+        artistaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Artista> buscar(@PathVariable Long id) {
-        Artista artista = artistaService.buscarId(id);
+        Artista artista = artistaService.findById(id);
         if (artista != null) {
             return ResponseEntity.ok(artista);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Artista> listar() {
-        return artistaService.listar();
     }
 }

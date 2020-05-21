@@ -23,43 +23,46 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
+    
+    @Override
+    public List<Role> findAll() {
+        return roleRepository.findAll();
+    }
 
     @Override
-    public Role adicionar(Role role) {
+    public Role save(Role role) {
         return roleRepository.save(role);
     }
 
     @Override
-    public Role alterar(Role role) {
+    public Role update(Role role) {
         return roleRepository.save(role);
     }
 
     @Override
-    public void remover(Role role) {
-        try {
-            roleRepository.deleteById(role.getId());
-        } catch (DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("A Role de código %d não pode ser removida.", role.getId()));
-        } catch (EmptyResultDataAccessException e) {
-            throw new RoleNaoCadastradaException(String.format("A role com o código %d não foi encontrada.", role.getId()));
-        }
+    public Role getOne(Long id) {
+        return roleRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Role buscarId(Long id) {
+    public Role findById(Long id) {
         return roleRepository.findById(id).orElseThrow(() -> new RoleNaoCadastradaException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try {
+            roleRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(String.format("A Role de código %d não pode ser removida.", id));
+        } catch (EmptyResultDataAccessException e) {
+            throw new RoleNaoCadastradaException(String.format("A role com o código %d não foi encontrada.", id));
+        }
     }
 
     @Override
     public List<Role> buscarNome(String nome) {
         return roleRepository.buscarNome(nome);
-    }
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Role> listar() {
-        return roleRepository.findAll();
     }
 
     @Override

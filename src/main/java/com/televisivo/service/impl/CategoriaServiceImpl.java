@@ -10,6 +10,7 @@ import com.televisivo.service.exceptions.CategoriaNaoCadastradaException;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,37 +25,44 @@ public class CategoriaServiceImpl implements CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     @Override
-    public Categoria adicionar(Categoria categoria) {
+    public List<Categoria> findAll() {
+        return categoriaRepository.findAll();
+    }
+
+    @Override
+    public Categoria save(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
 
     @Override
-    public Categoria alterar(Categoria categoria) {
+    public Categoria update(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
 
     @Override
-    public void remover(Categoria categoria) {
-		try {
-			categoriaRepository.deleteById(categoria.getId());
-		} catch (EmptyResultDataAccessException e){
-			throw new CategoriaNaoCadastradaException(String.format("A categoria com o código %d não foi encontrada!", categoria.getId()));
-		}
+    public Categoria getOne(Long id) {
+        return categoriaRepository.getOne(id);
     }
 
     @Override
-    public Categoria buscarId(Long id) {
+    public Categoria findById(Long id) {
 		return categoriaRepository.findById(id).orElseThrow(()-> new CategoriaNaoCadastradaException(id));
     }
 
     @Override
+    public void deleteById(Long id) {
+		try {
+			categoriaRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O categoria de código %d não pode ser removido!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new CategoriaNaoCadastradaException(String.format("A categoria com o código %d não foi encontrada!", id));
+		}
+    }
+    
+    @Override
     public List<Categoria> buscarNome(String nome) {
 		return categoriaRepository.buscarNome(nome);
-    }
-
-    @Override
-    public List<Categoria> listar() {
-        return categoriaRepository.findAll();
     }
 
     @Override

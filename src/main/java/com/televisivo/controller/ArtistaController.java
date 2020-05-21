@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +31,7 @@ public class ArtistaController {
     @Autowired
     private ArtistaService artistaService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(ArtistaFilter artistaFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Artista> paginaWrapper = new PaginaWrapper(artistaService.listaComPaginacao(artistaFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -41,9 +42,33 @@ public class ArtistaController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Artista artista) {
         ModelAndView modelAndView = new ModelAndView("/artista/artista");
+        modelAndView.addObject("artista", artista);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/artista/detalhes");
+        Artista artista = artistaService.getOne(id);
+        modelAndView.addObject("artista", artista);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView buscar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/artista/artista");
+        Artista artista = artistaService.getOne(id);
+        modelAndView.addObject("artista", artista);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/artista/remover");
+        Artista artista = artistaService.getOne(id);
         modelAndView.addObject("artista", artista);
         return modelAndView;
     }
@@ -53,7 +78,7 @@ public class ArtistaController {
         if (result.hasErrors()) {
             return cadastro(artista);
         }
-        artista = artistaService.adicionar(artista);
+        artistaService.save(artista);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/artista/lista");
     }
@@ -63,41 +88,16 @@ public class ArtistaController {
         if (result.hasErrors()) {
             return cadastro(artista);
         }
-        artistaService.alterar(artista);
+        artistaService.update(artista);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/artista/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Artista artista, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(artista);
-        }
-        artistaService.remover(artista);
+        artistaService.deleteById(artista.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/artista/lista");
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Artista artista = artistaService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/artista/detalhes");
-        modelAndView.addObject("artista", artista);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Artista artista = artistaService.buscarId(id);
-        return cadastro(artista);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Artista artista = artistaService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/artista/remover");
-        modelAndView.addObject("artista", artista);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

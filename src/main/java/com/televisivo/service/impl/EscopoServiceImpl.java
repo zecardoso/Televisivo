@@ -23,43 +23,46 @@ public class EscopoServiceImpl implements EscopoService {
 
     @Autowired
     private EscopoRepository escopoRepository;
+    
+    @Override
+    public List<Escopo> findAll() {
+        return escopoRepository.findAll();
+    }
 
     @Override
-    public Escopo adicionar(Escopo escopo) {
+    public Escopo save(Escopo escopo) {
         return escopoRepository.save(escopo);
     }
 
     @Override
-    public Escopo alterar(Escopo escopo) {
+    public Escopo update(Escopo escopo) {
         return escopoRepository.save(escopo);
     }
 
     @Override
-    public void remover(Escopo escopo) {
-        try {
-			escopoRepository.deleteById(escopo.getId());
-		} catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("O escopo de código %d não pode ser removido!", escopo.getId()));
-		} catch (EmptyResultDataAccessException e){
-			throw new EscopoNaoCadastradoException(String.format("O escopo com o código %d não foi encontrado!", escopo.getId()));
-		}
+    public Escopo getOne(Long id) {
+        return escopoRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Escopo buscarId(Long id) {
+    public Escopo findById(Long id) {
 		return escopoRepository.findById(id).orElseThrow(()-> new EscopoNaoCadastradoException(id));
     }
 
     @Override
+    public void deleteById(Long id) {
+        try {
+			escopoRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O escopo de código %d não pode ser removido!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new EscopoNaoCadastradoException(String.format("O escopo com o código %d não foi encontrado!", id));
+		}
+    }
+    
+    @Override
     public List<Escopo> buscarNome(String nome) {
         return escopoRepository.buscarNome(nome);
-    }
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Escopo> listar() {
-        return escopoRepository.findAll();
     }
 
     @Override

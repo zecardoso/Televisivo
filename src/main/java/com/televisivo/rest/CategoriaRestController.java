@@ -6,8 +6,8 @@ import javax.validation.Valid;
 
 import com.televisivo.model.Categoria;
 import com.televisivo.service.CategoriaService;
-import com.televisivo.service.exceptions.NegocioException;
 import com.televisivo.service.exceptions.CategoriaNaoCadastradaException;
+import com.televisivo.service.exceptions.NegocioException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/categorias")
+@RequestMapping(value = "/api/categoria")
 public class CategoriaRestController {
 
     @Autowired
     private CategoriaService categoriaService;
 
+    @GetMapping(value = "/listar")
+    public List<Categoria> listar() {
+        return categoriaService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Categoria registrar(@RequestBody @Valid Categoria categoria) {
-        return categoriaService.adicionar(categoria);
+        return categoriaService.save(categoria);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Categoria> alterar(@PathVariable Long id, @RequestBody Categoria categoria) {
         try {
-            Categoria categoria2 = categoriaService.buscarId(id);
+            Categoria categoria2 = categoriaService.findById(id);
             if (categoria2 != null) {
                 BeanUtils.copyProperties(categoria, categoria2);
-                categoria2 = categoriaService.alterar(categoria2);
+                categoria2 = categoriaService.update(categoria2);
                 return ResponseEntity.ok(categoria2);
             }
         } catch (CategoriaNaoCadastradaException e) {
@@ -53,22 +58,16 @@ public class CategoriaRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Categoria categoria = categoriaService.buscarId(id);
-        categoriaService.remover(categoria);
+        categoriaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Categoria> buscar(@PathVariable Long id) {
-        Categoria categoria = categoriaService.buscarId(id);
+        Categoria categoria = categoriaService.findById(id);
         if (categoria != null) {
             return ResponseEntity.ok(categoria);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Categoria> listar() {
-        return categoriaService.listar();
     }
 }

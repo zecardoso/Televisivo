@@ -10,6 +10,7 @@ import com.televisivo.service.exceptions.ElencoNaoCadastradoException;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,42 +23,47 @@ public class ElencoServiceImpl implements ElencoService {
 
     @Autowired
     private ElencoRepository elencoRepository;
+    
+    @Override
+    public List<Elenco> findAll() {
+        return elencoRepository.findAll();
+    }
 
     @Override
-    public Elenco adicionar(Elenco elenco) {
+    public Elenco save(Elenco elenco) {
         return elencoRepository.save(elenco);
     }
 
     @Override
-    public Elenco alterar(Elenco elenco) {
+    public Elenco update(Elenco elenco) {
         return elencoRepository.save(elenco);
     }
 
     @Override
-    public void remover(Elenco elenco) {
-		try {
-			elencoRepository.deleteById(elenco.getId());
-		} catch (EmptyResultDataAccessException e){
-			throw new ElencoNaoCadastradoException(String.format("O elenco com o código %d não foi encontrado!", elenco.getId()));
-		}
+    public Elenco getOne(Long id) {
+        return elencoRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Elenco buscarId(Long id) {
+    public Elenco findById(Long id) {
 		return elencoRepository.findById(id).orElseThrow(()-> new ElencoNaoCadastradoException(id));
     }
 
+    @Override
+    public void deleteById(Long id) {
+		try {
+			elencoRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O elenco de código %d não pode ser removido!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new ElencoNaoCadastradoException(String.format("O elenco com o código %d não foi encontrado!", id));
+		}
+    }
+    
 	@Override
 	public List<Elenco> buscarPersonagem(String personagem) {
 		return elencoRepository.buscarPersonagem(personagem);
 	}
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Elenco> listar() {
-        return elencoRepository.findAll();
-    }
 
     @Override
     public Page<Elenco> listaComPaginacao(ElencoFilter elencoFilter, Pageable pageable) {

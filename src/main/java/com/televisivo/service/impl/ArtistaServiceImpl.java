@@ -23,44 +23,46 @@ public class ArtistaServiceImpl implements ArtistaService {
 
     @Autowired
     private ArtistaRepository artistaRepository;
-
-    // @Autowired
-    // private CategoriaRepository categoriaRepository;
+    
+    @Override
+    public List<Artista> findAll() {
+        return artistaRepository.findAll();
+    }
 
     @Override
-    public Artista adicionar(Artista artista) {
+    public Artista save(Artista artista) {
         return artistaRepository.save(artista);
     }
 
     @Override
-    public Artista alterar(Artista artista) {
+    public Artista update(Artista artista) {
         return artistaRepository.save(artista);
     }
 
     @Override
-    public void remover(Artista artista) {
-		try {
-			artistaRepository.deleteById(artista.getId());
-		} catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("O artista de código %d não pode ser removido!", artista.getId()));
-		} catch (EmptyResultDataAccessException e){
-			throw new ArtistaNaoCadastradoException(String.format("O artista com o código %d não foi encontrado!", artista.getId()));
-		}
+    public Artista getOne(Long id) {
+		return artistaRepository.getOne(id);
     }
 
     @Override
-    public Artista buscarId(Long id) {
+    public Artista findById(Long id) {
 		return artistaRepository.findById(id).orElseThrow(()-> new ArtistaNaoCadastradoException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+		try {
+			artistaRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O artista de código %d não pode ser removido!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new ArtistaNaoCadastradoException(String.format("O artista com o código %d não foi encontrado!", id));
+		}
     }
 
     @Override
     public List<Artista> buscarNome(String nome) {
         return artistaRepository.buscarNome(nome);
-    }
-
-    @Override
-    public List<Artista> listar() {
-        return artistaRepository.findAll();
     }
 
     @Override

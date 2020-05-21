@@ -8,9 +8,11 @@ import com.televisivo.repository.EpisodioRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.repository.filters.TemporadaFilter;
 import com.televisivo.service.TemporadaService;
+import com.televisivo.service.exceptions.EntidadeEmUsoException;
 import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,39 +30,44 @@ public class TemporadaServiceImpl implements TemporadaService {
     private EpisodioRepository episodioRepository;
 
     @Override
-    public Temporada adicionar(Temporada temporada) {
+    public List<Temporada> findAll() {
+        return temporadaRepository.findAll();
+    }
+
+    @Override
+    public Temporada save(Temporada temporada) {
         return temporadaRepository.save(temporada);
     }
 
     @Override
-    public Temporada alterar(Temporada temporada) {
+    public Temporada update(Temporada temporada) {
         return temporadaRepository.save(temporada);
     }
 
     @Override
-    public void remover(Temporada temporada) {
-		try {
-			temporadaRepository.deleteById(temporada.getId());
-		} catch (EmptyResultDataAccessException e){
-			throw new TemporadaNaoCadastradaException(String.format("O temporada com o código %d não foi encontrada!", temporada.getId()));
-		}
+    public Temporada getOne(Long id) {
+        return temporadaRepository.getOne(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Temporada buscarId(Long id) {
+    public Temporada findById(Long id) {
         return temporadaRepository.findById(id).orElseThrow(() -> new TemporadaNaoCadastradaException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+		try {
+			temporadaRepository.deleteById(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("A temporada de código %d não pode ser removida!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new TemporadaNaoCadastradaException(String.format("O temporada com o código %d não foi encontrada!", id));
+		}
     }
 
     @Override
     public List<Temporada> buscarNumero(int numero) {
         return temporadaRepository.buscarNumero(numero);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Temporada> listar() {
-        return temporadaRepository.findAll();
     }
 
     @Override

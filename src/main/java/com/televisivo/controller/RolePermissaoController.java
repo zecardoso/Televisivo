@@ -17,6 +17,7 @@ import com.televisivo.service.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class RolePermissaoController {
     @Autowired
     private RolePermissaoService rolePermissaoService;
 
-    @RequestMapping(value = "lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(RolePermissaoFilter rolePermissaoFilter) {
         ModelAndView modelAndView = new ModelAndView("/direitos/lista");
         List<RolePermissao> lista = rolePermissaoService.buscarRolePermissaoFilter(rolePermissaoFilter);
@@ -48,7 +49,7 @@ public class RolePermissaoController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(RolePermissao rolePermissao) {
         ModelAndView modelAndView = new ModelAndView("/direitos/direitos");
         modelAndView.addObject("rolePermissao", rolePermissao);
@@ -62,49 +63,41 @@ public class RolePermissaoController {
         id.setPermissao(rolePermissao.getPermissao().getId());
         id.setEscopo(rolePermissao.getEscopo().getId());
         rolePermissao.setId(id);
-        rolePermissaoService.adicionar(rolePermissao);
+        rolePermissaoService.save(rolePermissao);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/rolePermissao/lista");
     }
 
-    // @RequestMapping(value = "/remover", method = RequestMethod.POST)
-    // public ModelAndView remover(RolePermissao rolePermissao, RedirectAttributes attributes) {
-    //     rolePermissaoService.remover(rolePermissao);
-    //     attributes.addFlashAttribute("success", "Registro removido com sucesso.");
-    //     return new ModelAndView("redirect:/rolePermissao/lista");
-    // }
-
     @RequestMapping(value = "/remover/{role_id}/{permissao_id}/{escopo_id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("role_id") Long role_id, @PathVariable("permissao_id") Long permissao_id, @PathVariable("escopo_id") Long escopo_id) {
+    public ModelAndView removerId(@PathVariable("role_id") Long role_id, @PathVariable("permissao_id") Long permissao_id, @PathVariable("escopo_id") Long escopo_id, RedirectAttributes attributes) {
         RolePermissaoId id = new RolePermissaoId();
-
         id.setRole(role_id);
         id.setPermissao(permissao_id);
         id.setEscopo(escopo_id);
-        
-        RolePermissao rolePermissao = rolePermissaoService.buscarId(id);
+        RolePermissao rolePermissao = rolePermissaoService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/rolePermissao/remover");
         modelAndView.addObject("rolePermissao", rolePermissao);
+        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return modelAndView;
-    }
-    
-    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
-	public String cancelar() {
-		return "redirect:/direitos/lista";
     }
     
     @ModelAttribute("roles")
     public List<Role> getRoles() {
-        return roleService.listar();
+        return roleService.findAll();
     }
 
     @ModelAttribute("permissoes")
     public List<Permissao> getPermissoes() {
-        return permissaoService.listar();
+        return permissaoService.findAll();
     }
 
     @ModelAttribute("escopos")
     public List<Escopo> getEscopos() {
-        return escopoService.listar();
+        return escopoService.findAll();
+    }
+
+    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
+	public String cancelar() {
+		return "redirect:/direitos/lista";
     }
 }

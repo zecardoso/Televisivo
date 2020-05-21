@@ -4,9 +4,10 @@ import java.util.List;
 
 public interface GenericService<T, ID> {
 
-    T adicionar(T entity);
-    T alterar(T entity);
-    T buscarId(ID id);
-    void remover(ID id);
-    List<T> listar();
+    List<T> findAll();
+	T save(T entity);
+	T update(T entity);
+	T getOne(ID id);
+	T findById(ID id);
+    void deleteById(ID id);
 }

@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class UsuarioController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(UsuarioFilter usuarioFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Usuario> paginaWrapper = new PaginaWrapper(usuarioService.listaComPaginacao(usuarioFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -51,9 +52,33 @@ public class UsuarioController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Usuario usuario) {
         ModelAndView modelAndView = new ModelAndView("/usuario/usuario");
+        modelAndView.addObject("usuario", usuario);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/usuario/detalhes");
+        Usuario usuario = usuarioService.getOne(id);
+        modelAndView.addObject("usuario", usuario);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView alterarId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/usuario/usuario");
+        Usuario usuario = usuarioService.getOne(id);
+        modelAndView.addObject("usuario", usuario);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/usuario/remover");
+        Usuario usuario = usuarioService.getOne(id);
         modelAndView.addObject("usuario", usuario);
         return modelAndView;
     }
@@ -64,12 +89,12 @@ public class UsuarioController {
             return cadastro(usuario);
         }
         try {
-            usuario = usuarioService.adicionar(usuario);
+            usuarioService.save(usuario);
         } catch (EmailExistente e) {
-            result.rejectValue("email", e.getMessage());
+            result.rejectValue("email", e.getMessage(), e.getMessage());
             return cadastro(usuario);
         } catch (SenhaError e) {
-            result.rejectValue("senha", e.getMessage());
+            result.rejectValue("senha", e.getMessage(), e.getMessage());
             return cadastro(usuario);
         }
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
@@ -81,46 +106,26 @@ public class UsuarioController {
         if (result.hasErrors()) {
             return cadastro(usuario);
         }
-        usuarioService.alterar(usuario);
+        try {
+			usuarioService.update(usuario);	
+		} catch(EmailExistente e) {
+			result.rejectValue("email", e.getMessage(), e.getMessage());
+			return cadastro(usuario);
+		}
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/usuario/lista");
     }
     
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Usuario usuario, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(usuario);
-        }
-        usuarioService.remover(usuario);
+        usuarioService.deleteById(usuario.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/usuario/lista");
     }
 
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Usuario usuario = usuarioService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/usuario/detalhes");
-        modelAndView.addObject("usuario", usuario);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Usuario usuario = usuarioService.buscarId(id);
-        return cadastro(usuario);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Usuario usuario = usuarioService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/usuario/remover");
-        modelAndView.addObject("usuario", usuario);
-        return modelAndView;
-    }
-
     @ModelAttribute("roles")
     public List<Role> getRoles() {
-        return roleService.listar();
+        return roleService.findAll();
     }
 
     @ModelAttribute("generos")

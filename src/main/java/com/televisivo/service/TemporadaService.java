@@ -8,14 +8,9 @@ import com.televisivo.repository.filters.TemporadaFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface TemporadaService {
+public interface TemporadaService extends GenericService<Temporada, Long>{
 
-    Temporada adicionar(Temporada temporada);
-    Temporada alterar(Temporada temporada);
-    void remover(Temporada temporada);
-    Temporada buscarId(Long id);
     List<Temporada> buscarNumero(int numero);
-    List<Temporada> listar();
     Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable);
     
     void salvarEpisodio(Temporada temporada);

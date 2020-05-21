@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +33,7 @@ public class TemporadaController {
     @Autowired
     private TemporadaService temporadaService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(TemporadaFilter temporadaFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Temporada> paginaWrapper = new PaginaWrapper(temporadaService.listaComPaginacao(temporadaFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -43,9 +44,33 @@ public class TemporadaController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Temporada temporada) {
         ModelAndView modelAndView = new ModelAndView("/temporada/temporada");
+        modelAndView.addObject("temporada", temporada);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/temporada/detalhes");
+        Temporada temporada = temporadaService.getOne(id);
+        modelAndView.addObject("temporada", temporada);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView alterarId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/temporada/temporada");
+        Temporada temporada = temporadaService.buscarPorIdEpisodio(id);
+        modelAndView.addObject("temporada", temporada);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/temporada/remover");
+        Temporada temporada = temporadaService.getOne(id);
         modelAndView.addObject("temporada", temporada);
         return modelAndView;
     }
@@ -55,7 +80,7 @@ public class TemporadaController {
         if (result.hasErrors()) {
             return cadastro(temporada);
         }
-        temporada = temporadaService.adicionar(temporada);
+        temporadaService.save(temporada);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/temporada/lista");
     }
@@ -65,17 +90,15 @@ public class TemporadaController {
         if (result.hasErrors()) {
             return cadastro(temporada);
         }
-        temporadaService.alterar(temporada);
+        temporadaService.update(temporada);
+        temporadaService.salvarEpisodio(temporada);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/temporada/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Temporada temporada, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(temporada);
-        }
-        temporadaService.remover(temporada);
+        temporadaService.deleteById(temporada.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/temporada/lista");
     }
@@ -99,28 +122,6 @@ public class TemporadaController {
         temporada = temporadaService.removerEpisodio(temporada, index);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return cadastro(temporada);
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Temporada temporada = temporadaService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/temporada/detalhes");
-        modelAndView.addObject("temporada", temporada);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Temporada temporada = temporadaService.buscarPorIdEpisodio(id);
-        return cadastro(temporada);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Temporada temporada = temporadaService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/temporada/remover");
-        modelAndView.addObject("temporada", temporada);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +31,7 @@ public class ElencoController {
     @Autowired
     private ElencoService elencoService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(ElencoFilter elencoFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Elenco> paginaWrapper = new PaginaWrapper(elencoService.listaComPaginacao(elencoFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -41,9 +42,33 @@ public class ElencoController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Elenco elenco) {
         ModelAndView modelAndView = new ModelAndView("/elenco/elenco");
+        modelAndView.addObject("elenco", elenco);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/elenco/detalhes");
+        Elenco elenco = elencoService.getOne(id);
+        modelAndView.addObject("elenco", elenco);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView buscar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/elenco/elenco");
+        Elenco elenco = elencoService.getOne(id);
+        modelAndView.addObject("elenco", elenco);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/elenco/remover");
+        Elenco elenco = elencoService.getOne(id);
         modelAndView.addObject("elenco", elenco);
         return modelAndView;
     }
@@ -53,7 +78,7 @@ public class ElencoController {
         if (result.hasErrors()) {
             return cadastro(elenco);
         }
-        elenco = elencoService.adicionar(elenco);
+        elencoService.save(elenco);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
         return new ModelAndView("redirect:/elenco/lista");
     }
@@ -63,41 +88,16 @@ public class ElencoController {
         if (result.hasErrors()) {
             return cadastro(elenco);
         }
-        elencoService.alterar(elenco);
+        elencoService.update(elenco);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/elenco/lista");
     }
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Elenco elenco, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(elenco);
-        }
-        elencoService.remover(elenco);
+        elencoService.deleteById(elenco.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/elenco/lista");
-    }
-
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Elenco elenco = elencoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/elenco/detalhes");
-        modelAndView.addObject("elenco", elenco);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Elenco elenco = elencoService.buscarId(id);
-        return cadastro(elenco);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Elenco elenco = elencoService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/elenco/remover");
-        modelAndView.addObject("elenco", elenco);
-        return modelAndView;
     }
 
     @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")

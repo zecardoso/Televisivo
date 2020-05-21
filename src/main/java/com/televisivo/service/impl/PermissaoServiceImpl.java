@@ -23,43 +23,46 @@ public class PermissaoServiceImpl implements PermissaoService {
 
     @Autowired
     private PermissaoRepository permissaoRepository;
+    
+    @Override
+    public List<Permissao> findAll() {
+        return permissaoRepository.findAll();
+    }
 
     @Override
-    public Permissao adicionar(Permissao permissao) {
+    public Permissao save(Permissao permissao) {
         return permissaoRepository.save(permissao);
     }
 
     @Override
-    public Permissao alterar(Permissao permissao) {
+    public Permissao update(Permissao permissao) {
         return permissaoRepository.save(permissao);
     }
 
     @Override
-    public void remover(Permissao permissao) {
-        try {
-            permissaoRepository.deleteById(permissao.getId());
-        } catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("A Permissao de código %d não pode ser removida!", permissao.getId()));
-		} catch (EmptyResultDataAccessException e){
-			throw new PermissaoNaoCadastradaException(String.format("A permissao com o código %d não foi encontrada!", permissao.getId()));
-		}
+    public Permissao getOne(Long id) {
+        return permissaoRepository.getOne(id);
     }
 
     @Override
-	@Transactional(readOnly = true)
-    public Permissao buscarId(Long id) {
+    public Permissao findById(Long id) {
 		return permissaoRepository.findById(id).orElseThrow(()-> new PermissaoNaoCadastradaException(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try {
+            permissaoRepository.deleteById(id);
+        } catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("A Permissao de código %d não pode ser removida!", id));
+		} catch (EmptyResultDataAccessException e){
+			throw new PermissaoNaoCadastradaException(String.format("A permissao com o código %d não foi encontrada!", id));
+		}
     }
 
     @Override
     public List<Permissao> buscarNome(String nome) {
         return buscarNome(nome);
-    }
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Permissao> listar() {
-        return permissaoRepository.findAll();
     }
 
     @Override

@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/temporadas")
+@RequestMapping(value = "/api/temporada")
 public class TemporadaRestController {
 
     @Autowired
     private TemporadaService temporadaService;
 
+    @GetMapping(value = "/listar")
+    public List<Temporada> listar() {
+        return temporadaService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Temporada registrar(@RequestBody @Valid Temporada temporada) {
-        return temporadaService.adicionar(temporada);
+        return temporadaService.save(temporada);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Temporada> alterar(@PathVariable Long id, @RequestBody Temporada temporada) {
         try {
-            Temporada temporada2 = temporadaService.buscarId(id);
+            Temporada temporada2 = temporadaService.findById(id);
             if (temporada2 != null) {
                 BeanUtils.copyProperties(temporada, temporada2);
-                temporada2 = temporadaService.alterar(temporada2);
+                temporada2 = temporadaService.update(temporada2);
                 return ResponseEntity.ok(temporada2);
             }
         } catch (TemporadaNaoCadastradaException e) {
@@ -53,22 +58,16 @@ public class TemporadaRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Temporada temporada = temporadaService.buscarId(id);
-        temporadaService.remover(temporada);
+        temporadaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Temporada> buscar(@PathVariable Long id) {
-        Temporada temporada = temporadaService.buscarId(id);
+        Temporada temporada = temporadaService.findById(id);
         if (temporada != null) {
             return ResponseEntity.ok(temporada);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Temporada> listar() {
-        return temporadaService.listar();
     }
 }

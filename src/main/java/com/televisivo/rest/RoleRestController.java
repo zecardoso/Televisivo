@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/roles")
+@RequestMapping(value = "/api/role")
 public class RoleRestController {
 
     @Autowired
     private RoleService roleService;
 
+    @GetMapping(value = "/listar")
+    public List<Role> listar() {
+        return roleService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Role registrar(@RequestBody @Valid Role role) {
-        return roleService.adicionar(role);
+        return roleService.save(role);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Role> alterar(@PathVariable Long id, @RequestBody Role role) {
         try {
-            Role role2 = roleService.buscarId(id);
+            Role role2 = roleService.findById(id);
             if (role2 != null) {
                 BeanUtils.copyProperties(role, role2);
-                role2 = roleService.alterar(role2);
+                role2 = roleService.update(role2);
                 return ResponseEntity.ok(role2);
             }
         } catch (RoleNaoCadastradaException e) {
@@ -53,22 +58,16 @@ public class RoleRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Role role = roleService.buscarId(id);
-        roleService.remover(role);
+        roleService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Role> buscar(@PathVariable Long id) {
-        Role role = roleService.buscarId(id);
+        Role role = roleService.findById(id);
         if (role != null) {
             return ResponseEntity.ok(role);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Role> listar() {
-        return roleService.listar();
     }
 }

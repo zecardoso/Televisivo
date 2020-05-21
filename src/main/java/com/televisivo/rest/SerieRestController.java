@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/series")
+@RequestMapping(value = "/api/serie")
 public class SerieRestController {
 
     @Autowired
     private SerieService serieService;
 
+    @GetMapping(value = "/listar")
+    public List<Serie> listar() {
+        return serieService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Serie registrar(@RequestBody @Valid Serie serie) {
-        return serieService.adicionar(serie);
+        return serieService.save(serie);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Serie> alterar(@PathVariable Long id, @RequestBody Serie serie) {
         try {
-            Serie serie2 = serieService.buscarId(id);
+            Serie serie2 = serieService.findById(id);
             if (serie2 != null) {
                 BeanUtils.copyProperties(serie, serie2);
-                serie2 = serieService.alterar(serie2);
+                serie2 = serieService.update(serie2);
                 return ResponseEntity.ok(serie2);
             }
         } catch (SerieNaoCadastradaException e) {
@@ -53,22 +58,16 @@ public class SerieRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Serie serie = serieService.buscarId(id);
-        serieService.remover(serie);
+        serieService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Serie> buscar(@PathVariable Long id) {
-        Serie serie = serieService.buscarId(id);
+        Serie serie = serieService.findById(id);
         if (serie != null) {
             return ResponseEntity.ok(serie);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Serie> listar() {
-        return serieService.listar();
     }
 }

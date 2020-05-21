@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class SerieController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @RequestMapping(value = "/lista", method = RequestMethod.GET)
+    @GetMapping("/lista")
     public ModelAndView lista(SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         PaginaWrapper<Serie> paginaWrapper = new PaginaWrapper(serieService.listaComPaginacao(serieFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -54,9 +55,33 @@ public class SerieController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.GET)
+    @GetMapping("/cadastro")
     public ModelAndView cadastro(Serie serie) {
         ModelAndView modelAndView = new ModelAndView("/serie/serie");
+        modelAndView.addObject("serie", serie);
+        return modelAndView;
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/serie/detalhes");
+        Serie serie = serieService.getOne(id);
+        modelAndView.addObject("serie", serie);
+        return modelAndView;
+    }
+
+    @GetMapping("/alterar/{id}")
+    public ModelAndView alterarId(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("/serie/serie");
+        Serie serie = serieService.buscarPorIdTemporada(id);
+        modelAndView.addObject("serie", serie);
+        return modelAndView;
+    }
+
+    @GetMapping("/remover/{id}")
+    public ModelAndView removerId(@PathVariable("id") Long id) {
+        Serie serie = serieService.getOne(id);
+        ModelAndView modelAndView = new ModelAndView("/serie/remover");
         modelAndView.addObject("serie", serie);
         return modelAndView;
     }
@@ -66,7 +91,7 @@ public class SerieController {
         if (result.hasErrors()) {
             return cadastro(serie);
         }
-        serie = serieService.adicionar(serie);
+        serieService.save(serie);
         ModelAndView modelAndView = new ModelAndView("/serie/serie");
 		modelAndView.addObject("serie", serie);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
@@ -78,7 +103,7 @@ public class SerieController {
         if (result.hasErrors()) {
             return cadastro(serie);
         }
-        serieService.alterar(serie);
+        serieService.update(serie);
         serieService.salvarTemporada(serie);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
         return new ModelAndView("redirect:/serie/lista");
@@ -86,10 +111,7 @@ public class SerieController {
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Serie serie, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(serie);
-        }
-        serieService.remover(serie);
+        serieService.deleteById(serie.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/serie/lista");
     }
@@ -111,40 +133,18 @@ public class SerieController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/detalhes/{id}", method = RequestMethod.GET)
-    public ModelAndView detalhes(@PathVariable("id") Long id) {
-        Serie serie = serieService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/serie/detalhes");
-        modelAndView.addObject("serie", serie);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/alterar/{id}", method = RequestMethod.GET)
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        Serie serie = serieService.buscarPorIdTemporada(id);
-        return cadastro(serie);
-    }
-
-    @RequestMapping(value = "/remover/{id}", method = RequestMethod.GET)
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Serie serie = serieService.buscarId(id);
-        ModelAndView modelAndView = new ModelAndView("/serie/remover");
-        modelAndView.addObject("serie", serie);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
-	public String cancelar() {
-		return "redirect:/serie/lista";
-    }
-    
     @ModelAttribute("servicos")
 	public List<Servico> getServicos() {
-		return servicoService.listar();
+		return servicoService.findAll();
     }
     
     @ModelAttribute("categorias")
 	public List<Categoria> getCategorias() {
-		return categoriaService.listar();
-	}
+		return categoriaService.findAll();
+    }
+    
+    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
+	public String cancelar() {
+		return "redirect:/serie/lista";
+    }
 }

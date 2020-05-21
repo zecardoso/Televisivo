@@ -6,8 +6,8 @@ import javax.validation.Valid;
 
 import com.televisivo.model.Escopo;
 import com.televisivo.service.EscopoService;
-import com.televisivo.service.exceptions.NegocioException;
 import com.televisivo.service.exceptions.EscopoNaoCadastradoException;
+import com.televisivo.service.exceptions.NegocioException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +24,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/escopos")
+@RequestMapping(value = "/api/escopo")
 public class EscopoRestController {
 
     @Autowired
     private EscopoService escopoService;
 
+    @GetMapping(value = "/listar")
+    public List<Escopo> listar() {
+        return escopoService.findAll();
+    }
+
     @PostMapping(value = "/adicionar")
     @ResponseStatus(HttpStatus.OK)
     public Escopo registrar(@RequestBody @Valid Escopo escopo) {
-        return escopoService.adicionar(escopo);
+        return escopoService.save(escopo);
     }
 
     @PutMapping("/alterar/{id}")
     public ResponseEntity<Escopo> alterar(@PathVariable Long id, @RequestBody Escopo escopo) {
         try {
-            Escopo escopo2 = escopoService.buscarId(id);
+            Escopo escopo2 = escopoService.findById(id);
             if (escopo2 != null) {
                 BeanUtils.copyProperties(escopo, escopo2);
-                escopo2 = escopoService.alterar(escopo2);
+                escopo2 = escopoService.update(escopo2);
                 return ResponseEntity.ok(escopo2);
             }
         } catch (EscopoNaoCadastradoException e) {
@@ -53,22 +58,16 @@ public class EscopoRestController {
 
     @DeleteMapping("/remover/{id}")
     public ResponseEntity<?> remover(@PathVariable Long id) {
-        Escopo escopo = escopoService.buscarId(id);
-        escopoService.remover(escopo);
+        escopoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping(value = "/buscar/{id}")
     public ResponseEntity<Escopo> buscar(@PathVariable Long id) {
-        Escopo escopo = escopoService.buscarId(id);
+        Escopo escopo = escopoService.findById(id);
         if (escopo != null) {
             return ResponseEntity.ok(escopo);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping(value = "/listar")
-    public List<Escopo> listar() {
-        return escopoService.listar();
     }
 }
