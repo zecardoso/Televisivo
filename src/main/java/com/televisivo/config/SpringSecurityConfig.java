@@ -2,6 +2,7 @@ package com.televisivo.config;
 
 import com.televisivo.security.LoginFailuireHandler;
 import com.televisivo.security.LoginSucessHandler;
+import com.televisivo.security.LogoutSuccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginFailuireHandler loginFailuireHandler;
+
+    @Autowired
+    private LogoutSuccess logoutSuccess;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
@@ -65,7 +69,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .failureHandler(loginFailuireHandler)
             .permitAll();
         http.logout()
-            .logoutSuccessUrl("/login?logout=true")
+            // .logoutSuccessUrl("/login?logout=true")
+            .logoutSuccessHandler(logoutSuccess)
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
