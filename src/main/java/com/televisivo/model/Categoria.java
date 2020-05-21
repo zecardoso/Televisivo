@@ -53,10 +53,4 @@ public class Categoria implements Serializable {
     @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
     private List<Artista> artistas;
-
-    private Categoria() {
-        usuarios = new ArrayList<Usuario>();
-        series = new ArrayList<Serie>();
-        artistas = new ArrayList<Artista>();
-    }
 }

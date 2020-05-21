@@ -52,8 +52,4 @@ public class Temporada implements Serializable {
     @ManyToOne(targetEntity = Serie.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "serie_id", nullable = false, referencedColumnName = "serie_id", foreignKey = @ForeignKey(name = "FK_SERIE_TEMPORADA"))
     private Serie serie;
-
-    public Temporada() {
-        episodios = new ArrayList<Episodio>();
-    }
 }

@@ -52,9 +52,4 @@ public class Artista implements Serializable {
 
     @OneToOne(mappedBy = "artista", fetch = FetchType.LAZY)
     private Elenco elenco;
-
-    private Artista() {
-        categorias = new ArrayList<Categoria>();
-        series = new ArrayList<Serie>();
-    }
 }

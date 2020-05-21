@@ -53,9 +53,4 @@ public class Elenco {
     @OneToOne(targetEntity = Artista.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "artista_id", referencedColumnName = "artista_id")
     private Artista artista;
-
-    private Elenco() {
-        episodios = new ArrayList<Episodio>();
-        series = new ArrayList<Serie>();
-    }
 }

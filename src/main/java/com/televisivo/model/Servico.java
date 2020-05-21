@@ -40,8 +40,4 @@ public class Servico {
 
     @OneToMany(mappedBy = "servico", fetch = FetchType.LAZY)
     private List<Serie> series;
-
-    private Servico() {
-        series = new ArrayList<Serie>();
-    }
 }
