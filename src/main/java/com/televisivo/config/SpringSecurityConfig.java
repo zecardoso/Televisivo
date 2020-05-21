@@ -1,5 +1,6 @@
 package com.televisivo.config;
 
+import com.televisivo.security.LoginFailuireHandler;
 import com.televisivo.security.LoginSucessHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginSucessHandler loginSucessHandler;
+
+    @Autowired
+    private LoginFailuireHandler loginFailuireHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
@@ -57,7 +61,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .passwordParameter("senha")
             // .defaultSuccessUrl("/home", true)
             .successHandler(loginSucessHandler)
-            .failureUrl("/login?error=true")
+            // .failureUrl("/login?error=true")
+            .failureHandler(loginFailuireHandler)
             .permitAll();
         http.logout()
             .logoutSuccessUrl("/login?logout=true")
