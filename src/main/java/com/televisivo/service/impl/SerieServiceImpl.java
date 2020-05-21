@@ -30,6 +30,7 @@ public class SerieServiceImpl implements SerieService {
     private TemporadaRepository temporadaRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Serie> findAll() {
         return serieRepository.findAll();
     }
@@ -45,6 +46,7 @@ public class SerieServiceImpl implements SerieService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Serie getOne(Long id) {
         return serieRepository.getOne(id);
     }

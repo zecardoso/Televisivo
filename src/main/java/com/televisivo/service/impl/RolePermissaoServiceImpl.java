@@ -20,6 +20,7 @@ public class RolePermissaoServiceImpl implements RolePermissaoService {
     private RolePermissaoRepository rolePermissaoRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<RolePermissao> findAll() {
         return rolePermissaoRepository.findAll();
     }
@@ -35,6 +36,7 @@ public class RolePermissaoServiceImpl implements RolePermissaoService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public RolePermissao getOne(RolePermissaoId id) {
         return rolePermissaoRepository.getOne(id);
     }

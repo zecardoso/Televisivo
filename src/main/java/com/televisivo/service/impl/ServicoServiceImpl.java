@@ -25,6 +25,7 @@ public class ServicoServiceImpl implements ServicoService {
     private ServicoRepository servicoRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Servico> findAll() {
         return servicoRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Servico getOne(Long id) {
         return servicoRepository.getOne(id);
     }

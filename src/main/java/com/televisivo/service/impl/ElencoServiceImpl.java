@@ -25,6 +25,7 @@ public class ElencoServiceImpl implements ElencoService {
     private ElencoRepository elencoRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Elenco> findAll() {
         return elencoRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class ElencoServiceImpl implements ElencoService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Elenco getOne(Long id) {
         return elencoRepository.getOne(id);
     }

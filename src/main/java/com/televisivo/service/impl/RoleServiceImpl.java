@@ -25,6 +25,7 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Role> findAll() {
         return roleRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Role getOne(Long id) {
         return roleRepository.getOne(id);
     }

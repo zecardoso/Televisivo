@@ -25,6 +25,7 @@ public class PermissaoServiceImpl implements PermissaoService {
     private PermissaoRepository permissaoRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Permissao> findAll() {
         return permissaoRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class PermissaoServiceImpl implements PermissaoService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Permissao getOne(Long id) {
         return permissaoRepository.getOne(id);
     }

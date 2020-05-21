@@ -25,6 +25,7 @@ public class EscopoServiceImpl implements EscopoService {
     private EscopoRepository escopoRepository;
     
     @Override
+	@Transactional(readOnly = true)
     public List<Escopo> findAll() {
         return escopoRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class EscopoServiceImpl implements EscopoService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Escopo getOne(Long id) {
         return escopoRepository.getOne(id);
     }

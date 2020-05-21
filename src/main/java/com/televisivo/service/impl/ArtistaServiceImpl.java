@@ -25,6 +25,7 @@ public class ArtistaServiceImpl implements ArtistaService {
     private ArtistaRepository artistaRepository;
     
     @Override
+    @Transactional(readOnly = true)
     public List<Artista> findAll() {
         return artistaRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class ArtistaServiceImpl implements ArtistaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Artista getOne(Long id) {
 		return artistaRepository.getOne(id);
     }

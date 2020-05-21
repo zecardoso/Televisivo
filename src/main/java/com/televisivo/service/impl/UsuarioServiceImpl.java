@@ -34,6 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
     
     @Override
+	@Transactional(readOnly = true)
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
@@ -58,6 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Usuario getOne(Long id) {
 		return usuarioRepository.getOne(id);
     }

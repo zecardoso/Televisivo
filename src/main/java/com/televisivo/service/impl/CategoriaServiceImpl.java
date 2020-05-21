@@ -25,6 +25,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Categoria> findAll() {
         return categoriaRepository.findAll();
     }
@@ -40,6 +41,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Categoria getOne(Long id) {
         return categoriaRepository.getOne(id);
     }

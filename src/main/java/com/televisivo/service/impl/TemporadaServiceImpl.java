@@ -30,6 +30,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     private EpisodioRepository episodioRepository;
 
     @Override
+	@Transactional(readOnly = true)
     public List<Temporada> findAll() {
         return temporadaRepository.findAll();
     }
@@ -45,6 +46,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Temporada getOne(Long id) {
         return temporadaRepository.getOne(id);
     }

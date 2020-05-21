@@ -24,10 +24,8 @@ public class EpisodioServiceImpl implements EpisodioService {
     @Autowired
     private EpisodioRepository episodioRepository;
 
-    // @Autowired
-    // private ElencoRepository elencoRepository;
-    
     @Override
+	@Transactional(readOnly = true)
     public List<Episodio> findAll() {
         return episodioRepository.findAll();
     }
@@ -43,6 +41,7 @@ public class EpisodioServiceImpl implements EpisodioService {
     }
 
     @Override
+	@Transactional(readOnly = true)
     public Episodio getOne(Long id) {
         return episodioRepository.getOne(id);
     }
