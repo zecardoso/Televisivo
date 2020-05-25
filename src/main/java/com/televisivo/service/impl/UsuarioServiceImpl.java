@@ -1,5 +1,6 @@
 package com.televisivo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,5 +111,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Optional<Usuario> loginUsuarioByEmail(String email) {
         return usuarioRepository.loginUsuarioByEmail(email);
+    }
+
+    @Override
+    public void updateLoginUsuario(Usuario usuario) {
+        usuario.setLastLogin(new Date());
+        usuario.setFailedLogin(0);
+        usuarioRepository.save(usuario);
     }
 }

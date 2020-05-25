@@ -90,6 +90,14 @@ public class Usuario implements UserDetails, Serializable {
     @Column(nullable = true)
     private boolean ativo = false;
 
+    @Column(nullable = true)
+    private Integer failedLogin;
+
+    @DateTimeFormat(pattern = "dd/M/yyyy")
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = true, columnDefinition = "DATE")
+    private Date lestLogin;
+
     @JsonIgnore
     @Size(min = 1, message = "Selecione pelo menos um grupo")
     @ManyToMany(fetch = FetchType.LAZY)
