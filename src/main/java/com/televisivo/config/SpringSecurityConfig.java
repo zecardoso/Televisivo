@@ -1,5 +1,6 @@
 package com.televisivo.config;
 
+import com.televisivo.security.LoginAuthenticationProvider;
 import com.televisivo.security.LoginFailuireHandler;
 import com.televisivo.security.LoginSucessHandler;
 import com.televisivo.security.LogoutSuccess;
@@ -25,7 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private LoginAuthenticationProvider loginAuthenticationProvider;
 
     @Autowired
     private LoginSucessHandler loginSucessHandler;
@@ -41,7 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // String senha = passwordEncoder().encode("123456");
 		// System.out.println("senha: [" + senha + "]");
 		// authentication.inMemoryAuthentication().withUser("admin").password(senha).roles("USUARIO");
-		authentication.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        authentication.authenticationProvider(loginAuthenticationProvider);
     }
 
 	@Override
