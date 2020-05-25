@@ -16,6 +16,8 @@ public interface UsuarioService extends GenericService<Usuario, Long> {
     Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFiltro, Pageable pageable);
     Optional<Usuario> loginUsuarioByEmail(String email);
 	void updateLoginUsuario(Usuario usuario);
+	void blockedUsuario(Usuario usuario);
+	void updateFaileAccess(Usuario usuario);
     
     // void salvarCategoria(Usuario usuario);
     // Usuario adicionarCategoria(Usuario usuario);

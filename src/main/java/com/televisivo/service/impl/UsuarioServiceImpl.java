@@ -119,4 +119,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setFailedLogin(0);
         usuarioRepository.save(usuario);
     }
+
+    @Override
+    public void updateFaileAccess(Usuario usuario) {
+        Integer totalAcesso = usuario.getFailedLogin() + 1;
+        usuario.setFailedLogin(totalAcesso);
+        usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void blockedUsuario(Usuario usuario) {
+        usuario.setAtivo(Boolean.FALSE);
+        usuarioRepository.save(usuario);
+    }
 }
