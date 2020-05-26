@@ -47,13 +47,6 @@ public class LoginFailuireHandler implements AuthenticationFailureHandler {
             mensagem  = exception.getMessage();
         }
 
-        if (exception.getClass() == UsernameNotFoundException.class) {
-            mensagem= "Usuario nao cadastrado!";
-        } else if (exception.getClass() == BadCredentialsException.class) {
-            mensagem = "Senha invalida";
-        } else {
-            mensagem = "Erro inesperado, tente novamente mais tarde";
-        }
         request.getRequestDispatcher(String.format("/login?mensagem=%s", mensagem)).forward(request, response);
     }
 
@@ -63,6 +56,7 @@ public class LoginFailuireHandler implements AuthenticationFailureHandler {
         if (usuario.isPresent()) {
             if (usuario.get().getFailedLogin() + 1 > TOTAL_ACESSO) {
                 blockedUsuario(usuario.get());
+            } else {
                 updateFaileAccess(usuario.get());
             }
         }
