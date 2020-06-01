@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Detalhes da temporada</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Detalhes</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/temporada/lista}">Pesquisar temporada</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:object="${temporada}" th:text="*{numero}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${temporada}">
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<label class="control-label">Numero</label>
+								<h4 th:text="*{numero}"></h4>
+							</div>
+                        </div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Ano</label>
+									<h4 th:text="*{ano}"></h4>
+								</div>
+							</div>
+						<!-- </div>
+						<fieldset>
+							<legend>Episodios</legend>
+						</fieldset>
+						<div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
+							<div class="col-md-3 mb-3">
+								<a th:href="@{/temporada/alterar/{id}(id=*{temporadas[__${rowStat.index}__].numero})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].numero}"></span></a>
+								<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].ano}"></span></a>
+							</div>
+						</div> -->
+                        <div class="tile-footer">
+							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/temporada/alterar/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
+							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/temporada/remover/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
+							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/temporada/lista}" aria-hidden="true" temporada="button"></a>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</section>
+    <th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script type="text/javascript">
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
+</body>
+</html>

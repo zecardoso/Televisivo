@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title th:text="*{temporada.id == null} ? 'Registrar série' : 'Alterar série'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/temporada/lista}">Pesquisar temporada</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:text="*{temporada.id == null} ? 'Nova série' : *{temporada.nome}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${temporada}" th:action="${temporada.id == null} ? @{/temporada/adicionar} : @{/temporada/alterar}" method="post" autocomplete="off">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/validation :: validation"></div>
+								<div th:replace="fragments/alert"></div>
+							</div>
+                        </div>
+						<input type="hidden" th:field="*{id}">
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="nome">Nome</label>
+								<Input class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+								<div class="invalid-feedback">
+									<span th:errors="*{nome}"></span>
+								</div>
+							</div>
+                        </div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="enredo">Enredo</label>
+                                <Input class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{enredo}"></span>
+                                </div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="ano">Ano</label>
+                                <Input class="form-control" type="text" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{ano}"></span>
+                                </div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="restricao">Restrição de idade</label>
+                                <Input class="form-control" type="text" placeholder="Enter Restriction" th:field="*{restricao}" id="restricao" name="restricao" th:classappend="${#fields.hasErrors('restricao')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{restricao}"></span>
+                                </div>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label>Serviço</label>
+                                <select class="form-control" th:field="*{servico}" id="servico" name="servico">
+                                    <option value="">Selecione uma opção</option>
+                                    <option th:each="servico : ${servicos}" th:value="${servico.id}" th:text="${servico.nome}" th:classappend="${#fields.hasErrors('servico')} ? 'is-invalid'"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{servico}"></span>
+                                </div>
+							</div>
+                        </div>
+                        <label class="control-label">Categorias</label>
+                        <fieldset>
+                            <div class="form-row">
+                                <th:block th:each="categoria : ${categorias}">
+                                    <div class="col-md-1 mb-3">
+                                        <label th:text="${categoria.nome}"></label>
+                                        <div class="make-switch switch-large">
+                                            <input type="checkbox" th:value="${categoria.id}" th:field="*{categorias}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </fieldset>
+                        <div th:if="${temporada.id} != null">
+                            <label class="control-label">Temporadas</label>
+							<fieldset>
+                                <div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
+                                    <div class="col-md-3 mb-3">
+                                        <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
+                                        <label>Número da temporada</label>
+                                        <input type="text" placeholder="Número" class="form-control" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Ano</label>
+                                        <input type="text" placeholder="Ano" class="form-control" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label th:if="${rowStat.index} ge 0 and ${#lists.size(temporada.temporadas) ne 1}">Remover</label>
+                                        <button class="btn btn-danger" type="submit" name="removerow" th:value="${rowStat.index}" th:if="${rowStat.index} ge 0 and ${#lists.size(temporada.temporadas) ne 1}"><i class="fa fa-minus" style="color: white"></i></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
+                                </div>
+							</fieldset>
+						</div>
+                        <div class="tile-footer">
+							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script type="text/javascript">
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
+</body>
+</html>

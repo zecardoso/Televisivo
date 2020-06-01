@@ -23,6 +23,60 @@
 								<label class="control-label">Nome</label>
 								<h4 th:text="*{nome}"></h4>
 							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Enredo</label>
+									<h4 th:text="*{enredo}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Ano</label>
+									<h4 th:text="*{ano}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Restrição de idade</label>
+									<h4 th:text="*{restricao}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Serviço</label>
+									<h4 th:text="*{servico.nome}"></h4>
+								</div>
+							</div>
+						</div>
+						<fieldset>
+							<legend>Categorias</legend>
+							<div class="row">
+								<th:block th:each="categoria : ${categorias}">
+									<div class="col-md-1 mb-3">
+										<label th:text="${categoria.nome}"></label>
+										<div class="make-switch switch-large">
+											<input type="checkbox" th:value="${categoria.id}" th:field="*{categorias}" disabled class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+										</div>
+									</div>
+								</th:block>
+							</div>
+						</fieldset>
+						<fieldset>
+							<legend>Temporadas</legend>
+						</fieldset>
+						<div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
+							<div class="col-md-3 mb-3">
+								<a th:href="@{/temporada/detalhes/{id}(id=*{temporadas[__${rowStat.index}__].numero})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].numero}"></span></a>
+								<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].ano}"></span></a>
+							</div>
 						</div>
                         <div class="tile-footer">
 							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/serie/alterar/{id}(id=${serie.id})}" aria-hidden="true" serie="button"></a>
@@ -34,5 +88,11 @@
             </div>
         </div>
 	</section>
+    <th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script type="text/javascript">
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
 </body>
 </html>

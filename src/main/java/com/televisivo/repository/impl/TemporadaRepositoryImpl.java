@@ -23,53 +23,53 @@ import org.springframework.util.StringUtils;
 
 public class TemporadaRepositoryImpl implements TemporadaQuery {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    // @PersistenceContext
+    // private EntityManager entityManager;
 
-    @Override
-    public Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable) {
-        List<Temporada> temporadas = new ArrayList<>();
-        List<Predicate> predicates = new ArrayList<>();
-        TypedQuery<Temporada> query = null;
+    // @Override
+    // public Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable) {
+    //     List<Temporada> temporadas = new ArrayList<>();
+    //     List<Predicate> predicates = new ArrayList<>();
+    //     TypedQuery<Temporada> query = null;
 
-        int totalRegistroPorPagina = pageable.getPageSize();
-        int paginaAtual = pageable.getPageNumber();
-        int primeiroRegistro = paginaAtual *totalRegistroPorPagina;
+    //     int totalRegistroPorPagina = pageable.getPageSize();
+    //     int paginaAtual = pageable.getPageNumber();
+    //     int primeiroRegistro = paginaAtual *totalRegistroPorPagina;
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Temporada> criteriaQuery = criteriaBuilder.createQuery(Temporada.class);
-        Root<Temporada> root = criteriaQuery.from(Temporada.class);
+    //     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    //     CriteriaQuery<Temporada> criteriaQuery = criteriaBuilder.createQuery(Temporada.class);
+    //     Root<Temporada> root = criteriaQuery.from(Temporada.class);
 
-        if (!StringUtils.isEmpty(temporadaFilter.getNumero())) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Temporada_.NUMERO)), "%" + temporadaFilter.getNumero() + "%"));
-        }
+    //     if (!StringUtils.isEmpty(temporadaFilter.getNumero())) {
+    //         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Temporada_.NUMERO)), "%" + temporadaFilter.getNumero() + "%"));
+    //     }
 
-        if (predicates.size() != -1) {
-            criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
-            query = entityManager.createQuery(criteriaQuery);
-        } else {
-            query = entityManager.createQuery(criteriaQuery);
-        }
+    //     if (predicates.size() != -1) {
+    //         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     } else {
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     }
 
-        query.setFirstResult(primeiroRegistro);
-        query.setMaxResults(totalRegistroPorPagina);
-        temporadas = query.getResultList();
-        return new PageImpl<>(temporadas, pageable, totalRegistro(predicates));
-    }
+    //     query.setFirstResult(primeiroRegistro);
+    //     query.setMaxResults(totalRegistroPorPagina);
+    //     temporadas = query.getResultList();
+    //     return new PageImpl<>(temporadas, pageable, totalRegistro(predicates));
+    // }
 
-    private Long totalRegistro(List<Predicate> predicates) {
-        TypedQuery<Long> query = null;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        Root<Temporada> root = criteriaQuery.from(Temporada.class);
-        criteriaQuery.select(criteriaBuilder.count(root));
-        if (predicates.size() != -1) {
-            criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
-            query = entityManager.createQuery(criteriaQuery);
-        } else {
-            query = entityManager.createQuery(criteriaQuery);
-        }
-        Long resultado = query.getSingleResult();
-        return resultado;
-    }
+    // private Long totalRegistro(List<Predicate> predicates) {
+    //     TypedQuery<Long> query = null;
+    //     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    //     CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+    //     Root<Temporada> root = criteriaQuery.from(Temporada.class);
+    //     criteriaQuery.select(criteriaBuilder.count(root));
+    //     if (predicates.size() != -1) {
+    //         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     } else {
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     }
+    //     Long resultado = query.getSingleResult();
+    //     return resultado;
+    // }
 }

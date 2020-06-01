@@ -42,6 +42,7 @@ public class TemporadaServiceImpl implements TemporadaService {
 
     @Override
     public Temporada update(Temporada temporada) {
+        temporada.setQtd_episodios(temporada.getEpisodios().size());
         return temporadaRepository.save(temporada);
     }
 
@@ -102,7 +103,7 @@ public class TemporadaServiceImpl implements TemporadaService {
             episodioRepository.deleteById(episodio.getId());
         }
         temporada.getEpisodios().remove(index);
-        return null;
+        return temporada;
     }
 
     @Override

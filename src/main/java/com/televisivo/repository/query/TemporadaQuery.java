@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface TemporadaQuery {
 
-    Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable);
+    // Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable);
 }
