@@ -105,12 +105,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div th:if="${#lists.size(serie.temporadas)} &lt; 4">
-                                        <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
-                                    </div>
-                                    <div th:if="${#lists.size(serie.temporadas)} >= 4">
-                                        <button class="btn btn-primary" type="submit" disabled="disabled"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
-                                    </div>
+                                    <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
                                 </div>
 							</fieldset>
 						</div>
@@ -125,7 +120,7 @@
     </section>
     <th:block layout:fragment="javascript-extra">
 		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
-		<script>
+		<script type="text/javascript">
             $('.js-status').bootstrapSwitch();
         </script>
 	</th:block>

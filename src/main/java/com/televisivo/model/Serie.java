@@ -83,4 +83,8 @@ public class Serie implements Serializable {
     @JsonIgnore
 	@ManyToMany(mappedBy="series")
     private List<Artista> artistas;
+
+    public Serie() {
+        temporadas = new ArrayList<Temporada>();
+    }
 }

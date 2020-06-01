@@ -111,12 +111,13 @@ public class SerieController {
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Serie serie, BindingResult result, RedirectAttributes attributes) {
+        // serieService.remover(serie);
         serieService.deleteById(serie.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/serie/lista");
     }
 
-    @RequestMapping(value = "/alterar", method = RequestMethod.GET, params = "addrow")
+    @RequestMapping(value = "/alterar", method = RequestMethod.POST, params = "addrow")
     public ModelAndView adicionarTemporada(@Valid Serie serie) {
         ModelAndView modelAndView = new ModelAndView("/serie/serie");
         serie = serieService.adicionarTemporada(serie);
@@ -124,7 +125,7 @@ public class SerieController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/alterar", method = RequestMethod.GET, params = "removerow")
+    @RequestMapping(value = "/alterar", method = RequestMethod.POST, params = "removerow")
     public ModelAndView removerTemporada(Serie serie, HttpServletRequest request) {
         int index = Integer.valueOf(request.getParameter("removerow"));
         serie = serieService.removerTemporada(serie, index);
