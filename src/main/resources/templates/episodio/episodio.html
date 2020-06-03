@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Alterar episodio</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Alterar</h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/episodio/lista}">Pesquisar episodio</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:text="'Episodio ' + ${episodio.numero}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:object="${episodio}" th:action="@{/serie/temporada/episodio/alterar}" method="post" autocomplete="off">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/validation :: validation"></div>
+								<div th:replace="fragments/alert"></div>
+							</div>
+                        </div>
+						<input type="hidden" th:field="*{id}">
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="numero">Numero</label>
+                                <Input class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{numero}"></span>
+                                </div>
+							</div>
+						</div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="nome">Nome</label>
+                                <Input class="form-control" type="text" placeholder="Enter nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{nome}"></span>
+                                </div>
+							</div>
+						</div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="enredo">Enredo</label>
+                                <Input class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{enredo}"></span>
+                                </div>
+							</div>
+						</div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="duracao">Duração</label>
+                                <Input class="form-control" type="text" placeholder="Enter duracao" th:field="*{duracao}" id="duracao" name="duracao" th:classappend="${#fields.hasErrors('duracao')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{duracao}"></span>
+                                </div>
+							</div>
+						</div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="publicacao">Publicação</label>
+                                <Input class="form-control" type="date" placeholder="Enter publicacao" th:field="*{publicacao}" id="publicacao" name="publicacao" th:classappend="${#fields.hasErrors('publicacao')} ? 'is-invalid'">
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{publicacao}"></span>
+                                </div>
+							</div>
+						</div>
+                        <div class="tile-footer">
+							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
+							<a th:href="@{/serie/temporada/detalhes/{id}(id=${episodio.temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

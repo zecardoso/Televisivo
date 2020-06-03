@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Remover episodio</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Remover</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/episodio/lista}">Pesquisar episodio</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+				<h3 class="tile-title" th:object="${episodio}" th:text="'Temporada ' + *{numero}"></h3>
+                <div class="tile-body tile-footer">
+                    <form th:action="@{/serie/episodio/remover}" th:object="${episodio}" method="post" autocomplete="off">
+						<input type="hidden" th:field="*{id}">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Ano</label>
+									<h4 th:text="*{ano}"></h4>
+								</div>
+							</div>
+						</div>
+						<label class="control-label">Episodios</label>
+						<div class="form-row" th:each="episodios, rowStat :*{episodios}">
+							<div class="col-md-5 mb-1">
+								<button type="button" disabled class="btn btn-primary">Episodio <span class="badge badge-light" th:text="*{episodios[__${rowStat.index}__].numero}"></span></button>
+								<button type="button" disabled class="btn btn-primary">Publicacao <span class="badge badge-light" th:text="*{episodios[__${rowStat.index}__].publicacao}"></span></button>
+							</div>
+						</div>
+                        <div class="tile-footer">
+							<button class="btn btn-danger" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Remover</button>
+							<a th:href="@{/serie/temporada/detalhes/{id}(id=${episodio.temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</section>
+</body>
+</html>

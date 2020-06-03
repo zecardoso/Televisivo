@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<head>
+    <title>Lista de episodios</title>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Lista</h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
+                <li class="breadcrumb-item"><a th:href="@{/episodio/lista}">Pesquisar episodio</a></li>
+            </ul>
+        </div>
+        <div class="container">
+			<div class="tile">
+                <div class="tile-body">
+					<div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div th:replace="fragments/alert"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered table-hover" id="sampleTable" episodio="grid" aria-describedby="sampleTable_info">
+									<thead>
+										<tr>
+											<th scope="col">Name</th>
+											<th scope="col" style="text-align: center;">Detalhes</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="episodio :${pagina.conteudo}">
+											<td data-tile="nome" th:text="*{episodio.nome}"></td>
+											<td data-tile="Detalhes" style="text-align: center;">
+												<a title="Detalhes" th:href="@{/episodio/detalhes/{id}(id=${episodio.id})}" class="btn btn-warning btn-sm btn-block"><i class="fa fa-search-plus"></i>Detalhes</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div th:replace="fragments/pagination :: pagination"></div>
+								<a title="Adicionar" class="btn btn-success" th:href="@{/episodio/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+	</section>
+	<th:block layout:fragment="javascript-extra">
+		<script>
+			$(document).ready(function(){
+				changePageAndSize();
+			});
+			
+			function changePageAndSize(){
+				$('#pageSizeSelect').change(function(e){
+					window.location.replace("/episodio/lista?size="+this.value+"&page=0");
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>
