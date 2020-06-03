@@ -65,7 +65,7 @@
                         </fieldset>
                         <div class="tile-footer">
 							<button class="btn btn-danger" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Remover</button>
-							<button type="submit" class="btn btn-secondary" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+							<a th:href="@{/usuario/detalhes/{id}(id=${usuario.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
 						</div>
                     </form>
                 </div>

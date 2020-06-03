@@ -107,11 +107,12 @@
                                 <div class="form-group">
                                     <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
                                 </div>
-							</fieldset>
-						</div>
+                            </fieldset>
+                        </div>
                         <div class="tile-footer">
 							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+							<a th:if="${serie.id} != null" th:href="@{/serie/detalhes/{id}(id=${serie.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
+							<button th:if="${serie.id} == null" class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
 						</div>
                     </form>
                 </div>
