@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/temporada")
+@RequestMapping(value = "/serie/temporada")
 public class TemporadaController {
 
     @Autowired
