@@ -19,20 +19,86 @@
                 <div class="tile-body tile-footer">
                     <form th:action="@{/serie/remover}" th:object="${serie}" method="post" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Enredo</label>
+									<h4 th:text="*{enredo}"></h4>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Nome</label>
-								<h4 th:text="*{nome}"></h4>
+								<div class="form-group">
+									<label class="control-label">Ano</label>
+									<h4 th:text="*{ano}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Restrição de idade</label>
+									<h4 th:text="*{restricao}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Serviço</label>
+									<h4 th:text="*{servico.nome}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Quantidade de temporadas</label>
+									<h4 th:text="*{qtd_temporadas}"></h4>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Quantidade de seguidores</label>
+									<h4 th:text="*{qtd_seguidores}"></h4>
+								</div>
+							</div>
+						</div>
+						<label class="control-label">Categorias</label>
+						<div class="row">
+							<th:block th:each="categoria : ${categorias}">
+								<div class="col-md-1 mb-2">
+									<label th:text="${categoria.nome}"></label>
+									<div class="make-switch switch-large">
+										<input type="checkbox" th:value="${categoria.id}" th:field="*{categorias}" disabled class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+									</div>
+								</div>
+							</th:block>
+						</div>
+						<label class="control-label">Temporadas</label>
+						<div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
+							<div class="col-md-5 mb-1">
+								<button type="button" disabled class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].numero}"></span></button>
+								<button type="button" disabled class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].ano}"></span></button>
 							</div>
 						</div>
                         <div class="tile-footer">
 							<button class="btn btn-danger" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Remover</button>
-							<button type="submit" class="btn btn-secondary" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+							<a th:href="@{/serie/detalhes/{id}(id=${serie.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
 						</div>
                     </form>
                 </div>
             </div>
         </div>
 	</section>
+    <th:block layout:fragment="javascript-extra">
+		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
+		<script type="text/javascript">
+            $('.js-status').bootstrapSwitch();
+        </script>
+	</th:block>
 </body>
 </html>

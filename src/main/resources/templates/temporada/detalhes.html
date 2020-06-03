@@ -15,15 +15,9 @@
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${temporada}" th:text="*{numero}"></h3>
+				<h3 class="tile-title" th:object="${temporada}" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:object="${temporada}">
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Numero</label>
-								<h4 th:text="*{numero}"></h4>
-							</div>
-                        </div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div class="form-group">
@@ -31,20 +25,34 @@
 									<h4 th:text="*{ano}"></h4>
 								</div>
 							</div>
-						<!-- </div>
-						<fieldset>
-							<legend>Episodios</legend>
-						</fieldset>
-						<div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
-							<div class="col-md-3 mb-3">
-								<a th:href="@{/temporada/alterar/{id}(id=*{temporadas[__${rowStat.index}__].numero})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].numero}"></span></a>
-								<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporadas[__${rowStat.index}__].ano}"></span></a>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Avaliação</label>
+									<h4 th:text="*{avaliacao}"></h4>
+								</div>
 							</div>
-						</div> -->
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Quantidade de episodios</label>
+									<h4 th:text="*{qtd_episodios}"></h4>
+								</div>
+							</div>
+						</div>
+						<label class="control-label">Episodios</label>
+						<div class="form-row" th:each="episodios, rowStat :*{episodios}">
+							<div class="col-md-5 mb-1">
+								<a th:href="@{/serie/temporada/episodio/detalhes/{id}(id=*{episodios[__${rowStat.index}__].id})}" type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="*{episodios[__${rowStat.index}__].numero}"></span></a>
+								<a type="button" class="btn btn-primary">Publicacao <span class="badge badge-light" th:text="*{episodios[__${rowStat.index}__].publicacao}"></span></a>
+							</div>
+						</div>
                         <div class="tile-footer">
-							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/temporada/alterar/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
-							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/temporada/remover/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
-							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/temporada/lista}" aria-hidden="true" temporada="button"></a>
+							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/serie/temporada/alterar/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
+							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/serie/temporada/remover/{id}(id=${temporada.id})}" aria-hidden="true" temporada="button"></a>
+							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/serie/detalhes/{id}(id=${temporada.serie.id})}" aria-hidden="true" temporada="button"></a>
 						</div>
                     </form>
                 </div>
