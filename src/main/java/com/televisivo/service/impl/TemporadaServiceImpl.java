@@ -73,10 +73,10 @@ public class TemporadaServiceImpl implements TemporadaService {
         return temporadaRepository.buscarNumero(numero);
     }
 
-    @Override
-    public Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable) {
-        return temporadaRepository.listaComPaginacao(temporadaFilter, pageable);
-    }
+    // @Override
+    // public Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable) {
+    //     return temporadaRepository.listaComPaginacao(temporadaFilter, pageable);
+    // }
 
     @Override
     public void salvarEpisodio(Temporada temporada) {

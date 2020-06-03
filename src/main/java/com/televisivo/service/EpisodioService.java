@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 public interface EpisodioService extends GenericService<Episodio, Long>{
 
     List<Episodio> buscarNumero(int numero);
-    Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable);
+    // Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable);
 
     // void salvarElenco(Episodio episodio);
     // Episodio adicionarElenco(Episodio episodio);

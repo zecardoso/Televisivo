@@ -67,8 +67,8 @@ public class EpisodioServiceImpl implements EpisodioService {
         return episodioRepository.buscarNumero(numero);
     }
 
-    @Override
-    public Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable) {
-        return episodioRepository.listaComPaginacao(episodioFilter, pageable);
-    }
+    // @Override
+    // public Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable) {
+    //     return episodioRepository.listaComPaginacao(episodioFilter, pageable);
+    // }
 }

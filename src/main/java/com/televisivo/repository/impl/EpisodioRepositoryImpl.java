@@ -26,54 +26,54 @@ public class EpisodioRepositoryImpl implements EpisodioQuery {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable) {
-        List<Episodio> episodios = new ArrayList<>();
-        List<Predicate> predicates = new ArrayList<>();
-        TypedQuery<Episodio> query = null;
+    // @Override
+    // public Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable) {
+    //     List<Episodio> episodios = new ArrayList<>();
+    //     List<Predicate> predicates = new ArrayList<>();
+    //     TypedQuery<Episodio> query = null;
 
-        int totalRegistroPorPagina = pageable.getPageSize();
-        int paginaAtual = pageable.getPageNumber();
-        int primeiroRegistro = paginaAtual *totalRegistroPorPagina;
+    //     int totalRegistroPorPagina = pageable.getPageSize();
+    //     int paginaAtual = pageable.getPageNumber();
+    //     int primeiroRegistro = paginaAtual *totalRegistroPorPagina;
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Episodio> criteriaQuery = criteriaBuilder.createQuery(Episodio.class);
-        Root<Episodio> root = criteriaQuery.from(Episodio.class);
+    //     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    //     CriteriaQuery<Episodio> criteriaQuery = criteriaBuilder.createQuery(Episodio.class);
+    //     Root<Episodio> root = criteriaQuery.from(Episodio.class);
 
-        if (!StringUtils.isEmpty(episodioFilter.getNumero())) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Episodio_.NUMERO)), "%" + episodioFilter.getNumero() + "%"));
-        }
+    //     if (!StringUtils.isEmpty(episodioFilter.getNumero())) {
+    //         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Episodio_.NUMERO)), "%" + episodioFilter.getNumero() + "%"));
+    //     }
 
-        if (!StringUtils.isEmpty(episodioFilter.getNome())) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Episodio_.NOME)), "%" + episodioFilter.getNome() + "%"));
-        }
+    //     if (!StringUtils.isEmpty(episodioFilter.getNome())) {
+    //         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Episodio_.NOME)), "%" + episodioFilter.getNome() + "%"));
+    //     }
 
-        if (predicates.size() != -1) {
-            criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
-            query = entityManager.createQuery(criteriaQuery);
-        } else {
-            query = entityManager.createQuery(criteriaQuery);
-        }
+    //     if (predicates.size() != -1) {
+    //         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     } else {
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     }
 
-        query.setFirstResult(primeiroRegistro);
-        query.setMaxResults(totalRegistroPorPagina);
-        episodios = query.getResultList();
-        return new PageImpl<>(episodios, pageable, totalRegistro(predicates));
-    }
+    //     query.setFirstResult(primeiroRegistro);
+    //     query.setMaxResults(totalRegistroPorPagina);
+    //     episodios = query.getResultList();
+    //     return new PageImpl<>(episodios, pageable, totalRegistro(predicates));
+    // }
 
-    private Long totalRegistro(List<Predicate> predicates) {
-        TypedQuery<Long> query = null;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        Root<Episodio> root = criteriaQuery.from(Episodio.class);
-        criteriaQuery.select(criteriaBuilder.count(root));
-        if (predicates.size() != -1) {
-            criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
-            query = entityManager.createQuery(criteriaQuery);
-        } else {
-            query = entityManager.createQuery(criteriaQuery);
-        }
-        Long resultado = query.getSingleResult();
-        return resultado;
-    }
+    // private Long totalRegistro(List<Predicate> predicates) {
+    //     TypedQuery<Long> query = null;
+    //     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    //     CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+    //     Root<Episodio> root = criteriaQuery.from(Episodio.class);
+    //     criteriaQuery.select(criteriaBuilder.count(root));
+    //     if (predicates.size() != -1) {
+    //         criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     } else {
+    //         query = entityManager.createQuery(criteriaQuery);
+    //     }
+    //     Long resultado = query.getSingleResult();
+    //     return resultado;
+    // }
 }

@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface EpisodioQuery {
 
-    Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable);
+    // Page<Episodio> listaComPaginacao(EpisodioFilter episodioFilter, Pageable pageable);
 }
