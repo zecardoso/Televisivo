@@ -37,6 +37,7 @@ public class SerieServiceImpl implements SerieService {
 
     @Override
     public Serie save(Serie serie) {
+        serie.setQtd_temporadas(serie.getTemporadas().size());
         return serieRepository.save(serie);
     }
 
@@ -67,16 +68,6 @@ public class SerieServiceImpl implements SerieService {
 			throw new SerieNaoCadastradaException(String.format("A serie com o código %d não foi encontrada!", id));
 		}
     }
-
-    // @Override
-    // public void remover(Serie serie) {
-    //     if (serie.getTemporadas().size() != -1) {
-    //         for (Temporada temporada : serie.getTemporadas()) {
-    //             temporadaRepository.deleteById(temporada.getId());
-    //         }
-    //     }
-    //     serieRepository.deleteById(serie.getId());
-    // }
 
     @Override
     public List<Serie> buscarNome(String nome) {
