@@ -111,7 +111,6 @@ public class SerieController {
 
     @RequestMapping(value = "/remover", method = RequestMethod.POST)
     public ModelAndView remover(Serie serie, BindingResult result, RedirectAttributes attributes) {
-        // serieService.remover(serie);
         serieService.deleteById(serie.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/serie/lista");

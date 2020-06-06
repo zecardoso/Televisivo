@@ -33,17 +33,6 @@ public class TemporadaController {
     @Autowired
     private TemporadaService temporadaService;
 
-    // @GetMapping("/lista")
-    // public ModelAndView lista(TemporadaFilter temporadaFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
-    //     Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-    //     PaginaWrapper<Temporada> paginaWrapper = new PaginaWrapper(temporadaService.listaComPaginacao(temporadaFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
-    //     ModelAndView modelAndView = new ModelAndView("/temporada/lista");
-    //     modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
-    //     modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-    //     modelAndView.addObject("pagina", paginaWrapper);
-    //     return modelAndView;
-    // }
-
     @GetMapping("/cadastro")
     public ModelAndView cadastro(Temporada temporada) {
         ModelAndView modelAndView = new ModelAndView("/temporada/temporada");
@@ -74,17 +63,7 @@ public class TemporadaController {
         modelAndView.addObject("temporada", temporada);
         return modelAndView;
     }
-
-    // @RequestMapping(value = "/adicionar", method = RequestMethod.POST)
-    // public ModelAndView adicionar(@Valid Temporada temporada, BindingResult result, RedirectAttributes attributes) {
-    //     if (result.hasErrors()) {
-    //         return cadastro(temporada);
-    //     }
-    //     temporadaService.save(temporada);
-    //     attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
-    //     return new ModelAndView("redirect:/temporada/lista");
-    // }
-
+    
     @RequestMapping(value = "/alterar", method = RequestMethod.POST)
     public ModelAndView alterar(@Valid Temporada temporada, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
@@ -119,9 +98,4 @@ public class TemporadaController {
         modelAndView.addObject("temporada", temporada);
         return modelAndView;
     }
-
-    // @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
-	// public String cancelar() {
-	// 	return "redirect:/temporada/lista";
-	// }
 }

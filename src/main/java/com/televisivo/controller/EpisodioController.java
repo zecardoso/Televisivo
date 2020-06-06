@@ -30,18 +30,7 @@ public class EpisodioController {
 
     @Autowired
     private EpisodioService episodioService;
-
-    // @GetMapping("/lista")
-    // public ModelAndView lista(EpisodioFilter episodioFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
-    //     Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-    //     PaginaWrapper<Episodio> paginaWrapper = new PaginaWrapper(episodioService.listaComPaginacao(episodioFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
-    //     ModelAndView modelAndView = new ModelAndView("/episodio/lista");
-    //     modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
-    //     modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-    //     modelAndView.addObject("pagina", paginaWrapper);
-    //     return modelAndView;
-    // }
-
+    
     @GetMapping("/cadastro")
     public ModelAndView cadastro(Episodio episodio) {
         ModelAndView modelAndView = new ModelAndView("/episodio/episodio");
@@ -73,16 +62,6 @@ public class EpisodioController {
         return modelAndView;
     }
 
-    // @RequestMapping(value = "/adicionar", method = RequestMethod.POST)
-    // public ModelAndView adicionar(@Valid Episodio episodio, BindingResult result, RedirectAttributes attributes) {
-    //     if (result.hasErrors()) {
-    //         return cadastro(episodio);
-    //     }
-    //     episodioService.save(episodio);
-    //     attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
-    //     return new ModelAndView("redirect:/episodio/lista");
-    // }
-
     @RequestMapping(value = "/alterar", method = RequestMethod.POST)
     public ModelAndView alterar(@Valid Episodio episodio, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
@@ -99,9 +78,4 @@ public class EpisodioController {
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return new ModelAndView("redirect:/episodio/lista");
     }
-
-    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
-	public String cancelar() {
-		return "redirect:/episodio/lista";
-	}
 }
