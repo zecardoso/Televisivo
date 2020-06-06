@@ -24,7 +24,8 @@
 								<div th:replace="fragments/alert"></div>
 							</div>
                         </div>
-						<input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{serie.id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="numero">Numero</label>
@@ -43,22 +44,35 @@
                                 </div>
 							</div>
 						</div>
-                        <div th:if="${temporada.id} != null">
+                        <div>
                             <label class="control-label">Episodios</label>
 							<fieldset>
                                 <div class="form-row" th:each="episodios, rowStat :*{episodios}">
-                                    <div class="col-md-3 mb-3">
+                                    <div class="col-md-2">
                                         <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
+                                        <input type="hidden" th:field="*{temporada.serie.id}">
+                                        <label>Número da temporada</label>
+                                        <input type="number" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].numero}"/>
+                                    </div>
+                                    <div class="col-md-3">
                                         <label>Nome do episodio</label>
                                         <input type="text" placeholder="Nome" class="form-control" th:field="*{episodios[__${rowStat.index}__].nome}"/>
                                     </div>
                                     <div class="col-md-3">
-                                        <label>Número da temporada</label>
-                                        <input type="text" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].numero}"/>
+                                        <label>Enredo</label>
+                                        <input type="text" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].enredo}"/>
                                     </div>
+                                    <div class="col-md-2">
+                                        <label>Duração</label>
+                                        <input type="number" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].duracao}"/>
+                                    </div>
+                                    <!-- <div class="col-md-2">
+                                        <label>Publicação</label>
+                                        <input type="date" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].publicacao}"/>
+                                    </div> -->
                                     <div class="col-md-1">
-                                        <label th:if="${rowStat.index} ge 0 and ${#lists.size(temporada.episodios) ne 1}">Remover</label>
-                                        <button class="btn btn-danger" type="submit" name="removerow" th:value="${rowStat.index}" th:if="${rowStat.index} ge 0 and ${#lists.size(temporada.episodios) ne 1}"><i class="fa fa-minus" style="color: white"></i></button>
+                                        <label>Remover</label>
+                                        <button class="btn btn-danger" type="submit" name="removerow" th:value="${rowStat.index}"><i class="fa fa-minus" style="color: white"></i></button>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -68,7 +82,7 @@
 						</div>
                         <div class="tile-footer">
 							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+							<a th:href="@{/serie/temporada/detalhes/{id}(id=${temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
 						</div>
                     </form>
                 </div>
