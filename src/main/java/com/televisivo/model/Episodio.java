@@ -24,6 +24,8 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -63,9 +65,10 @@ public class Episodio implements Serializable {
 	@Column(nullable = false)
     private int duracao;
 
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date publicacao;
+    // @DateTimeFormat(pattern = "dd/mm/yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @Column(nullable = tryue)
+    // private Date publicacao;
 
     @ManyToOne(targetEntity = Temporada.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name="FK_TEMPORADA_EPISODIO"))

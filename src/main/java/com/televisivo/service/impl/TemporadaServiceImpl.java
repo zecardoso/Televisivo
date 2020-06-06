@@ -3,6 +3,7 @@ package com.televisivo.service.impl;
 import java.util.List;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.repository.EpisodioRepository;
 import com.televisivo.repository.TemporadaRepository;
@@ -34,9 +35,10 @@ public class TemporadaServiceImpl implements TemporadaService {
     public List<Temporada> findAll() {
         return temporadaRepository.findAll();
     }
-
+    
     @Override
     public Temporada save(Temporada temporada) {
+        temporada.setQtd_episodios(temporada.getEpisodios().size());
         return temporadaRepository.save(temporada);
     }
 
@@ -72,12 +74,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     public List<Temporada> buscarNumero(int numero) {
         return temporadaRepository.buscarNumero(numero);
     }
-
-    // @Override
-    // public Page<Temporada> listaComPaginacao(TemporadaFilter temporadaFilter, Pageable pageable) {
-    //     return temporadaRepository.listaComPaginacao(temporadaFilter, pageable);
-    // }
-
+    
     @Override
     public void salvarEpisodio(Temporada temporada) {
         if (temporada.getEpisodios().size() != -1) {

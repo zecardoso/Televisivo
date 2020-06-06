@@ -61,7 +61,7 @@
                                 </div>
 							</div>
 						</div>
-                        <div class="form-row">
+                        <!-- <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="publicacao">Publicação</label>
                                 <Input class="form-control" type="date" placeholder="Enter publicacao" th:field="*{publicacao}" id="publicacao" name="publicacao" th:classappend="${#fields.hasErrors('publicacao')} ? 'is-invalid'">
@@ -69,7 +69,7 @@
                                     <span th:errors="*{publicacao}"></span>
                                 </div>
 							</div>
-						</div>
+						</div> -->
                         <div class="tile-footer">
 							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
 							<a th:href="@{/serie/temporada/detalhes/{id}(id=${episodio.temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>

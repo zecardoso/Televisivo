@@ -1,6 +1,5 @@
 package com.televisivo.model;
 
-import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
@@ -10,7 +9,6 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Episodio.class)
 public abstract class Episodio_ {
 
-	public static volatile SingularAttribute<Episodio, Date> publicacao;
 	public static volatile SingularAttribute<Episodio, Integer> numero;
 	public static volatile ListAttribute<Episodio, Elenco> elencos;
 	public static volatile SingularAttribute<Episodio, Temporada> temporada;
@@ -21,7 +19,6 @@ public abstract class Episodio_ {
 	public static volatile SingularAttribute<Episodio, Float> avaliacao;
 	public static volatile ListAttribute<Episodio, Usuario> usuarios;
 
-	public static final String PUBLICACAO = "publicacao";
 	public static final String NUMERO = "numero";
 	public static final String ELENCOS = "elencos";
 	public static final String TEMPORADA = "temporada";
