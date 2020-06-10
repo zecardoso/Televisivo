@@ -15,6 +15,8 @@ import lombok.ToString;
 @Embeddable
 public class RolePermissaoId implements Serializable {
 
+    private static final long serialVersionUID = 6291875624901334284L;
+
     @EqualsAndHashCode.Include
 	@Column(name = "role_id", nullable = false, insertable = false, updatable = false)
     private Long role;

@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArtistaRepository extends JpaRepository<Artista, Long>, ArtistaQuery {
 
-    @Query(value = "SELECT a FROM Artista a WHERE a.nome like %:nome%")
+    @Query("SELECT a FROM Artista a WHERE a.nome like %:nome%")
     List<Artista> buscarNome(@Param("nome") String nome);
 }

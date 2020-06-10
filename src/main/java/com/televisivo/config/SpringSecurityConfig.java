@@ -1,8 +1,8 @@
 package com.televisivo.config;
 
 import com.televisivo.security.LoginAuthenticationProvider;
-import com.televisivo.security.LoginFailuireHandler;
-import com.televisivo.security.LoginSucessHandler;
+import com.televisivo.security.LoginFailureHandler;
+import com.televisivo.security.LoginSuccessHandler;
 import com.televisivo.security.LogoutSuccess;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,74 +28,68 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-    
-    @Autowired
     private LoginAuthenticationProvider loginAuthenticationProvider;
 
     @Autowired
-    private LoginSucessHandler loginSucessHandler;
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Autowired
-    private LoginFailuireHandler loginFailuireHandler;
-
-    @Autowired
-    private PersistentTokenRepository persistentTokenRepository;
+    private LoginFailureHandler loginFailureHandler;
 
     @Autowired
     private LogoutSuccess logoutSuccess;
 
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
+
     @Override
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
-        // String senha = passwordEncoder().encode("123456");
-		// System.out.println("senha: [" + senha + "]");
-		// authentication.inMemoryAuthentication().withUser("admin").password(senha).roles("USUARIO");
         authentication.authenticationProvider(loginAuthenticationProvider);
     }
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/resources/**").permitAll()
-            .antMatchers("/js/**").permitAll()
-            .antMatchers("/static/**").permitAll()
-            .antMatchers("/css/**").permitAll()
             .antMatchers("/").permitAll()
-            .antMatchers("/fontawesome/**").permitAll()
-            .antMatchers("/images/**").permitAll()
-            .antMatchers("/login/**").permitAll() // tirar
-            .antMatchers("/roles/**").permitAll() // tirar
-            .antMatchers("/usuarios/**").permitAll() // .hasAnyRole("ADMINISTRADOR", "USUARIO")
-            // .antMatchers("/usuario/**").hasRole("ADMINISTRADOR")
+            .antMatchers("/static/**").permitAll()
+            .antMatchers("/js/**").permitAll()
+            .antMatchers("/img/**").permitAll()
+            .antMatchers("/css/**").permitAll()
+            .antMatchers("/resources/**").permitAll()
+            .antMatchers("/login").permitAll()
+            .antMatchers("/usuarios/**").permitAll()
+			.antMatchers("/usuario/**").hasAnyRole("ADMINISTRADOR","USUARIO")
             .anyRequest().authenticated();
+
         http.formLogin()
             .loginPage("/login")
             .usernameParameter("email")
-            .passwordParameter("senha")
-            // .defaultSuccessUrl("/home", true)
-            .successHandler(loginSucessHandler)
-            // .failureUrl("/login?error=true")
-            .failureHandler(loginFailuireHandler)
+            .passwordParameter("password")
+            .successHandler(loginSuccessHandler)
+            .failureHandler(loginFailureHandler)
             .permitAll();
+
         http.logout()
-            // .logoutSuccessUrl("/login?logout=true")
             .logoutSuccessHandler(logoutSuccess)
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .deleteCookies("JSESSIONID")
             .invalidateHttpSession(true)
             .clearAuthentication(true)
             .permitAll();
+
         http.sessionManagement()
             .invalidSessionUrl("/?expirado=true")
             .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             .maximumSessions(1)
-            .sessionRegistry(SessionRegistry())
-            .and()
+			.maxSessionsPreventsLogin(false)
+			.expiredUrl("/?mensagem=true")
+            .sessionRegistry(sessionRegistry()).and()
             .sessionFixation()
             .none();
+
         http.exceptionHandling()
             .accessDeniedPage("/403");
-        // http.csrf().disable();
+
         http.rememberMe()
             .rememberMeCookieName("LEMBRARID")
             .rememberMeParameter("checkRemenberMe")
@@ -108,7 +102,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SessionRegistry SessionRegistry() {
+    public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
     
@@ -123,7 +117,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     
     @Bean
-    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices(UserDetailsService userDetailsService) {
         PersistentTokenBasedRememberMeServices persistentTokenBasedServices = new PersistentTokenBasedRememberMeServices("LEMBRARID", userDetailsService, persistentTokenRepository);
         persistentTokenBasedServices.setAlwaysRemember(true);
         return persistentTokenBasedServices;

@@ -2,7 +2,9 @@ package com.televisivo.service.exceptions;
 
 public class NegocioException extends RuntimeException {
 
-    public NegocioException(String mensagem) {
-        super(mensagem);
+    private static final long serialVersionUID = 9194142944838512218L;
+
+    public NegocioException(String message) {
+        super(message);
     }
 }

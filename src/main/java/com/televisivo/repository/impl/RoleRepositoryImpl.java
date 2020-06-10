@@ -28,7 +28,6 @@ public class RoleRepositoryImpl implements RoleQuery {
 
     @Override
     public Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable) {
-        List<Role> roles = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Role> query = null;
 
@@ -53,7 +52,7 @@ public class RoleRepositoryImpl implements RoleQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        roles = query.getResultList();
+        List<Role> roles = query.getResultList();
         return new PageImpl<>(roles, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class RoleRepositoryImpl implements RoleQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

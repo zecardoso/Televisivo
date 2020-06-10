@@ -1,6 +1,5 @@
 package com.televisivo.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -49,7 +48,9 @@ import lombok.ToString;
 @Where(clause = TelevisivoConfig.NAO_DELETADO)
 @WhereJoinTable(clause = TelevisivoConfig.NAO_DELETADO)
 @SequenceGenerator(name = "usuario_sequence", sequenceName = "usuario_sequence", initialValue = 1, allocationSize = 1)
-public class Usuario implements UserDetails, Serializable {
+public class Usuario implements UserDetails {
+
+    private static final long serialVersionUID = 3598850498230758819L;
 
     @Id
     @EqualsAndHashCode.Include
@@ -125,17 +126,11 @@ public class Usuario implements UserDetails, Serializable {
     @JoinTable(name = "usuario_episodio", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "episodio_id"))
     private List<Episodio> episodios;
 
-    public Usuario() {
-        roles = new ArrayList<Role>();
-        categorias = new ArrayList<Categoria>();
-        episodios = new ArrayList<Episodio>();
-    }
-
     @JsonIgnore
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> autoridade = new ArrayList<GrantedAuthority>();
+        final List<GrantedAuthority> autoridade = new ArrayList<>();
         for (Role role : this.getRoles()) {
             autoridade.add(new SimpleGrantedAuthority("ROLE_" + role.getNome().toUpperCase()));
         }
@@ -145,24 +140,24 @@ public class Usuario implements UserDetails, Serializable {
     @Override
     @Transient
     public boolean isAccountNonExpired() {
-        return ativo;
+        return isAtivo();
     }
 
     @Override
     @Transient
     public boolean isAccountNonLocked() {
-        return ativo;
+        return isAtivo();
     }
 
     @Override
     @Transient
     public boolean isCredentialsNonExpired() {
-        return ativo;
+        return isAtivo();
     }
 
     @Override
     @Transient
     public boolean isEnabled() {
-        return ativo;
+        return isAtivo();
     }
 }

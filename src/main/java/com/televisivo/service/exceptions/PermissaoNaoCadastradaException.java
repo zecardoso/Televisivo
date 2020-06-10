@@ -1,9 +1,13 @@
 package com.televisivo.service.exceptions;
 
-public class PermissaoNaoCadastradaException extends EntidadeNaoCadastradaException {
+import org.springframework.security.core.AuthenticationException;
 
-    public PermissaoNaoCadastradaException(String mensagem) {
-        super(mensagem);
+public class PermissaoNaoCadastradaException extends AuthenticationException {
+
+    private static final long serialVersionUID = 8210337502325233287L;
+
+    public PermissaoNaoCadastradaException(String msg) {
+        super(msg);
     }
 
     public PermissaoNaoCadastradaException(Long id) {

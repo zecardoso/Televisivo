@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,9 +19,10 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "persistence")
 public class PersistenceTokenLogin implements Serializable {
-    
+
+    private static final long serialVersionUID = 2025240050646540656L;
+
     @Id
     @EqualsAndHashCode.Include
     @Column(name = "persistence_id")

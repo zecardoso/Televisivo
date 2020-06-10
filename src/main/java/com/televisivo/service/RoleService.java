@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface RoleService extends GenericService<Role, Long> {
 
-    List<Role> buscarNome(String nome);
     Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable);
+    List<Role> buscarNome(String nome);
+
+    Role findRole(String role);
 	void saveUsuarioAuditoria(Role role, String operacao);
 }

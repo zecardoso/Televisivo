@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ElencoRepository extends JpaRepository<Elenco, Long>, ElencoQuery {
 
-    @Query(value = "SELECT e FROM Elenco e WHERE e.personagem like %:personagem%")
+    @Query("SELECT e FROM Elenco e WHERE e.personagem like %:personagem%")
     List<Elenco> buscarPersonagem(@Param("personagem") String personagem);
 }

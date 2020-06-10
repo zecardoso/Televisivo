@@ -30,6 +30,8 @@ import lombok.ToString;
 @SequenceGenerator(name = "artista_sequence", sequenceName = "artista_sequence", initialValue = 1, allocationSize = 1)
 public class Artista implements Serializable {
 
+    private static final long serialVersionUID = 2386611204242179779L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "artista_sequence")
@@ -44,11 +46,11 @@ public class Artista implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "artista_categoria", joinColumns = @JoinColumn(name = "artista_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<Categoria> categorias;
+    private List<Categoria> categorias = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "artista_serie", joinColumns = @JoinColumn(name = "artista_id"), inverseJoinColumns = @JoinColumn(name = "serie_id"))
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 
     @OneToOne(mappedBy = "artista", fetch = FetchType.LAZY)
     private Elenco elenco;

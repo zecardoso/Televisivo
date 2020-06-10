@@ -39,14 +39,16 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(Role role) {
+        role = roleRepository.save(role);
         saveUsuarioAuditoria(role, TelevisivoConfig.INCLUSAO);
-        return roleRepository.save(role);
+        return role;
     }
 
     @Override
     public Role update(Role role) {
+        role = roleRepository.save(role);
         saveUsuarioAuditoria(role, TelevisivoConfig.ALTERACAO);
-        return roleRepository.save(role);
+        return role;
     }
 
     @Override
@@ -80,6 +82,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable) {
         return roleRepository.listaComPaginacao(roleFilter, pageable);
+    }
+
+    @Override
+    public Role findRole(String role) {
+        return null;
     }
 
     @Override

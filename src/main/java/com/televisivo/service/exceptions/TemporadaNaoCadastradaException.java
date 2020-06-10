@@ -1,9 +1,13 @@
 package com.televisivo.service.exceptions;
 
-public class TemporadaNaoCadastradaException extends EntidadeNaoCadastradaException {
+import org.springframework.security.core.AuthenticationException;
 
-    public TemporadaNaoCadastradaException(String mensagem) {
-        super(mensagem);
+public class TemporadaNaoCadastradaException extends AuthenticationException {
+
+    private static final long serialVersionUID = -8105966840987384720L;
+
+    public TemporadaNaoCadastradaException(String msg) {
+        super(msg);
     }
 
     public TemporadaNaoCadastradaException(Long id) {

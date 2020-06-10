@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ServicoRepository extends JpaRepository<Servico, Long>, ServicoQuery {
 
-    @Query(value = "SELECT s FROM Servico s WHERE s.nome like %:nome%")
+    @Query("SELECT s FROM Servico s WHERE s.nome like %:nome%")
     List<Servico> buscarNome(@Param("nome") String nome);
 }

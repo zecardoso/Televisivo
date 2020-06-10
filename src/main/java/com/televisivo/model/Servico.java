@@ -1,5 +1,6 @@
 package com.televisivo.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @SequenceGenerator(name = "servico_sequence", sequenceName = "servico_sequence", initialValue = 1, allocationSize = 1)
-public class Servico {
+public class Servico implements Serializable {
+
+    private static final long serialVersionUID = -6011359642344617832L;
 
     @Id
     @EqualsAndHashCode.Include
@@ -39,5 +42,5 @@ public class Servico {
     private String nome;
 
     @OneToMany(mappedBy = "servico", fetch = FetchType.LAZY)
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 }

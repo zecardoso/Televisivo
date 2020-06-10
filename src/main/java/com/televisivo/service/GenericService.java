@@ -2,12 +2,12 @@ package com.televisivo.service;
 
 import java.util.List;
 
-public interface GenericService<T, ID> {
+public interface GenericService<T, I> {
 
     List<T> findAll();
 	T save(T entity);
 	T update(T entity);
-	T getOne(ID id);
-	T findById(ID id);
-    void deleteById(ID id);
+	T getOne(I id);
+	T findById(I id);
+    void deleteById(I id);
 }

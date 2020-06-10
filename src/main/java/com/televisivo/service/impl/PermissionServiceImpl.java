@@ -3,9 +3,6 @@ package com.televisivo.service.impl;
 import java.util.List;
 
 import com.televisivo.model.Permission;
-import com.televisivo.model.Role;
-import com.televisivo.model.RolePermissao;
-import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.PermissionService;
@@ -23,20 +20,18 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public boolean hasPermission(Authentication usuarioLogado, Object permissao, Object escopo) {
         boolean toReturn = false;
-        boolean true_permissao = false;
-        boolean true_escopo = false;
+        boolean truePermissao = false;
+        boolean trueEscopo = false;
 
         UsuarioSistema usuarioSistema = (UsuarioSistema) usuarioLogado.getPrincipal();
         List<Permission> lista = this.findRolePermissaoByUsuarioId(usuarioSistema.getUsuario().getId());
-        for (Permission p : lista) {
-            true_permissao = permissao.equals(p.getPermissao().toUpperCase()) ? true : false;
-            true_escopo = escopo.equals(p.getEscopo().toUpperCase()) ? true : false;
-            if (true_permissao == true && true_escopo == true) {
+        for (Permission permission : lista) {
+            truePermissao = ((String) permissao).equalsIgnoreCase(permission.getPermissao());
+            trueEscopo = ((String) escopo).equalsIgnoreCase(permission.getEscopo());
+            if (truePermissao && trueEscopo) {
                 toReturn = true;
                 break;
             }
-            true_permissao = false;
-            true_escopo = false;
         }
         return toReturn;
     }

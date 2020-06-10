@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EpisodioRepository extends JpaRepository<Episodio, Long>, EpisodioQuery {
 
-    @Query(value = "SELECT e FROM Episodio e WHERE e.numero like %:numero%")
+    @Query("SELECT e FROM Episodio e WHERE e.numero like %:numero%")
     List<Episodio> buscarNumero(@Param("numero") int numero);
 }

@@ -31,7 +31,6 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
 
     @Override
     public Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFilter, Pageable pageable) {
-        List<Usuario> usuarios = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Usuario> query = null;
 
@@ -68,7 +67,7 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        usuarios = query.getResultList();
+        List<Usuario> usuarios = query.getResultList();
         return new PageImpl<>(usuarios, pageable, totalRegistro(predicates));
     }
 
@@ -84,8 +83,7 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 
     @Override
@@ -96,17 +94,17 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
     }
 
     @Override
-    public Optional<Usuario> loginUsuarioByEmail(String email) {
+    public Optional<Usuario> findUsuarioByEmail(String email) {
 		TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.email =:email", Usuario.class);
 		return query.setParameter("email", email).setMaxResults(1).getResultList().stream().findFirst();
     }
 
-    // @Override
-    // public Usuario findRolePermissaoByUsuarioId(Long id) {
-    //     TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles r LEFT JOIN r.rolePermissoes rp LEFT JOIN rp.permissao LEFT JOIN rp.escopo WHERE u.id =:id", Usuario.class).setParameter("id", id);
-    //     return query.getSingleResult();
-    // }
-
+    @Override
+    public Optional<Usuario> loginUsuarioByEmail(String email) {
+		return findUsuarioByEmail(email);
+    }
+    
+    @SuppressWarnings("unchecked")
     @Override
     public List<Permission> findRolePermissaoByUsuarioId(Long id) {
         List<Permission> lista = new ArrayList<>();

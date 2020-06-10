@@ -13,5 +13,5 @@ public interface PersistenceTokenRepository extends JpaRepository<PersistenceTok
     
     @Modifying
     @Query("DELETE FROM PersistenceTokenLogin p WHERE p.username =:username")
-    public void deletePeristenceTokenLogin(@Param("username") String username);
+    public void deletePersistenceTokenLogin(@Param("username") String username);
 }

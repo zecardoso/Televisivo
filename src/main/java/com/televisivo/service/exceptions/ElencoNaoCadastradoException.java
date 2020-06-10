@@ -1,9 +1,13 @@
 package com.televisivo.service.exceptions;
 
-public class ElencoNaoCadastradoException extends EntidadeNaoCadastradaException {
+import org.springframework.security.core.AuthenticationException;
 
-    public ElencoNaoCadastradoException(String mensagem) {
-        super(mensagem);
+public class ElencoNaoCadastradoException extends AuthenticationException {
+
+    private static final long serialVersionUID = -2205817950449449884L;
+
+    public ElencoNaoCadastradoException(String msg) {
+        super(msg);
     }
 
     public ElencoNaoCadastradoException(Long id) {

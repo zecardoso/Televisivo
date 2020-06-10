@@ -11,7 +11,7 @@ import lombok.Setter;
 public class ErroCadastro {
 
     private boolean validated;
-	private Map<String, String> erroMensagem = new HashMap<String, String>();
+	private Map<String, String> erroMensagem = new HashMap<>();
 	private String mensagem;
     private Long idClasse;
 }

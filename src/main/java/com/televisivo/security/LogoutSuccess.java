@@ -20,6 +20,15 @@ public class LogoutSuccess implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         final HttpSession session = request.getSession();
+
+        if (response.isCommitted()) {
+            return;
+        }
+
+        if (request.isRequestedSessionIdValid()) {
+            request.changeSessionId();
+        }
+
         if ((authentication != null) && (authentication.getDetails() != null)) {
             try {
                 session.removeAttribute("user");

@@ -37,14 +37,13 @@ public class SerieServiceImpl implements SerieService {
 
     @Override
     public Serie save(Serie serie) {
-        serie.setQtd_temporadas(serie.getTemporadas().size());
+        serie.setQtdTemporadas(serie.getTemporadas().size());
         return serieRepository.save(serie);
     }
 
     @Override
     public Serie update(Serie serie) {
-        serie.setQtd_temporadas(serie.getTemporadas().size());
-        return serieRepository.save(serie);
+        return save(serie);
     }
 
     @Override

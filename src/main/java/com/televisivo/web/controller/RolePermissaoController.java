@@ -1,4 +1,4 @@
-package com.televisivo.controller;
+package com.televisivo.web.controller;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,7 +44,7 @@ public class RolePermissaoController {
     @GetMapping("/lista")
     public ModelAndView lista(RolePermissaoFilter rolePermissaoFilter) {
         ModelAndView modelAndView = new ModelAndView("/direitos/lista");
-        List<RolePermissao> lista = rolePermissaoService.buscarRolePermissaoFilter(rolePermissaoFilter);
+        List<RolePermissao> lista = rolePermissaoService.findRolePermissaoEscopoFilter(rolePermissaoFilter);
         modelAndView.addObject("lista", lista);
         return modelAndView;
     }
@@ -56,7 +56,7 @@ public class RolePermissaoController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/adicionar", method = RequestMethod.POST)
+    @PostMapping("/adicionar")
     public ModelAndView adicionar(@Valid RolePermissao rolePermissao, RedirectAttributes attributes) {
         RolePermissaoId id = new RolePermissaoId();
         id.setRole(rolePermissao.getRole().getId());
@@ -68,7 +68,7 @@ public class RolePermissaoController {
         return new ModelAndView("redirect:/rolePermissao/lista");
     }
 
-    @RequestMapping(value = "/remover/{role_id}/{permissao_id}/{escopo_id}", method = RequestMethod.GET)
+    @GetMapping("/remover/{role_id}/{permissao_id}/{escopo_id}")
     public ModelAndView removerId(@PathVariable("role_id") Long role_id, @PathVariable("permissao_id") Long permissao_id, @PathVariable("escopo_id") Long escopo_id, RedirectAttributes attributes) {
         RolePermissaoId id = new RolePermissaoId();
         id.setRole(role_id);
@@ -96,7 +96,7 @@ public class RolePermissaoController {
         return escopoService.findAll();
     }
 
-    @RequestMapping(value = {"/adicionar", "/alterar", "/remover"}, method = RequestMethod.POST, params = "action=cancelar")
+    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
 	public String cancelar() {
 		return "redirect:/direitos/lista";
     }

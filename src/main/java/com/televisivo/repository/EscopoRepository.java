@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EscopoRepository extends JpaRepository<Escopo, Long>, EscopoQuery {
 
-    @Query(value = "SELECT e FROM Escopo e WHERE e.nome like %:nome%")
+    @Query("SELECT e FROM Escopo e WHERE e.nome like %:nome%")
     List<Escopo> buscarNome(@Param("nome") String nome);
 }

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface SerieService extends GenericService<Serie, Long> {
 
-    // void remover(Serie serie);
     List<Serie> buscarNome(String nome);
     Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable);
 

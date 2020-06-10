@@ -2,7 +2,9 @@ package com.televisivo.service.exceptions;
 
 public class EntidadeEmUsoException extends NegocioException {
 
-    public EntidadeEmUsoException(String mensagem) {
-        super(mensagem);
+    private static final long serialVersionUID = 2966969127517422881L;
+
+    public EntidadeEmUsoException(String message) {
+        super(message);
     }
 }

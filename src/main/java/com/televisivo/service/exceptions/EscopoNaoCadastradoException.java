@@ -1,9 +1,13 @@
 package com.televisivo.service.exceptions;
 
-public class EscopoNaoCadastradoException extends EntidadeNaoCadastradaException {
+import org.springframework.security.core.AuthenticationException;
 
-    public EscopoNaoCadastradoException(String mensagem) {
-        super(mensagem);
+public class EscopoNaoCadastradoException extends AuthenticationException {
+
+    private static final long serialVersionUID = 775274825028750333L;
+
+    public EscopoNaoCadastradoException(String msg) {
+        super(msg);
     }
 
     public EscopoNaoCadastradoException(Long id) {

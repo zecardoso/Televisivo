@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>, RoleQuery {
 
-    @Query(value = "SELECT r FROM Role r WHERE r.nome like %:nome%")
+    @Query("SELECT r FROM Role r WHERE r.nome like %:nome%")
     List<Role> buscarNome(@Param("nome") String nome);
+
+    @Query("SELECT r FROM Role r LEFT JOIN r.usuarios ")
+	List<Role> findAllRoles();
 }

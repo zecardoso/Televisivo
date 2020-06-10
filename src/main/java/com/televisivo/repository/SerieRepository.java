@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SerieRepository extends JpaRepository<Serie, Long>, SerieQuery {
 
-    @Query(value = "SELECT s FROM Serie s WHERE s.nome like %:nome%")
+    @Query("SELECT s FROM Serie s WHERE s.nome like %:nome%")
     List<Serie> buscarNome(@Param("nome") String nome);
 
     @Query("SELECT s FROM Serie s JOIN Temporada t ON s.id = t.serie.id WHERE s.id = :id")

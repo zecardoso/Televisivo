@@ -28,7 +28,6 @@ public class ElencoRepositoryImpl implements ElencoQuery {
 
     @Override
     public Page<Elenco> listaComPaginacao(ElencoFilter elencoFilter, Pageable pageable) {
-        List<Elenco> elencos = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Elenco> query = null;
 
@@ -53,7 +52,7 @@ public class ElencoRepositoryImpl implements ElencoQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        elencos = query.getResultList();
+        List<Elenco> elencos = query.getResultList();
         return new PageImpl<>(elencos, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class ElencoRepositoryImpl implements ElencoQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

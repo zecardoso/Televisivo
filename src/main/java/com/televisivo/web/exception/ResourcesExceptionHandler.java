@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class ResourcesExceptionHandler {
     
-    @ModelAttribute("usuario_logado")
-    public UsuarioSistema getUsuarioLogado(@AuthenticationPrincipal UsuarioSistema usuario_logado) {
-        return (usuario_logado == null) ? null : usuario_logado;
+    @ModelAttribute("usuarioLogado")
+    public UsuarioSistema getUsuarioLogado(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        return (usuarioLogado == null) ? null : usuarioLogado;
     }
 }

@@ -1,5 +1,6 @@
 package com.televisivo.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @SequenceGenerator(name = "elenco_sequence", sequenceName = "elenco_sequence", initialValue = 1, allocationSize = 1)
-public class Elenco {
+public class Elenco implements Serializable {
+
+    private static final long serialVersionUID = -2236280201631903989L;
 
     @Id
     @EqualsAndHashCode.Include
@@ -45,10 +48,10 @@ public class Elenco {
     private String personagem;
 
     @ManyToMany(mappedBy = "elencos")
-    private List<Episodio> episodios;
+    private List<Episodio> episodios = new ArrayList<>();
 
     @ManyToMany(mappedBy = "elencos")
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 
     @OneToOne(targetEntity = Artista.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "artista_id", referencedColumnName = "artista_id")

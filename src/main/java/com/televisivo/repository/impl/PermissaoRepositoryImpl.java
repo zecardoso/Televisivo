@@ -28,7 +28,6 @@ public class PermissaoRepositoryImpl implements PermissaoQuery {
 
     @Override
     public Page<Permissao> listaComPaginacao(PermissaoFilter permissaoFilter, Pageable pageable) {
-        List<Permissao> permissaos = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Permissao> query = null;
 
@@ -53,7 +52,7 @@ public class PermissaoRepositoryImpl implements PermissaoQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        permissaos = query.getResultList();
+        List<Permissao> permissaos = query.getResultList();
         return new PageImpl<>(permissaos, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class PermissaoRepositoryImpl implements PermissaoQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

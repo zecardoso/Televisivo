@@ -27,6 +27,7 @@ public class RolePermissaoServiceImpl implements RolePermissaoService {
 
     @Override
     public RolePermissao save(RolePermissao rolePermissao) {
+        rolePermissaoRepository.flush();
         return rolePermissaoRepository.save(rolePermissao);
     }
 
@@ -49,11 +50,10 @@ public class RolePermissaoServiceImpl implements RolePermissaoService {
     @Override
     public void deleteById(RolePermissaoId id) {
         rolePermissaoRepository.deleteById(id);
-
     }
 
     @Override
-    public List<RolePermissao> buscarRolePermissaoFilter(RolePermissaoFilter rolePermissaoFilter) {
-        return rolePermissaoRepository.buscarRolePermissaoFilter(rolePermissaoFilter);
+    public List<RolePermissao> findRolePermissaoEscopoFilter(RolePermissaoFilter rolePermissaoFilter) {
+        return rolePermissaoRepository.findRolePermissaoEscopoFilter(rolePermissaoFilter);
     }
 }

@@ -1,7 +1,5 @@
 package com.televisivo.repository.query;
 
-import java.util.Optional;
-
 import com.televisivo.model.Serie;
 import com.televisivo.repository.filters.SerieFilter;
 

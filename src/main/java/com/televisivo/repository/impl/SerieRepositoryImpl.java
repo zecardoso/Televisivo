@@ -28,7 +28,6 @@ public class SerieRepositoryImpl implements SerieQuery {
 
     @Override
     public Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable) {
-        List<Serie> series = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Serie> query = null;
 
@@ -53,7 +52,7 @@ public class SerieRepositoryImpl implements SerieQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        series = query.getResultList();
+        List<Serie> series = query.getResultList();
         return new PageImpl<>(series, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class SerieRepositoryImpl implements SerieQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

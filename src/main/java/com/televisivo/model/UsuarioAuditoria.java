@@ -2,7 +2,6 @@ package com.televisivo.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,6 +17,8 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class UsuarioAuditoria implements Serializable {
+
+    private static final long serialVersionUID = -400417222409113349L;
 
     @Id
     @EqualsAndHashCode.Include

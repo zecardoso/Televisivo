@@ -8,5 +8,5 @@ import com.televisivo.repository.filters.RolePermissaoFilter;
 
 public interface RolePermissaoService extends GenericService<RolePermissao, RolePermissaoId> {
 
-	List<RolePermissao> buscarRolePermissaoFilter(RolePermissaoFilter rolePermissaoFilter);
+	List<RolePermissao> findRolePermissaoEscopoFilter(RolePermissaoFilter rolePermissaoFilter);
 }

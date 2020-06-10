@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissaoRepository extends JpaRepository<Permissao, Long>, PermissaoQuery {
 
-    @Query(value = "SELECT p FROM Permissao p WHERE p.nome like %:nome%")
+    @Query("SELECT p FROM Permissao p WHERE p.nome like %:nome%")
     List<Permissao> buscarNome(@Param("nome") String nome);
 }

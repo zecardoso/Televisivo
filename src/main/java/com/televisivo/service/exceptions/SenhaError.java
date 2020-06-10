@@ -2,7 +2,9 @@ package com.televisivo.service.exceptions;
 
 public class SenhaError extends RuntimeException {
 
-    public SenhaError(String mensagem) {
-        super(mensagem);
+    private static final long serialVersionUID = 6083837978190598703L;
+
+    public SenhaError(String message) {
+        super(message);
     }
 }

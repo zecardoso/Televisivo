@@ -17,8 +17,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.springframework.http.HttpStatus.Series;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,7 +27,9 @@ import lombok.ToString;
 @Entity
 @SequenceGenerator(name = "categoria_sequence", sequenceName = "categoria_sequence", initialValue = 1, allocationSize = 1)
 public class Categoria implements Serializable {
-    
+
+    private static final long serialVersionUID = -495061248786573017L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoria_sequence")
@@ -44,13 +44,13 @@ public class Categoria implements Serializable {
 
     @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList<>();
 
     @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 
     @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
-    private List<Artista> artistas;
+    private List<Artista> artistas = new ArrayList<>();
 }

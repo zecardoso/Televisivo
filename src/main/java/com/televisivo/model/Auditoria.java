@@ -1,10 +1,10 @@
 package com.televisivo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -22,7 +22,9 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Embeddable
-public class Auditoria {
+public class Auditoria implements Serializable {
+
+    private static final long serialVersionUID = 5568752960016113809L;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

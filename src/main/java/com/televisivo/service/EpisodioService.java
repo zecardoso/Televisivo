@@ -3,10 +3,6 @@ package com.televisivo.service;
 import java.util.List;
 
 import com.televisivo.model.Episodio;
-import com.televisivo.repository.filters.EpisodioFilter;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface EpisodioService extends GenericService<Episodio, Long>{
 

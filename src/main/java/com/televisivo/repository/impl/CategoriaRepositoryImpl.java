@@ -28,7 +28,6 @@ public class CategoriaRepositoryImpl implements CategoriaQuery {
 
     @Override
     public Page<Categoria> listaComPaginacao(CategoriaFilter categoriaFilter, Pageable pageable) {
-        List<Categoria> categorias = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Categoria> query = null;
 
@@ -53,7 +52,7 @@ public class CategoriaRepositoryImpl implements CategoriaQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        categorias = query.getResultList();
+        List<Categoria> categorias = query.getResultList();
         return new PageImpl<>(categorias, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class CategoriaRepositoryImpl implements CategoriaQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

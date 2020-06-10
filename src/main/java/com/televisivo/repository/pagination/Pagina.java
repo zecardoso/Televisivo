@@ -1,4 +1,4 @@
-package com.televisivo.controller.page;
+package com.televisivo.repository.pagination;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,42 +10,43 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public class PaginaWrapper<T> {
+public class Pagina<T> {
 
-    private UriComponentsBuilder uriComponentsBuilder;
     private Page<T> page;
-    private List<PaginaItem> items;
+    private UriComponentsBuilder uriComponentsBuilder;
     private int pageSize;
+    private List<PaginaItem> items;
     private int numeroAtual;
 
-    public PaginaWrapper(Page<T> page, int pageSize, HttpServletRequest httpServletRequest) {
+    public Pagina(Page<T> page, int pageSize, HttpServletRequest httpServletRequest) {
         this.page = page;
         String httpUrl = httpServletRequest.getRequestURL().append(httpServletRequest.getQueryString() != null ? "?" + httpServletRequest.getQueryString() : "").toString().replaceAll("\\+", "%20");
         this.uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
         this.pageSize = pageSize;
 
-        items = new ArrayList<PaginaItem>();
+        items = new ArrayList<>();
         numeroAtual = page.getNumber() + 1;
 
-        int start, size;
+        int start;
+        int size;
         
-        if (page.getTotalPages() <= pageSize){
-	        start = 1;
-	        size = page.getTotalPages();
-	    } else {
-	       if (numeroAtual <= pageSize - pageSize / 2){
-	           start = 1;
-	           size = pageSize;
-	       } else if (numeroAtual >= page.getTotalPages() - pageSize / 2){
-	           start = page.getTotalPages() - pageSize + 1;
-	           size = pageSize;
-	       } else {
-	           start = numeroAtual - pageSize / 2;
-	           size = pageSize;
-	       }
+        if (page.getTotalPages() <= pageSize) {
+            start = 1;
+            size = page.getTotalPages();
+        } else {
+            if (numeroAtual <= pageSize - pageSize / 2) {
+                start = 1;
+                size = pageSize;
+            } else if (numeroAtual >= page.getTotalPages() - pageSize / 2) {
+                start = page.getTotalPages() - pageSize + 1;
+                size = pageSize;
+            } else {
+                start = numeroAtual - pageSize / 2;
+                size = pageSize;
+            }
         }
-        for (int i = 0; i < size; i++){
-            items.add(new PaginaItem(start + i, (start +i ) == numeroAtual));
+        for (int i = 0; i < size; i++) {
+            items.add(new PaginaItem(start + i, (start + i) == numeroAtual));
         }
     }
 
@@ -70,9 +71,9 @@ public class PaginaWrapper<T> {
     }
 
     public int getPageSize() {
-		return pageSize;
+        return pageSize;
     }
-    
+
     public boolean isPrimeira() {
         return page.isFirst();
     }
@@ -101,19 +102,20 @@ public class PaginaWrapper<T> {
         return page.hasNext();
     }
 
-    public String urlPagina(int size, int pagina) {
-        return uriComponentsBuilder.replaceQueryParam("page", pagina, "size", size).build(true).encode().toUriString();
+    public String urlPagina(int size, int pagina, String sort, String dir) {
+        return uriComponentsBuilder.replaceQueryParam("page", pagina, "size", size, "sort", sort, "dir", dir).build(true).encode().toUriString();
     }
 
     public String urlOrdenada(String propriedade) {
         UriComponentsBuilder uriComponentsBuilderOrder = UriComponentsBuilder.fromUriString(uriComponentsBuilder.build(true).encode().toUriString());
-        String valorSort = String.format("%s,%s", propriedade, inverterDirecao(propriedade));
-        return uriComponentsBuilderOrder.replaceQueryParam("sort", valorSort).build(true).encode().toUriString();
+        String valorSort = String.format("%s", propriedade);
+        String valorDir = String.format("%s", inverterDirecao(propriedade));
+        return uriComponentsBuilderOrder.replaceQueryParam("sort", valorSort).replaceQueryParam("dir", valorDir).build(true).encode().toUriString();
     }
 
     public String inverterDirecao(String propriedade) {
         String direcao = "asc";
-        Order order = page.getSort() != null ? page.getSort().getOrderFor(propriedade) : null;
+        Order order = page.getSort().getOrderFor(propriedade);
         if (order != null) {
             direcao = Sort.Direction.ASC.equals(order.getDirection()) ? "desc" : "asc";
         }
@@ -125,10 +127,10 @@ public class PaginaWrapper<T> {
     }
 
     public boolean ordenada(String propriedade) {
-		Order order = page.getSort() != null ? page.getSort().getOrderFor(propriedade) : null; 
+		Order order = page.getSort().getOrderFor(propriedade); 
 		if (order == null) {
 			return false;
 		}
-		return page.getSort().getOrderFor(propriedade) != null ? true : false;
+		return page.getSort().getOrderFor(propriedade) != null;
 	}
 }

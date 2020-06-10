@@ -28,7 +28,6 @@ public class ServicoRepositoryImpl implements ServicoQuery {
 
     @Override
     public Page<Servico> listaComPaginacao(ServicoFilter servicoFilter, Pageable pageable) {
-        List<Servico> servicos = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Servico> query = null;
 
@@ -53,7 +52,7 @@ public class ServicoRepositoryImpl implements ServicoQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        servicos = query.getResultList();
+        List<Servico> servicos = query.getResultList();
         return new PageImpl<>(servicos, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class ServicoRepositoryImpl implements ServicoQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

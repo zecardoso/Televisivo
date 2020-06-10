@@ -3,11 +3,9 @@ package com.televisivo.service.impl;
 import java.util.List;
 
 import com.televisivo.model.Episodio;
-import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.repository.EpisodioRepository;
 import com.televisivo.repository.TemporadaRepository;
-import com.televisivo.repository.filters.TemporadaFilter;
 import com.televisivo.service.TemporadaService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
 import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
@@ -15,8 +13,6 @@ import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +34,13 @@ public class TemporadaServiceImpl implements TemporadaService {
     
     @Override
     public Temporada save(Temporada temporada) {
-        temporada.setQtd_episodios(temporada.getEpisodios().size());
+        temporada.setQtdEpisodios(temporada.getEpisodios().size());
         return temporadaRepository.save(temporada);
     }
 
     @Override
     public Temporada update(Temporada temporada) {
-        temporada.setQtd_episodios(temporada.getEpisodios().size());
-        return temporadaRepository.save(temporada);
+        return save(temporada);
     }
 
     @Override

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, UsuarioQuery {
 
-    @Query(value = "SELECT u FROM Usuario u WHERE u.nome like %:nome%")
+    @Query("SELECT u FROM Usuario u WHERE u.nome like %:nome%")
     List<Usuario> buscarNome(@Param("nome") String nome);
+
+    @Query("SELECT distinct u FROM Usuario u LEFT JOIN FETCH u.roles")
+	List<Usuario> findAllUsuarios();
 }

@@ -7,5 +7,5 @@ import com.televisivo.repository.filters.RolePermissaoFilter;
 
 public interface RolePermissaoQuary {
 
-	List<RolePermissao> buscarRolePermissaoFilter(RolePermissaoFilter rolePermissaoFilter);  
+	List<RolePermissao> findRolePermissaoEscopoFilter(RolePermissaoFilter rolePermissaoFilter);  
 }

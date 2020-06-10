@@ -1,4 +1,4 @@
-package com.televisivo.controller.page;
+package com.televisivo.repository.pagination;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PaginaItem {
 
-    private int numero;
-    private boolean atual;
+    private int number;
+    private boolean current;
 }

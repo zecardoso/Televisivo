@@ -1,6 +1,7 @@
 package com.televisivo.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +28,8 @@ import lombok.ToString;
 @SequenceGenerator(name = "role_sequence", sequenceName = "role_sequence", initialValue = 1, allocationSize = 1)
 public class Role implements Serializable {
 
+    private static final long serialVersionUID = 7984174243702361109L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
@@ -41,8 +43,8 @@ public class Role implements Serializable {
     private String nome;
 
     @ManyToMany(mappedBy = "roles")
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private List<RolePermissao> rolePermissoes;
+    private List<RolePermissao> rolePermissoes = new ArrayList<>();
 }

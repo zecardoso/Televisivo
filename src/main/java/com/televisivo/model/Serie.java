@@ -34,6 +34,8 @@ import lombok.ToString;
 @SequenceGenerator(name = "serie_sequence", sequenceName = "serie_sequence", initialValue = 1, allocationSize = 1)
 public class Serie implements Serializable {
 
+    private static final long serialVersionUID = 776430409375361602L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "serie_sequence")
@@ -60,12 +62,14 @@ public class Serie implements Serializable {
 	@Column(nullable = false)
     private int restricao;
 
-    private int qtd_temporadas;
+    @Column(name = "qtd_temporadas")
+    private int qtdTemporadas;
 
-    private int qtd_seguidores;
+    @Column(name = "qtd_seguidores")
+    private int qtdSeguidores;
 
     @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
-    private List<Temporada> temporadas;
+    private List<Temporada> temporadas = new ArrayList<>();
 
     @ManyToOne(targetEntity = Servico.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "servico_id", nullable = false, referencedColumnName = "servico_id", foreignKey = @ForeignKey(name = "FK_SERVICO_SERIE"))
@@ -73,18 +77,14 @@ public class Serie implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "serie_categoria", joinColumns = @JoinColumn(name = "serie_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<Categoria> categorias;
+    private List<Categoria> categorias = new ArrayList<>();
 
     @JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "serie_elenco", joinColumns = @JoinColumn(name = "serie_id"), inverseJoinColumns = @JoinColumn(name = "elenco_id"))
-    private List<Elenco> elencos;
+    private List<Elenco> elencos = new ArrayList<>();
 
     @JsonIgnore
 	@ManyToMany(mappedBy="series")
-    private List<Artista> artistas;
-
-    public Serie() {
-        temporadas = new ArrayList<Temporada>();
-    }
+    private List<Artista> artistas = new ArrayList<>();
 }

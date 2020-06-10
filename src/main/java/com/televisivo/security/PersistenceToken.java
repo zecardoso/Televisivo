@@ -48,6 +48,6 @@ public class PersistenceToken implements PersistentTokenRepository {
 
     @Override
     public void removeUserTokens(String username) {
-        persistenceTokenRepository.deletePeristenceTokenLogin(username);
+        persistenceTokenRepository.deletePersistenceTokenLogin(username);
     }
 }

@@ -1,6 +1,7 @@
 package com.televisivo.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,8 @@ import lombok.ToString;
 @SequenceGenerator(name = "episodio_sequence", sequenceName = "episodio_sequence", initialValue = 1, allocationSize = 1)
 public class Episodio implements Serializable {
 
+    private static final long serialVersionUID = 1144598121866007606L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "episodio_sequence")
@@ -65,20 +68,20 @@ public class Episodio implements Serializable {
 	@Column(nullable = false)
     private int duracao;
 
-    // @DateTimeFormat(pattern = "dd/mm/yyyy")
-    // @Temporal(TemporalType.DATE)
-    // @Column(nullable = tryue)
-    // private Date publicacao;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, columnDefinition = "DATE")
+    private Date publicacao;
 
     @ManyToOne(targetEntity = Temporada.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name="FK_TEMPORADA_EPISODIO"))
+	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))
     private Temporada temporada;
 
     @ManyToMany(mappedBy = "episodios")
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList<>();
 
     @JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "episodio_elenco", joinColumns = @JoinColumn(name = "episodio_id"), inverseJoinColumns = @JoinColumn(name = "elenco_id"))
-    private List<Elenco> elencos;
+    private List<Elenco> elencos = new ArrayList<>();
 }

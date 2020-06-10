@@ -28,7 +28,6 @@ public class ArtistaRepositoryImpl implements ArtistaQuery {
 
     @Override
     public Page<Artista> listaComPaginacao(ArtistaFilter artistaFilter, Pageable pageable) {
-        List<Artista> artistas = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Artista> query = null;
 
@@ -53,7 +52,7 @@ public class ArtistaRepositoryImpl implements ArtistaQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        artistas = query.getResultList();
+        List<Artista> artistas = query.getResultList();
         return new PageImpl<>(artistas, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class ArtistaRepositoryImpl implements ArtistaQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

@@ -28,7 +28,6 @@ public class EscopoRepositoryImpl implements EscopoQuery {
 
     @Override
     public Page<Escopo> listaComPaginacao(EscopoFilter escopoFilter, Pageable pageable) {
-        List<Escopo> escopos = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         TypedQuery<Escopo> query = null;
 
@@ -53,7 +52,7 @@ public class EscopoRepositoryImpl implements EscopoQuery {
 
         query.setFirstResult(primeiroRegistro);
         query.setMaxResults(totalRegistroPorPagina);
-        escopos = query.getResultList();
+        List<Escopo> escopos = query.getResultList();
         return new PageImpl<>(escopos, pageable, totalRegistro(predicates));
     }
 
@@ -69,7 +68,6 @@ public class EscopoRepositoryImpl implements EscopoQuery {
         } else {
             query = entityManager.createQuery(criteriaQuery);
         }
-        Long resultado = query.getSingleResult();
-        return resultado;
+        return query.getSingleResult();
     }
 }

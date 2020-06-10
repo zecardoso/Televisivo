@@ -11,9 +11,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface UsuarioService extends GenericService<Usuario, Long> {
 
-    List<Usuario> buscarNome(String nome);
-    Optional<Usuario> buscarEmail(String email);
     Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFiltro, Pageable pageable);
+    List<Usuario> buscarNome(String nome);
+    
+    Optional<Usuario> findUsuarioByEmail(String email);
     Optional<Usuario> loginUsuarioByEmail(String email);
 	void updateLoginUsuario(Usuario usuario);
 	void blockedUsuario(Usuario usuario);
