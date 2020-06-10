@@ -2,9 +2,9 @@
     <a class="app-header__logo" th:href="@{/home}">Televisivo</a>
     <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
     <div class="app-nav">
-        <a class="app-nav__item" th:href="@{/usuario/detalhes/{id}(id=${usuario_logado.getUsuario().getId()})}">
+        <a class="app-nav__item" th:href="@{/usuario/detalhes/{id}(id=${usuarioLogado.getUsuario().getId()})}">
             <i class="fa fa-user fa-lg"></i>
-            <span th:text="${usuario_logado.getUsuario().getUsername()}"></span>
+            <span th:text="${usuarioLogado.getUsuario().getUsername()}"></span>
         </a>
         <a class="app-nav__item" th:href="@{/logout}"></i>
             <i class="fa fa-sign-out fa-lg"></i>
