@@ -91,11 +91,6 @@ public class Usuario implements UserDetails {
     @Transient
     private String contraSenha;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = true, columnDefinition = "DATE")
-    private Date lastLogin;
-
     @Column(nullable = true)
     private boolean ativo = false;
 
@@ -108,7 +103,7 @@ public class Usuario implements UserDetails {
     @DateTimeFormat(pattern = "dd/M/yyyy")
     @Temporal(TemporalType.DATE)
     @Column(nullable = true, columnDefinition = "DATE")
-    private Date lestLogin;
+    private Date lastLogin;
 
     @JsonIgnore
     @Size(min = 1, message = "Selecione pelo menos um grupo")
