@@ -19,12 +19,17 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+    
     @Autowired
     private LoginAuthenticationProvider loginAuthenticationProvider;
 
@@ -33,6 +38,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginFailuireHandler loginFailuireHandler;
+
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
 
     @Autowired
     private LogoutSuccess logoutSuccess;
@@ -88,6 +96,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
             .accessDeniedPage("/403");
         // http.csrf().disable();
+        http.rememberMe()
+            .rememberMeCookieName("LEMBRARID")
+            .rememberMeParameter("checkRemenberMe")
+            .tokenValiditySeconds(diasParaSegundo(12, 1))
+            .tokenRepository(persistentTokenRepository);
+    }
+
+    private int diasParaSegundo(int horas, int dias) {
+        return (60*60*horas)*dias;
     }
 
     @Bean
@@ -103,5 +120,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	}
+    }
+    
+    @Bean
+    public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+        PersistentTokenBasedRememberMeServices persistentTokenBasedServices = new PersistentTokenBasedRememberMeServices("LEMBRARID", userDetailsService, persistentTokenRepository);
+        persistentTokenBasedServices.setAlwaysRemember(true);
+        return persistentTokenBasedServices;
+    }
 }
