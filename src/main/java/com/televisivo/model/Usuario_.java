@@ -18,6 +18,7 @@ public abstract class Usuario_ {
 	public static volatile SingularAttribute<Usuario, String> nome;
 	public static volatile SingularAttribute<Usuario, Integer> failedLogin;
 	public static volatile SingularAttribute<Usuario, String> password;
+	public static volatile SingularAttribute<Usuario, Boolean> deleted;
 	public static volatile SingularAttribute<Usuario, Genero> genero;
 	public static volatile SingularAttribute<Usuario, Date> lestLogin;
 	public static volatile ListAttribute<Usuario, Episodio> episodios;
@@ -33,6 +34,7 @@ public abstract class Usuario_ {
 	public static final String NOME = "nome";
 	public static final String FAILED_LOGIN = "failedLogin";
 	public static final String PASSWORD = "password";
+	public static final String DELETED = "deleted";
 	public static final String GENERO = "genero";
 	public static final String LEST_LOGIN = "lestLogin";
 	public static final String EPISODIOS = "episodios";

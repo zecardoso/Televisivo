@@ -12,4 +12,5 @@ public interface RoleService extends GenericService<Role, Long> {
 
     List<Role> buscarNome(String nome);
     Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable);
+	void saveUsuarioAuditoria(Role role, String operacao);
 }
