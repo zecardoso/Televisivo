@@ -37,13 +37,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     
     @Override
 	@Transactional(readOnly = true)
-	@PreAuthorize("hasPermission('USUARIO','LEITURA')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
     @Override
-	@PreAuthorize("hasPermission('USUARIO','INSERIR')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado .isPresent() && !usuarioCadastrado.get().equals(usuario)) {
@@ -58,26 +58,26 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-	@PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         return this.save(usuario);
     }
 
     @Override
 	@Transactional(readOnly = true)
-	@PreAuthorize("hasPermission('USUARIO','LEITURA')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public Usuario getOne(Long id) {
 		return usuarioRepository.getOne(id);
     }
 
     @Override
-	@PreAuthorize("hasPermission('USUARIO','LEITURA')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
 
     @Override
-	@PreAuthorize("hasPermission('USUARIO','EXCLUIR')")
+	@PreAuthorize("hasPermission('ADMINISTRADOR','EXCLUIR')")
     public void deleteById(Long id) {
         try {
             usuarioRepository.deleteById(id);
