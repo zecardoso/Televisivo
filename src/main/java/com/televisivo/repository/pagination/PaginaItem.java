@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PaginaItem {
 
-    private int number;
-    private boolean current;
+    private int numero;
+    private boolean atual;
 }
