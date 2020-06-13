@@ -15,10 +15,36 @@
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${rolepermissao}" th:text="*{nome} + ' ' + *{sobrenome}"></h3>
+				<h3 class="tile-title" th:object="${rolePermissao}" th:text="*{role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{/rolepermissao/remover}" th:object="${rolepermissao}" method="post" autocomplete="off">
-						
+					<form th:action="@{/direitos/remover}" th:object="${rolePermissao}" method="post" autocomplete="off">
+						<input th:value="*{id.role}">
+						<input th:value="*{id.permissao}">
+						<input th:value="*{id.escopo}">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Role</label>
+									<h4 th:text="*{role.nome}"></h4>
+								</div>
+							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Permissao</label>
+									<h4 th:text="*{permissao.nome}"></h4>
+								</div>
+							</div>
+                        </div>
+                        <div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12">
+								<div class="form-group">
+									<label class="control-label">Escopo</label>
+									<h4 th:text="*{escopo.nome}"></h4>
+								</div>
+							</div>
+						</div>
                         <div class="tile-footer">
 							<button class="btn btn-danger" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Remover</button>
 							<button type="submit" class="btn btn-secondary" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>

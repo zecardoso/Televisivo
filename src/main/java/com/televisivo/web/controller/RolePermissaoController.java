@@ -17,6 +17,7 @@ import com.televisivo.service.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,22 +66,28 @@ public class RolePermissaoController {
         rolePermissao.setId(id);
         rolePermissaoService.save(rolePermissao);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
-        return new ModelAndView("redirect:/rolePermissao/lista");
+        return new ModelAndView("redirect:/direitos/lista");
     }
 
-    @GetMapping("/remover/{role_id}/{permissao_id}/{escopo_id}")
-    public ModelAndView removerId(@PathVariable("role_id") Long role_id, @PathVariable("permissao_id") Long permissao_id, @PathVariable("escopo_id") Long escopo_id, RedirectAttributes attributes) {
+    @GetMapping("/remover/{roleId}/{permissaoId}/{escopoId}")
+    public ModelAndView removerId(@PathVariable("roleId") Long roleId, @PathVariable("permissaoId") Long permissaoId, @PathVariable("escopoId") Long escopoId) {
         RolePermissaoId id = new RolePermissaoId();
-        id.setRole(role_id);
-        id.setPermissao(permissao_id);
-        id.setEscopo(escopo_id);
+        id.setRole(roleId);
+        id.setPermissao(permissaoId);
+        id.setEscopo(escopoId);
         RolePermissao rolePermissao = rolePermissaoService.getOne(id);
-        ModelAndView modelAndView = new ModelAndView("/rolePermissao/remover");
+        ModelAndView modelAndView = new ModelAndView("/direitos/remover");
         modelAndView.addObject("rolePermissao", rolePermissao);
-        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
         return modelAndView;
     }
     
+    @PostMapping(value = "/remover")
+    public ModelAndView remover(RolePermissao rolePermissao, BindingResult result, RedirectAttributes attributes) {
+        rolePermissaoService.deleteById(rolePermissao.getId());
+        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
+        return new ModelAndView("/direitos/lista");
+    }
+
     @ModelAttribute("roles")
     public List<Role> getRoles() {
         return roleService.findAll();
@@ -96,7 +103,7 @@ public class RolePermissaoController {
         return escopoService.findAll();
     }
 
-    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
+    @PostMapping(value = { "/adicionar", "/alterar", "/remover" }, params = "action=cancelar")
 	public String cancelar() {
 		return "redirect:/direitos/lista";
     }

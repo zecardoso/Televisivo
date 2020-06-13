@@ -31,15 +31,15 @@ public class RolePermissaoRepositoryImpl implements RolePermissaoQuary {
         CriteriaQuery<RolePermissao> criteriaQuery = criteriaBuilder.createQuery(RolePermissao.class);
         Root<RolePermissao> root = criteriaQuery.from(RolePermissao.class);
         
-        if (!StringUtils.isEmpty(rolePermissaoFilter.getRoleNome())) {
+        if (!StringUtils.isEmpty(rolePermissaoFilter.getRole())) {
             Join<RolePermissao, Role> role = root.join("role");
-            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(role.get("nome")), "%" + rolePermissaoFilter.getRoleNome()));
-        } else if (!StringUtils.isEmpty(rolePermissaoFilter.getPermissaoNome())) {
+            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(role.get("nome")), "%" + rolePermissaoFilter.getRole() + "%"));
+        } else if (!StringUtils.isEmpty(rolePermissaoFilter.getPermissao())) {
             Join<RolePermissao, Permissao> permissao = root.join("permissao");
-            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(permissao.get("nome")), "%" + rolePermissaoFilter.getPermissaoNome()));
-        } else if (!StringUtils.isEmpty(rolePermissaoFilter.getEscopoNome())) {
+            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(permissao.get("nome")), "%" + rolePermissaoFilter.getPermissao() + "%"));
+        } else if (!StringUtils.isEmpty(rolePermissaoFilter.getEscopo())) {
             Join<RolePermissao, Escopo> escopo = root.join("escopo");
-            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(escopo.get("nome")), "%" + rolePermissaoFilter.getEscopoNome()));
+            criteriaQuery.where(criteriaBuilder.like(criteriaBuilder.lower(escopo.get("nome")), "%" + rolePermissaoFilter.getEscopo() + "%"));
         } else {
             criteriaQuery.select(root);
         }

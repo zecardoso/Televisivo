@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RolePermissaoFilter {
 
-    private String roleNome;
-    private String permissaoNome;
-    private String escopoNome;
+    private String role;
+    private String permissao;
+    private String escopo;
 }
