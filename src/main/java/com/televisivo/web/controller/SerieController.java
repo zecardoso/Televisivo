@@ -147,7 +147,7 @@ public class SerieController {
 		return categoriaService.findAll();
     }
     
-    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
+    @PostMapping(value = { "/adicionar", "/alterar", "/remover" }, params = "action=cancelar")
 	public String cancelar() {
 		return LISTA;
     }
