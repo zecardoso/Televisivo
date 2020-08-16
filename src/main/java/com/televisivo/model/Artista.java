@@ -1,8 +1,6 @@
 package com.televisivo.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
@@ -43,15 +38,7 @@ public class Artista implements Serializable {
 	@NotNull(message = "O nome deve ser informado.")
 	@Column(length = 40, nullable = false)
     private String nome;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "artista_categoria", joinColumns = @JoinColumn(name = "artista_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<Categoria> categorias = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "artista_serie", joinColumns = @JoinColumn(name = "artista_id"), inverseJoinColumns = @JoinColumn(name = "serie_id"))
-    private List<Serie> series = new ArrayList<>();
-
+    
     @OneToOne(mappedBy = "artista", fetch = FetchType.LAZY)
     private Elenco elenco;
 }

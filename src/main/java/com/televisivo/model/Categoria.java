@@ -15,8 +15,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -42,15 +40,9 @@ public class Categoria implements Serializable {
 	@Column(length = 40, nullable = false)
     private String nome;
 
-    @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
     private List<Usuario> usuarios = new ArrayList<>();
 
-    @JsonIgnore
 	@ManyToMany(mappedBy="categorias")
     private List<Serie> series = new ArrayList<>();
-
-    @JsonIgnore
-	@ManyToMany(mappedBy="categorias")
-    private List<Artista> artistas = new ArrayList<>();
 }
