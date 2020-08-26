@@ -1,8 +1,11 @@
 package com.televisivo.web.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
@@ -10,10 +13,18 @@ import com.televisivo.model.Artista;
 import com.televisivo.repository.filters.ArtistaFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.service.ArtistaService;
+import com.televisivo.service.JasperReportsService;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +46,9 @@ public class ArtistaController {
     @Autowired
     private ArtistaService artistaService;
 
+    @Autowired
+    private JasperReportsService jasperReportsService;
+    
     @GetMapping("/lista")
     public ModelAndView lista(ArtistaFilter artistaFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
@@ -108,4 +122,24 @@ public class ArtistaController {
 	public String cancelar() {
 		return LISTA;
 	}
+    
+    @GetMapping("/download")
+    public void imprimeRelatorioDownload(HttpServletResponse response) {
+    	JasperPrint jasperPrint = null;
+    	jasperPrint = jasperReportsService.imprimeRelatorioDownload("artista");
+    	response.setContentType("application/x-download");
+    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"artista.pdf\""));
+    	try {
+			OutputStream out = response.getOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+		} catch (IOException | JRException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @GetMapping("/pdf")
+    public ResponseEntity<byte[]> imprimeRelatorioPdf() {
+    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador("usuario");
+    	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
+    }
 }

@@ -34,13 +34,15 @@
 										<tr th:each="artista :${pagina.conteudo}">
 											<td data-tile="nome" th:text="*{artista.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/artista/detalhes/{id}(id=${artista.id})}" class="btn btn-warning btn-sm btn-block"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/artista/detalhes/{id}(id=${artista.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<a title="Adicionar" class="btn btn-success" th:href="@{/artista/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								<a title="Download PDF" class="btn btn-success" th:href="@{/artista/download}"><i class="fa fa-file-pdf-o"></i>Download PDF</a>
+								<a title="Abrir PDF" class="btn btn-success" th:href="@{/artista/pdf}" target="_blank"><i class="fa fa-file-pdf-o"></i>Abrir PDF</a>
 							</div>
 						</div>
 					</div>

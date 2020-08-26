@@ -21,21 +21,9 @@
 								<div th:replace="fragments/alert"></div>
 							</div>
 						</div>
-						<div class="row row-cols-1 row-cols-md-3">
-							<div class="col mb-4" th:each="serie :${pagina.conteudo}">
-								<div class="card h-100">
-									<img src="http://lorempixel.com/output/abstract-q-c-640-480-2.jpg" class="card-img" alt="...">
-									<div class="card-body">
-										<h5 class="card-title" th:text="*{serie.nome}"></h5>
-										<p class="card-text" th:text="*{serie.enredo}"></p>
-										<a title="Detalhes" th:href="@{/serie/detalhes/{id}(id=${serie.id})}" class="btn btn-warning btn-sm btn-block"><i class="fa fa-search-plus"></i>Detalhes</a>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<!-- <table class="table table-bordered table-hover" id="sampleTable" serie="grid" aria-describedby="sampleTable_info">
+								<table class="table table-bordered table-hover" id="sampleTable" servico="grid" aria-describedby="sampleTable_info">
 									<thead>
 										<tr>
 											<th scope="col">Name</th>
@@ -46,13 +34,17 @@
 										<tr th:each="serie :${pagina.conteudo}">
 											<td data-tile="nome" th:text="*{serie.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/serie/detalhes/{id}(id=${serie.id})}" class="btn btn-warning btn-sm btn-block"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/serie/{id}(id=${serie.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
-								</table> -->
+								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
-								<a title="Adicionar" class="btn btn-success" th:href="@{/serie/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								<div class="tile-footer">
+									<a title="Adicionar" class="btn btn-success" th:href="@{/serie}"></i>Adicionar</a>
+									<a title="Download PDF" class="btn btn-success" th:href="@{/serie/download}"><i class="fa fa-file-pdf-o"></i>Download PDF</a>
+									<a title="Abrir PDF" class="btn btn-success" th:href="@{/serie/pdf}" target="_blank"><i class="fa fa-file-pdf-o"></i>Abrir PDF</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -68,7 +60,7 @@
 			
 			function changePageAndSize(){
 				$('#pageSizeSelect').change(function(e){
-					window.location.replace("/serie/lista?size="+this.value+"&page=0");
+					window.location.replace("/serie/lista?tamanho="+this.value+"&pagina=0");
 				});
 			}
 		</script>
