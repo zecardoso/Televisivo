@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Alterar episodio</title>
+    <title>Alterar episódio</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Alterar</h1>
+            <h1>Alterar episódio</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/episodio/lista}">Pesquisar episodio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Série</li>
+                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item">Episódio</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Alterar</a></li>
             </ul>
         </div>
         <div class="container">

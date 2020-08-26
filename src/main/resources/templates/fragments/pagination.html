@@ -1,6 +1,6 @@
 <div class="row" th:fragment="pagination">
     <div class="col-xs-12 col-md-5">
-        <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite" th:text="'Mostrando ' + ${pagina.tamanho * (pagina.numero - 1) + 1}  + ' página com ' +  ${pagina.ultima ? pagina.totalElementos : pagina.tamanho * (pagina.numero - 1)+ pagina.tamanho} + ' de ' + ${pagina.totalElementos} + ' registros de  cadastros.'"></div>
+        <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite" th:text="'Mostrando ' + ${pagina.tamanho * (pagina.numero - 1) + 1}  + ' página com ' +  ${pagina.ultima ? pagina.totalElementos : pagina.tamanho * (pagina.numero - 1)+ pagina.tamanho} + ' de ' + ${pagina.totalElementos} + ' registros.'"></div>
     </div>
     <div class="col-xs-12 col-md-7" th:if="${not pagina.vazia}">
         <ul class='pagination pull-right'>

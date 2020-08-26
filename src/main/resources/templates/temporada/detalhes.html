@@ -7,10 +7,12 @@
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Detalhes</i></h1>
+            <h1>Detalhes da temporada</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/temporada/lista}">Pesquisar temporada</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Série</li>
+                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Detalhes</a></li>
             </ul>
         </div>
         <div class="container">
@@ -23,11 +25,11 @@
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}">Serie</h3>
                 <div class="tile-body tile-footer">
                     <label class="control-label">Ano</label>
-                    <h4 th:text="*{ano}"></h4>
+                    <h4 th:text="${ano}"></h4>
                     <label class="control-label">Avaliação</label>
-                    <h4 th:text="*{avaliacao}"></h4>
+                    <h4 th:text="${avaliacao}"></h4>
                     <label class="control-label">Quantidade de episodios</label>
-                    <h4 th:text="*{qtdEpisodios}"></h4>
+                    <h4 th:text="${qtdEpisodios}"></h4>
                 </div>
 				<label class="control-label">Episodios</label>
 				<div class="form-row" th:each="episodio : ${episodios}">

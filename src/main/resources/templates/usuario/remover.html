@@ -7,40 +7,41 @@
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Remover</i></h1>
+            <h1>Remover usuário</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/usuario/lista}">Pesquisar usuário</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Usuário</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${usuario}" th:text="*{nome} + ' ' + *{sobrenome}"></h3>
+				<h3 class="tile-title" th:object="${usuario}" th:text="${nome} + ' ' + *{sobrenome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:action="@{/usuario/remover}" th:object="${usuario}" method="post" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Nome</label>
-								<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>
+								<h4 th:text="${nome} + ' ' + *{sobrenome}"></h4>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Username</label>
-								<h4 th:text="*{username}"></h4>
+								<h4 th:text="${username}"></h4>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Email</label>
-								<h4 th:text="*{email}"></h4>
+								<h4 th:text="${email}"></h4>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Gênero</label>
-								<h4 th:text="*{genero.descricao}"></h4>
+								<h4 th:text="${genero.descricao}"></h4>
 							</div>
 						</div>
                         <fieldset>

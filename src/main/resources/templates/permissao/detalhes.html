@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Detalhes da permissao</title>
+    <title>Detalhes da permissão</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Detalhes</i></h1>
+            <h1>Detalhes da permissão</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/permissao/lista}">Pesquisar permissao</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Usuário</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Detalhes</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${permissao}" th:text="*{nome}"></h3>
+				<h3 class="tile-title" th:object="${permissao}" th:text="${nome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:object="${permissao}">
                         <div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Nome</label>
-								<h4 th:text="*{nome}"></h4>
+								<h4 th:text="${nome}"></h4>
 							</div>
 						</div>
                         <div class="tile-footer">

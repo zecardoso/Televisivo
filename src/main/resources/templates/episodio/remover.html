@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Remover episodio</title>
+    <title>Remover episódio</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Remover</i></h1>
+            <h1>Remover episódio</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/episodio/lista}">Pesquisar episodio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Série</li>
+                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item">Episódio</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
         <div class="container">
@@ -18,15 +21,15 @@
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
 					<label class="control-label">Nome</label>
-					<h4 th:text="*{nome}"></h4>
+					<h4 th:text="${nome}"></h4>
 					<label class="control-label">Numero</label>
-					<h4 th:text="*{numero}"></h4>
+					<h4 th:text="${numero}"></h4>
 					<label class="control-label">Enredo</label>
-					<h4 th:text="*{enredo}"></h4>
+					<h4 th:text="${enredo}"></h4>
 					<label class="control-label">Duração</label>
-					<h4 th:text="*{duracao}"></h4>
+					<h4 th:text="${duracao}"></h4>
 					<!-- <label class="control-label">Publicação</label>
-					<h4 th:text="*{publicacao}"></h4> -->
+					<h4 th:text="${publicacao}"></h4> -->
 					<form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/remover(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=*{id})}" method="post" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
                         <div class="tile-footer">

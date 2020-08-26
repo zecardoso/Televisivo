@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title th:text="*{serie.id == null} ? 'Registrar série' : 'Alterar série'"></title>
+    <title th:text="${serie.id == null} ? 'Cadastrar série' : 'Alterar série'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <h1 th:text="${id == null} ? 'Cadastrar série' : 'Alterar série'"><i class="fa fa-edit" aria-hidden="true"></i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/serie/lista}">Pesquisar serie</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Série</li>
+                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
@@ -21,7 +22,7 @@
                         <div th:replace="fragments/alert"></div>
                     </div>
                 </div>
-				<h3 class="tile-title" th:text="*{id == null} ? 'Nova série' : *{nome}"></h3>
+				<h3 class="tile-title" th:text="${id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:action="${id == null} ? @{/serie} : @{/serie/{id}/alterar(id=${id})}" method="post" autocomplete="off">
                         <div class="form-row">

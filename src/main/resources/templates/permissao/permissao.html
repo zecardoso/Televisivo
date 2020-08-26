@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title th:text="*{permissao.id == null} ? 'Registrar permissão' : 'Alterar permissão'"></title>
+    <title th:text="${permissao.id == null} ? 'Cadastrar permissão' : 'Alterar permissão'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <h1 th:text="${id == null} ? 'Cadastrar permissão' : 'Alterar permissão'"><i class="fa fa-edit" aria-hidden="true"></i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/permissao/lista}">Pesquisar permissão</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Permissão</li>
+                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:text="*{permissao.id == null} ? 'Nova permissão' : *{permissao.nome}"></h3>
+				<h3 class="tile-title" th:text="${permissao.id == null} ? 'Nova permissão' : *{permissao.nome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:object="${permissao}" th:action="${permissao.id == null} ? @{/permissao/adicionar} : @{/permissao/alterar}" method="post" autocomplete="off">
 						<div class="row">

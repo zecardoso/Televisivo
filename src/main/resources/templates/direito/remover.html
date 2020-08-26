@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Remover usuário</title>
+    <title>Remover direito</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Remover</i></h1>
+            <h1>Remover direito</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/direitos/lista}">Pesquisar usuário</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Direito</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${rolePermissao}" th:text="*{role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
+				<h3 class="tile-title" th:object="${rolePermissao}" th:text="${role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
                 <div class="tile-body tile-footer">
-					<form th:action="@{/direitos/remover}" th:object="${rolePermissao}" method="post" autocomplete="off">
+					<form th:action="@{/direito/remover}" th:object="${rolePermissao}" method="post" autocomplete="off">
 						<input th:value="*{id.role}">
 						<input th:value="*{id.permissao}">
 						<input th:value="*{id.escopo}">
@@ -25,7 +26,7 @@
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div class="form-group">
 									<label class="control-label">Role</label>
-									<h4 th:text="*{role.nome}"></h4>
+									<h4 th:text="${role.nome}"></h4>
 								</div>
 							</div>
                         </div>
@@ -33,7 +34,7 @@
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div class="form-group">
 									<label class="control-label">Permissao</label>
-									<h4 th:text="*{permissao.nome}"></h4>
+									<h4 th:text="${permissao.nome}"></h4>
 								</div>
 							</div>
                         </div>
@@ -41,7 +42,7 @@
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div class="form-group">
 									<label class="control-label">Escopo</label>
-									<h4 th:text="*{escopo.nome}"></h4>
+									<h4 th:text="${escopo.nome}"></h4>
 								</div>
 							</div>
 						</div>

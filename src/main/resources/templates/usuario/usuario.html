@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title th:text="*{usuario.id == null} ? 'Registrar usuário' : 'Alterar usuário'"></title>
+    <title th:text="${usuario.id == null} ? 'Cadastrar usuário' : 'Alterar usuário'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <h1 th:text="${id == null} ? 'Cadastrar usuário' : 'Alterar usuário'"><i class="fa fa-edit" aria-hidden="true"></i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/usuario/lista}">Pesquisar usuário</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Usuário</li>
+                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:text="*{usuario.id == null} ? 'Novo usuário' : *{usuario.nome} + ' ' + *{usuario.sobrenome}"></h3>
+				<h3 class="tile-title" th:text="${usuario.id == null} ? 'Novo usuário' : *{usuario.nome} + ' ' + *{usuario.sobrenome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:object="${usuario}" th:action="${usuario.id == null} ? @{/usuario/adicionar} : @{/usuario/alterar}" method="post" autocomplete="off">
 						<div class="row">

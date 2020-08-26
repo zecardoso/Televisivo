@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title th:text="*{role.id == null} ? 'Registrar role' : 'Alterar role'"></title>
+    <title th:text="${role.id == null} ? 'Cadastrar role' : 'Alterar role'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="*{id == null} ? 'Registrar' : Alterar"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <h1 th:text="${id == null} ? 'Cadastrar role' : 'Alterar role'"><i class="fa fa-edit" aria-hidden="true"></i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/role/lista}">Pesquisar role</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Role</li>
+                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
-				<h3 class="tile-title" th:text="*{role.id == null} ? 'Nova role' : *{role.nome}"></h3>
+				<h3 class="tile-title" th:text="${role.id == null} ? 'Nova role' : *{role.nome}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:object="${role}" th:action="${role.id == null} ? @{/role/adicionar} : @{/role/alterar}" method="post" autocomplete="off">
 						<div class="row">
