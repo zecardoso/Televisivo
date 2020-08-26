@@ -20,7 +20,7 @@ public class Pagina<T> {
 
     public Pagina(Page<T> page, int pageSize, HttpServletRequest httpServletRequest) {
         this.page = page;
-        String httpUrl = httpServletRequest.getRequestURL().append(httpServletRequest.getQueryString() != null ? "?" + httpServletRequest.getQueryString() : "").toString().replaceAll("\\+", "%20");
+        String httpUrl = httpServletRequest.getRequestURL().append(httpServletRequest.getQueryString() != null ? "?" + httpServletRequest.getQueryString() : "").toString().replace("\\+", "%20");
         this.uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
         this.pageSize = pageSize;
 
