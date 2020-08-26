@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/direitos")
+@RequestMapping(value = "/direito")
 public class RolePermissaoController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class RolePermissaoController {
 
     @GetMapping("/lista")
     public ModelAndView lista(RolePermissaoFilter rolePermissaoFilter) {
-        ModelAndView modelAndView = new ModelAndView("/direitos/lista");
+        ModelAndView modelAndView = new ModelAndView("/direito/lista");
         List<RolePermissao> lista = rolePermissaoService.findRolePermissaoEscopoFilter(rolePermissaoFilter);
         modelAndView.addObject("lista", lista);
         return modelAndView;
@@ -52,7 +52,7 @@ public class RolePermissaoController {
 
     @GetMapping("/cadastro")
     public ModelAndView cadastro(RolePermissao rolePermissao) {
-        ModelAndView modelAndView = new ModelAndView("/direitos/direitos");
+        ModelAndView modelAndView = new ModelAndView("/direito/direito");
         modelAndView.addObject("rolePermissao", rolePermissao);
         return modelAndView;
     }
@@ -66,7 +66,7 @@ public class RolePermissaoController {
         rolePermissao.setId(id);
         rolePermissaoService.save(rolePermissao);
         attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
-        return new ModelAndView("redirect:/direitos/lista");
+        return new ModelAndView("redirect:/direito/lista");
     }
 
     @GetMapping("/remover/{roleId}/{permissaoId}/{escopoId}")
@@ -76,7 +76,7 @@ public class RolePermissaoController {
         id.setPermissao(permissaoId);
         id.setEscopo(escopoId);
         RolePermissao rolePermissao = rolePermissaoService.getOne(id);
-        ModelAndView modelAndView = new ModelAndView("/direitos/remover");
+        ModelAndView modelAndView = new ModelAndView("/direito/remover");
         modelAndView.addObject("rolePermissao", rolePermissao);
         return modelAndView;
     }
@@ -85,7 +85,7 @@ public class RolePermissaoController {
     public ModelAndView remover(RolePermissao rolePermissao, BindingResult result, RedirectAttributes attributes) {
         rolePermissaoService.deleteById(rolePermissao.getId());
         attributes.addFlashAttribute("success", "Registro removido com sucesso.");
-        return new ModelAndView("/direitos/lista");
+        return new ModelAndView("/direito/lista");
     }
 
     @ModelAttribute("roles")
@@ -105,6 +105,6 @@ public class RolePermissaoController {
 
     @PostMapping(value = { "/adicionar", "/alterar", "/remover" }, params = "action=cancelar")
 	public String cancelar() {
-		return "redirect:/direitos/lista";
+		return "redirect:/direito/lista";
     }
 }
