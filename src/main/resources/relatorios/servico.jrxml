@@ -17,9 +17,9 @@ FROM televisivo.servico]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement x="80" y="26" width="400" height="30" uuid="d0cc2213-9273-4aa4-aea6-eb5db50061b8"/>
+				<reportElement x="80" y="20" width="400" height="30" uuid="d0cc2213-9273-4aa4-aea6-eb5db50061b8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -27,10 +27,10 @@ FROM televisivo.servico]]>
 			</staticText>
 		</band>
 	</title>
-	<detail>
-		<band height="125" splitType="Stretch">
+	<columnHeader>
+		<band height="30">
 			<staticText>
-				<reportElement x="110" y="20" width="40" height="20" uuid="743f8522-3636-4e4b-a6c2-c24cd94d8868">
+				<reportElement x="110" y="0" width="40" height="20" uuid="743f8522-3636-4e4b-a6c2-c24cd94d8868">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51d9f8ff-9634-493f-b876-b8640be22b5d"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -39,7 +39,7 @@ FROM televisivo.servico]]>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="20" width="120" height="20" uuid="758807cf-d791-4d85-b1d1-9a9a75acb9d7">
+				<reportElement x="160" y="0" width="120" height="20" uuid="758807cf-d791-4d85-b1d1-9a9a75acb9d7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -47,14 +47,18 @@ FROM televisivo.servico]]>
 				</textElement>
 				<text><![CDATA[Nome]]></text>
 			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement x="110" y="51" width="40" height="19" uuid="975609cb-3172-4215-9a2b-ea78b8862a54">
+				<reportElement x="110" y="0" width="40" height="19" uuid="975609cb-3172-4215-9a2b-ea78b8862a54">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51d9f8ff-9634-493f-b876-b8640be22b5d"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{servico_id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="160" y="51" width="120" height="19" uuid="bdbdfcf2-ae36-45f8-bb07-9277dc7be2ec">
+				<reportElement x="160" y="0" width="120" height="19" uuid="bdbdfcf2-ae36-45f8-bb07-9277dc7be2ec">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
@@ -62,9 +66,9 @@ FROM televisivo.servico]]>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="55">
+		<band height="20">
 			<textField>
-				<reportElement x="520" y="25" width="34" height="30" uuid="7bb309a0-1053-4c22-8516-f49aae2447b1"/>
+				<reportElement x="531" y="0" width="24" height="20" uuid="7bb309a0-1053-4c22-8516-f49aae2447b1"/>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>

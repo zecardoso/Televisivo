@@ -14,9 +14,9 @@ FROM televisivo.artista]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement x="80" y="26" width="400" height="30" uuid="80e10fd9-2ff2-4e61-bb09-2c1dd3c01602"/>
+				<reportElement x="80" y="20" width="400" height="30" uuid="80e10fd9-2ff2-4e61-bb09-2c1dd3c01602"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -24,19 +24,10 @@ FROM televisivo.artista]]>
 			</staticText>
 		</band>
 	</title>
-	<detail>
-		<band height="125" splitType="Stretch">
+	<columnHeader>
+		<band height="30">
 			<staticText>
-				<reportElement x="110" y="20" width="40" height="20" uuid="ff509e25-891a-447b-b9eb-309bcf593f9c">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51d9f8ff-9634-493f-b876-b8640be22b5d"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Código]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="160" y="20" width="120" height="20" uuid="3c9540e0-cc1b-4d0f-bb34-5c77c337abac">
+				<reportElement x="160" y="0" width="120" height="20" uuid="3c9540e0-cc1b-4d0f-bb34-5c77c337abac">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -44,14 +35,27 @@ FROM televisivo.artista]]>
 				</textElement>
 				<text><![CDATA[Nome]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="40" height="20" uuid="ff509e25-891a-447b-b9eb-309bcf593f9c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51d9f8ff-9634-493f-b876-b8640be22b5d"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement x="160" y="51" width="120" height="19" uuid="1d2155f7-99f3-4935-826d-02210e386ca3">
+				<reportElement x="160" y="0" width="120" height="19" uuid="1d2155f7-99f3-4935-826d-02210e386ca3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="51" width="40" height="19" uuid="9eb5fd03-101d-4aa9-982d-18fd40518ea6">
+				<reportElement x="110" y="0" width="40" height="19" uuid="9eb5fd03-101d-4aa9-982d-18fd40518ea6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51d9f8ff-9634-493f-b876-b8640be22b5d"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{artista_id}]]></textFieldExpression>
@@ -59,9 +63,9 @@ FROM televisivo.artista]]>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="55">
+		<band height="20">
 			<textField>
-				<reportElement x="520" y="25" width="34" height="30" uuid="f51f3ebf-36ba-462a-ba41-ddd63d042443"/>
+				<reportElement x="531" y="0" width="24" height="20" uuid="da45a15c-a406-4752-b087-b9602f4e35f3"/>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
