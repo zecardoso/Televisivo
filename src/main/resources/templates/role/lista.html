@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Lista de roles</title>
+    <title>Lista de grupos</title>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Lista</h1>
+            <h1>Lista de grupos</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/role/lista}">Pesquisar role</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Role</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
             </ul>
+			<div class="app-search">
+				<form class="form-inline" method="GET" th:object="${roleFilter}">
+					<label class="sr-only" for="nome">Pesquisar</label>
+					<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Pesquisar">
+					<button class="app-search__button"><i class="fa fa-search"></i></button>
+				</form>
+			</div>
         </div>
         <div class="container">
 			<div class="tile">
@@ -19,6 +27,17 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div th:replace="fragments/alert"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12 col-md-6">
+								<div class="dataTables_length" id="sampleTable_length">
+									<label>
+										<select class="form-control form-control-md" id="pageSizeSelect">
+											<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
+										</select>
+									</label>
+								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -32,7 +51,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="role :${pagina.conteudo}">
-											<td data-tile="nome" th:text="*{role.nome}"></td>
+											<td data-tile="nome" th:text="${role.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
 												<a title="Detalhes" th:href="@{/role/detalhes/{id}(id=${role.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
 											</td>
@@ -40,7 +59,9 @@
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
-								<a title="Adicionar" class="btn btn-success" th:href="@{/role/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								<div class="tile-footer">
+									<a title="Adicionar" class="btn btn-success" th:href="@{/role/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								</div>
 							</div>
 						</div>
 					</div>

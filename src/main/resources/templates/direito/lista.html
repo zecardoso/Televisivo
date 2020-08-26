@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Lista de usuários</title>
+    <title>Lista de direitos</title>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Lista</h1>
+            <h1>Lista de direitos</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
-                <li class="breadcrumb-item"><a th:href="@{/direitos/lista}">Pesquisar usuário</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item">Direito</li>
+                <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
             </ul>
 		</div>
 		<div class="container">
 			<div class="tile">
                 <div class="tile-body">
 					<form class="form-inline" method="GET" th:object="${rolePermissaoFilter}">
-						<div class="col-sm-12 col-md-2">
+						<div class="col-auto">
 							<div class="form-group">
 								<input type="text" class="form-control" id="nome" name="nome" th:field="*{role}" placeholder="Role">
 							</div>
 						</div>
-						<div class="col-sm-12 col-md-2">
+						<div class="col-auto">
 							<div class="form-group">
 								<input type="text" class="form-control" id="permissao" name="permissao" th:field="*{permissao}" placeholder="Permissão">
 							</div>
 						</div>
-						<div class="col-sm-12 col-md-2">
+						<div class="col-auto">
 							<div class="form-group">
 								<input type="text" class="form-control" id="escopo" name="escopo" th:field="*{escopo}" placeholder="Escopo">
 							</div>
@@ -60,16 +61,18 @@
 									</thead>
 									<tbody>
 										<tr th:each="rolePermissao :${lista}">
-											<td data-tile="Grupo" th:text="*{rolePermissao.role.nome}"></td>
-											<td data-tile="Permissão" th:text="*{rolePermissao.permissao.nome}"></td>
-											<td data-tile="Permissão" th:text="*{rolePermissao.escopo.nome}"></td>
+											<td data-tile="Grupo" th:text="${rolePermissao.role.nome}"></td>
+											<td data-tile="Permissão" th:text="${rolePermissao.permissao.nome}"></td>
+											<td data-tile="Permissão" th:text="${rolePermissao.escopo.nome}"></td>
 											<td data-tile="Remover" style="text-align: center;">
-												<a title="Remover" th:href="@{/direitos/remover/{role}/{permissao}/{escopo}(role=${rolePermissao.role.id}, permissao=${rolePermissao.permissao.id}, escopo=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm">Remover</a>
+												<a title="Remover" th:href="@{/direito/remover/{role}/{permissao}/{escopo}(role=${rolePermissao.role.id}, permissao=${rolePermissao.permissao.id}, escopo=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm">Remover</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
-								<a title="Adicionar" class="btn btn-success" th:href="@{/direitos/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								<div class="tile-footer">
+									<a title="Adicionar" class="btn btn-success" th:href="@{/direito/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+								</div>
 							</div>
 						</div>
 					</div>
