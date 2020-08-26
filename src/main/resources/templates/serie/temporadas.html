@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
 <head>
-    <title>Remover serie</title>
+    <title>Serie</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Remover</i></h1>
+            <h1>Serie</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-search fa-lg"></i></li>
                 <li class="breadcrumb-item"><a th:href="@{/serie/lista}">Pesquisar serie</a></li>
             </ul>
         </div>
@@ -34,28 +33,28 @@
                         <h4 th:text="${categoria.nome}"></h4>
                     </div>
                 </div>
-				<label class="control-label">Temporadas</label>
-				<div class="form-row" th:each="temporada : ${temporadas}">
-					<div class="col-md-5 mb-1">
-						<a type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="${temporada.numero}"></span></a>
-						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
-					</div>
-				</div>
-                <form th:object="${serie}" th:action="@{/serie/{id}/remover(id=${serie.id})}" method="post" autocomplete="off">
-                    <input type="hidden" th:field="*{id}">
-                    <div class="tile-footer">
-                        <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>
-                        <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                <label class="control-label">Temporadas</label>
+                <div class="form-row" th:each="temporada : ${temporadas}">
+                    <div class="col-md-2 mb-1">
+                        <a th:href="@{/serie/temporada/detalhes/{id}(id=${temporada.id})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="' ' + ${temporada.numero}"></span> <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <a th:href="@{/serie/temporada/deletar/{id}(id=${temporada.id})}" type="button" class="btn btn-danger"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <form class="form-row" th:action="@{/serie/{id}/temporadas(id=${serie.id})}" method="POST">
+                    <div class="col-md-3 mb-3">
+                        <input class="form-control" type="number" id="numero" name="numero" autofocus placeholder="Número"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="number" id="ano" name="ano" placeholder="Ano"/>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-primary" type="submit">Adicionar</button>                        
                     </div>
                 </form>
             </div>
         </div>
-	</section>
-    <th:block layout:fragment="javascript-extra">
-		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
-		<script type="text/javascript">
-            $('.js-status').bootstrapSwitch();
-        </script>
-	</th:block>
+    </section>
 </body>
 </html>

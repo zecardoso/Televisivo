@@ -64,7 +64,7 @@
 											<td data-tile="Permissão" th:text="*{rolePermissao.permissao.nome}"></td>
 											<td data-tile="Permissão" th:text="*{rolePermissao.escopo.nome}"></td>
 											<td data-tile="Remover" style="text-align: center;">
-												<a title="Remover" th:href="@{/direitos/remover/{role}/{permissao}/{escopo}(role=${rolePermissao.role.id}, permissao=${rolePermissao.permissao.id}, escopo=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm btn-block"><i class="fa fa-trash-plus"></i>Remover</a>
+												<a title="Remover" th:href="@{/direitos/remover/{role}/{permissao}/{escopo}(role=${rolePermissao.role.id}, permissao=${rolePermissao.permissao.id}, escopo=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm">Remover</a>
 											</td>
 										</tr>
 									</tbody>

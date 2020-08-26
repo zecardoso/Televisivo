@@ -34,7 +34,7 @@
 										<tr th:each="episodio :${pagina.conteudo}">
 											<td data-tile="nome" th:text="*{episodio.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/episodio/detalhes/{id}(id=${episodio.id})}" class="btn btn-warning btn-sm btn-block"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/episodio/detalhes/{id}(id=${episodio.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
 											</td>
 										</tr>
 									</tbody>

@@ -14,17 +14,16 @@
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
+			<div class="tile" th:object="${episodio}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/validation :: validation"></div>
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
 				<h3 class="tile-title" th:text="'Episodio ' + ${episodio.numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${episodio}" th:action="@{/serie/temporada/episodio/alterar}" method="post" autocomplete="off">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div th:replace="fragments/validation :: validation"></div>
-								<div th:replace="fragments/alert"></div>
-							</div>
-                        </div>
-						<input type="hidden" th:field="*{id}">
+                    <form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/alterar(idSerie=*{temporada.serie.id}, idTemporada=*{temporada.id}, id=*{id})}" method="post" autocomplete="off">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="numero">Numero</label>
@@ -71,8 +70,8 @@
 							</div>
 						</div> -->
                         <div class="tile-footer">
-							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<a th:href="@{/serie/temporada/detalhes/{id}(id=${episodio.temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
+							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate"></i>Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>

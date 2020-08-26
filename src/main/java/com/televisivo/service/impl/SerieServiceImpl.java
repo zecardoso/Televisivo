@@ -37,7 +37,6 @@ public class SerieServiceImpl implements SerieService {
 
     @Override
     public Serie save(Serie serie) {
-        serie.setQtdTemporadas(serie.getTemporadas().size());
         return serieRepository.save(serie);
     }
 
@@ -79,6 +78,22 @@ public class SerieServiceImpl implements SerieService {
     }
     
     @Override
+    public Long findSerieByIdTemporada(Long id) {
+        return temporadaRepository.getOne(id).getSerie().getId();
+    }
+
+    @Override
+    public List<Temporada> temporadas(Long id) {
+        return serieRepository.temporadas(id);
+    }
+
+    @Override
+    public void atualizarQtdTemporadas(Long id) {
+        Serie serie = getOne(id);
+        serie.setQtdTemporadas(serie.getTemporadas().size());
+    }
+
+    @Override
     public void salvarTemporada(Serie serie) {
         if (serie.getTemporadas().size() != -1) {
             for (Temporada temporada: serie.getTemporadas()) {
@@ -104,10 +119,5 @@ public class SerieServiceImpl implements SerieService {
         }
         serie.getTemporadas().remove(index);
         return serie;
-    }
-
-    @Override
-    public Serie buscarPorIdTemporada(Long id) {
-        return serieRepository.buscarPorIdTemporada(id);
     }
 }

@@ -14,17 +14,16 @@
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
-				<h3 class="tile-title" th:text="*{serie.id == null} ? 'Nova série' : *{serie.nome}"></h3>
+			<div class="tile" th:object="${serie}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/validation :: validation"></div>
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
+				<h3 class="tile-title" th:text="*{id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${serie}" th:action="${serie.id == null} ? @{/serie/adicionar} : @{/serie/alterar}" method="post" autocomplete="off">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div th:replace="fragments/validation :: validation"></div>
-								<div th:replace="fragments/alert"></div>
-							</div>
-                        </div>
-						<input type="hidden" th:field="*{id}">
+                    <form th:action="${id == null} ? @{/serie} : @{/serie/{id}/alterar(id=${id})}" method="post" autocomplete="off">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
 								<label for="nome">Nome</label>
@@ -46,7 +45,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="ano">Ano</label>
-                                <Input class="form-control" type="text" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
+                                <Input class="form-control" type="number" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{ano}"></span>
                                 </div>
@@ -55,7 +54,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="restricao">Restrição de idade</label>
-                                <Input class="form-control" type="text" placeholder="Enter Restriction" th:field="*{restricao}" id="restricao" name="restricao" th:classappend="${#fields.hasErrors('restricao')} ? 'is-invalid'">
+                                <Input class="form-control" type="number" placeholder="Enter Restriction" th:field="*{restricao}" id="restricao" name="restricao" th:classappend="${#fields.hasErrors('restricao')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{restricao}"></span>
                                 </div>
@@ -74,46 +73,40 @@
 							</div>
                         </div>
                         <label class="control-label">Categorias</label>
-                        <fieldset>
-                            <div class="form-row">
-                                <th:block th:each="categoria : ${categorias}">
-                                    <div class="col-md-1 mb-3">
-                                        <label th:text="${categoria.nome}"></label>
-                                        <div class="make-switch switch-large">
-                                            <input type="checkbox" th:value="${categoria.id}" th:field="*{categorias}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
-                                        </div>
+                        <div class="form-row">
+                            <th:block th:each="categoria : ${categorias}">
+                                <div class="col-md-1 mb-3">
+                                    <label th:text="${categoria.nome}"></label>
+                                    <div class="make-switch switch-large">
+                                        <input type="checkbox" th:value="${categoria.id}" th:field="*{categorias}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
                                     </div>
-                                </th:block>
-                            </div>
-                        </fieldset>
+                                </div>
+                            </th:block>
+                        </div>
                         <div th:if="${serie.id} != null">
                             <label class="control-label">Temporadas</label>
-							<fieldset>
-                                <div class="form-row" th:each="temporadas, rowStat :*{temporadas}">
-                                    <div class="col-md-3 mb-3">
-                                        <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
-                                        <label>Número da temporada</label>
-                                        <input type="text" placeholder="Número" class="form-control" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Ano</label>
-                                        <input type="text" placeholder="Ano" class="form-control" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label th:if="${rowStat.index} ge 0 and ${#lists.size(serie.temporadas) ne 1}">Remover</label>
-                                        <button class="btn btn-danger" type="submit" name="removerow" th:value="${rowStat.index}" th:if="${rowStat.index} ge 0 and ${#lists.size(serie.temporadas) ne 1}"><i class="fa fa-minus" style="color: white"></i></button>
-                                    </div>
+                            <div class="form-row align-items-center" th:each="temporadas, rowStat :*{temporadas}">
+                                <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
+                                <div class="col-auto">
+                                    <label class="sr-only" for="numero">Name</label>
+                                    <input type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
                                 </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
+                                <div class="col-auto">
+                                    <label class="sr-only" for="ano">Name</label>
+                                    <input type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
                                 </div>
-                            </fieldset>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="${rowStat.index}">Remover</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
+                            </div>
                         </div>
                         <div class="tile-footer">
-							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<a th:if="${serie.id} != null" th:href="@{/serie/detalhes/{id}(id=${serie.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
-							<button th:if="${serie.id} == null" class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
-						</div>
+                            <button class="btn btn-success" type="submit" th:text="${serie.id == null} ? 'Próximo' : 'Salvar'" formnovalidate="formnovalidate"></button>
+                            <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                        </div>
                     </form>
                 </div>
             </div>

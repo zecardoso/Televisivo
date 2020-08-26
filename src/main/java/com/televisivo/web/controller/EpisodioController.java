@@ -16,22 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/serie/temporada/episodio")
+@RequestMapping(value = "/serie/{id}/temporada/{id}/episodio")
 public class EpisodioController {
 
     private static final String EPISODIO = "episodio";
+    private static final String REDIRECT_SERIE = "redirect:/serie/";
+    private static final String HTML_EPISODIO = "/episodio/episodio";
 
     @Autowired
     private EpisodioService episodioService;
     
-    @GetMapping("/cadastro")
-    public ModelAndView cadastro(Episodio episodio) {
-        ModelAndView modelAndView = new ModelAndView("/episodio/episodio");
-        modelAndView.addObject(EPISODIO, episodio);
-        return modelAndView;
-    }
-
-    @GetMapping("/detalhes/{id}")
+    @GetMapping("{id}")
     public ModelAndView detalhes(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/episodio/detalhes");
         Episodio episodio = episodioService.getOne(id);
@@ -39,36 +34,48 @@ public class EpisodioController {
         return modelAndView;
     }
 
-    @GetMapping("/alterar/{id}")
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("/episodio/episodio");
+    @GetMapping("/{id}/alterar")
+    public ModelAndView viewAlterar(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView(HTML_EPISODIO);
         Episodio episodio = episodioService.getOne(id);
         modelAndView.addObject(EPISODIO, episodio);
         return modelAndView;
     }
 
-    @GetMapping("/remover/{id}")
-    public ModelAndView removerId(@PathVariable("id") Long id) {
+    @PostMapping("/{id}/alterar")
+    public String alterar(@PathVariable("id") Long id, @Valid Episodio episodio, BindingResult result, RedirectAttributes attributes) {
+        Long idSerie = episodioService.findSerieByIdEpisodio(id);
+        Long idTemporada = episodioService.findTemporadaByIdEpisodio(id);
+        if (result.hasErrors()) {
+            return REDIRECT_SERIE + idSerie + "/temporada/" + idTemporada + "/episodio/" + id + "/alterar";
+        }
+        episodioService.update(episodio);
+        attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
+        return REDIRECT_SERIE + idSerie + "/temporada/" + idTemporada + "/episodio/" + id;
+    }
+
+    @GetMapping("/{id}/remover")
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/episodio/remover");
         Episodio episodio = episodioService.getOne(id);
         modelAndView.addObject(EPISODIO, episodio);
         return modelAndView;
     }
 
-    @PostMapping(value = "/alterar")
-    public ModelAndView alterar(@Valid Episodio episodio, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return cadastro(episodio);
-        }
-        episodioService.update(episodio);
-        attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
-        return new ModelAndView("redirect:/episodio/lista");
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        Long idSerie = episodioService.findSerieByIdEpisodio(id);
+        Long idTemporada = episodioService.findTemporadaByIdEpisodio(id);
+        episodioService.deleteById(id);
+        episodioService.atualizarQtdEpisodios(id);
+        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
+        return REDIRECT_SERIE + idSerie + "/temporada/" + idTemporada;
     }
 
-    @PostMapping(value = "/remover")
-    public ModelAndView remover(Episodio episodio, BindingResult result, RedirectAttributes attributes) {
-        episodioService.deleteById(episodio.getId());
-        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
-        return new ModelAndView("redirect:/episodio/lista");
+    @PostMapping(value = { "", "/", "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+	public String cancelar(@PathVariable("id") Long id) {
+        Long idSerie = episodioService.findSerieByIdEpisodio(id);
+        Long idTemporada = episodioService.findTemporadaByIdEpisodio(id);
+		return REDIRECT_SERIE + idSerie + "/temporada/" + idTemporada + "/episodio/" + id;
     }
 }

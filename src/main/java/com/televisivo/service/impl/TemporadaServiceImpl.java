@@ -3,8 +3,10 @@ package com.televisivo.service.impl;
 import java.util.List;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.repository.EpisodioRepository;
+import com.televisivo.repository.SerieRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.service.TemporadaService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
@@ -24,6 +26,9 @@ public class TemporadaServiceImpl implements TemporadaService {
     private TemporadaRepository temporadaRepository;
 
     @Autowired
+    private SerieRepository serieRepository;
+
+    @Autowired
     private EpisodioRepository episodioRepository;
 
     @Override
@@ -34,7 +39,6 @@ public class TemporadaServiceImpl implements TemporadaService {
     
     @Override
     public Temporada save(Temporada temporada) {
-        temporada.setQtdEpisodios(temporada.getEpisodios().size());
         return temporadaRepository.save(temporada);
     }
 
@@ -66,10 +70,32 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
-    public List<Temporada> buscarNumero(int numero) {
-        return temporadaRepository.buscarNumero(numero);
+    public Long findTemporadaByIdEpisodio(Long id) {
+        return episodioRepository.getOne(id).getTemporada().getId();
     }
-    
+
+    @Override
+    public Long findSerieByIdTemporada(Long id) {
+        return temporadaRepository.getOne(id).getSerie().getId();
+    }
+
+    @Override
+    public List<Episodio> episodios(Long id) {
+        return temporadaRepository.episodios(id);
+    }
+
+    @Override
+    public void atualizarQtdEpisodios(Long id) {
+        Temporada temporada = getOne(id);
+        temporada.setQtdEpisodios(temporada.getEpisodios().size());
+    }
+
+    @Override
+    public void atualizarQtdTemporadas(Long id) {
+        Serie serie = serieRepository.getOne(findSerieByIdTemporada(id));
+        serie.setQtdTemporadas(serie.getTemporadas().size());
+    }
+
     @Override
     public void salvarEpisodio(Temporada temporada) {
         if (temporada.getEpisodios().size() != -1) {
@@ -87,7 +113,7 @@ public class TemporadaServiceImpl implements TemporadaService {
         temporada.getEpisodios().add(episodio);
         return temporada;
     }
-
+    
     @Override
     public Temporada removerEpisodio(Temporada temporada, int index) {
         Episodio episodio = temporada.getEpisodios().get(index);
@@ -96,10 +122,5 @@ public class TemporadaServiceImpl implements TemporadaService {
         }
         temporada.getEpisodios().remove(index);
         return temporada;
-    }
-
-    @Override
-    public Temporada buscarPorIdEpisodio(Long id) {
-        return temporadaRepository.buscarPorIdEpisodio(id);
     }
 }

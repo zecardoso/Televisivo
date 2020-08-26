@@ -14,73 +14,34 @@
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
+			<div class="tile" th:object="${episodio}">
+				<div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
 				<h3 class="tile-title" th:object="${episodio}" th:text="'Episodio ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${episodio}">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Nome</label>
-									<h4 th:text="*{nome}"></h4>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Numero</label>
-									<h4 th:text="*{numero}"></h4>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Enredo</label>
-									<h4 th:text="*{enredo}"></h4>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Duração</label>
-									<h4 th:text="*{duracao}"></h4>
-								</div>
-							</div>
-						</div>
-						<!-- <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Publicação</label>
-									<h4 th:text="*{publicacao}"></h4>
-								</div>
-							</div>
-						</div> -->
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Avaliação</label>
-									<h4 th:text="*{avaliacao}"></h4>
-								</div>
-							</div>
-						</div>
-                        <div class="tile-footer">
-							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/serie/temporada/episodio/alterar/{id}(id=${episodio.id})}" aria-hidden="true" episodio="button"></a>
-							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/serie/temporada/episodio/remover/{id}(id=${episodio.id})}" aria-hidden="true" episodio="button"></a>
-							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/serie/temporada/detalhes/{id}(id=${episodio.temporada.id})}" aria-hidden="true" episodio="button"></a>
-						</div>
-                    </form>
+					<label class="control-label">Nome</label>
+					<h4 th:text="*{nome}"></h4>
+					<label class="control-label">Numero</label>
+					<h4 th:text="*{numero}"></h4>
+					<label class="control-label">Enredo</label>
+					<h4 th:text="*{enredo}"></h4>
+					<label class="control-label">Duração</label>
+					<h4 th:text="*{duracao}"></h4>
+					<!-- <label class="control-label">Publicação</label>
+					<h4 th:text="*{publicacao}"></h4> -->
+					<label class="control-label">Avaliação</label>
+					<h4 th:text="*{avaliacao}"></h4>
+					<div class="tile-footer">
+						<a type="button" title="Editar" class="btn btn-info" th:href="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/alterar(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=${episodio.id})}">Editar</a>
+						<a type="button" title="Excluir" class="btn btn-danger" th:href="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/remover(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=${episodio.id})}">Excluir</a>
+						<a type="button" title="Voltar" class="btn btn-secondary" th:href="@{/serie/{idSerie}/temporada/{idTemporada}/(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id})}">Voltar</a>
+					</div>
                 </div>
             </div>
         </div>
 	</section>
-    <th:block layout:fragment="javascript-extra">
-		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
-		<script type="text/javascript">
-            $('.js-status').bootstrapSwitch();
-        </script>
-	</th:block>
 </body>
 </html>

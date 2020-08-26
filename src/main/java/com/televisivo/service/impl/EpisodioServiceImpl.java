@@ -3,7 +3,9 @@ package com.televisivo.service.impl;
 import java.util.List;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Temporada;
 import com.televisivo.repository.EpisodioRepository;
+import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.service.EpisodioService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
 import com.televisivo.service.exceptions.EpisodioNaoCadastradoException;
@@ -21,6 +23,9 @@ public class EpisodioServiceImpl implements EpisodioService {
     @Autowired
     private EpisodioRepository episodioRepository;
 
+    @Autowired
+    private TemporadaRepository temporadaRepository;
+    
     @Override
 	@Transactional(readOnly = true)
     public List<Episodio> findAll() {
@@ -60,7 +65,18 @@ public class EpisodioServiceImpl implements EpisodioService {
     }
     
     @Override
-    public List<Episodio> buscarNumero(int numero) {
-        return episodioRepository.buscarNumero(numero);
+    public Long findTemporadaByIdEpisodio(Long id) {
+        return episodioRepository.getOne(id).getTemporada().getId();
+    }
+
+    @Override
+    public Long findSerieByIdEpisodio(Long id) {
+        return episodioRepository.getOne(id).getTemporada().getSerie().getId();
+    }
+
+    @Override
+    public void atualizarQtdEpisodios(Long id) {
+        Temporada temporada = temporadaRepository.getOne(findTemporadaByIdEpisodio(id));
+        temporada.setQtdEpisodios(temporada.getEpisodios().size());
     }
 }

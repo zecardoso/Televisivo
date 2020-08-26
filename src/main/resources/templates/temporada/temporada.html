@@ -14,20 +14,19 @@
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
-				<h3 class="tile-title" th:text="'Temporada ' + ${temporada.numero}"></h3>
+			<div class="tile" th:object="${temporada}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/validation :: validation"></div>
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
+				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${temporada}" th:action="@{/serie/temporada/alterar}" method="post" autocomplete="off">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div th:replace="fragments/validation :: validation"></div>
-								<div th:replace="fragments/alert"></div>
-							</div>
-                        </div>
-                        <input type="hidden" th:field="*{id}">
-                        <input type="hidden" th:field="*{serie.id}">
+                    <form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/alterar(idSerie=*{serie.id}, idTemporada=*{id})}" method="post" autocomplete="off">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
+                                <Input hidden th:field="*{serie}">
                                 <label for="numero">Numero</label>
                                 <Input class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
@@ -44,45 +43,39 @@
                                 </div>
 							</div>
 						</div>
-                        <div>
-                            <label class="control-label">Episodios</label>
-							<fieldset>
-                                <div class="form-row" th:each="episodios, rowStat :*{episodios}">
-                                    <div class="col-md-2">
-                                        <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
-                                        <input type="hidden" th:field="*{temporada.serie.id}">
-                                        <label>Número da temporada</label>
-                                        <input type="number" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].numero}"/>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Nome do episodio</label>
-                                        <input type="text" placeholder="Nome" class="form-control" th:field="*{episodios[__${rowStat.index}__].nome}"/>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Enredo</label>
-                                        <input type="text" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].enredo}"/>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Duração</label>
-                                        <input type="number" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].duracao}"/>
-                                    </div>
-                                    <!-- <div class="col-md-2">
-                                        <label>Publicação</label>
-                                        <input type="date" placeholder="Número" class="form-control" th:field="*{episodios[__${rowStat.index}__].publicacao}"/>
-                                    </div> -->
-                                    <div class="col-md-1">
-                                        <label>Remover</label>
-                                        <button class="btn btn-danger" type="submit" name="removerow" th:value="${rowStat.index}"><i class="fa fa-minus" style="color: white"></i></button>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit" name="addrow" value="addrow"><i class="fa fa-fw fa-lg fa-plus" style="color: white"></i></button>
-                                </div>
-							</fieldset>
-						</div>
+                        <label class="control-label">Episodios</label>
+                        <div class="form-row align-items-center" th:each="episodios, rowStat :*{episodios}">
+                            <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
+                            <div class="col-auto">
+                                <label class="sr-only" for="numero">Número da temporada</label>
+                                <input type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
+                            </div>
+                            <div class="col-auto">
+                                <label class="sr-only" for="nome">Nome do episodio</label>
+                                <input type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
+                            </div>
+                            <div class="col-auto">
+                                <label class="sr-only" for="enredo">Enredo</label>
+                                <input type="text" class="form-control mb-2" placeholder="Enredo" th:field="*{episodios[__${rowStat.index}__].enredo}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].enredo')} ? 'is-invalid'">
+                            </div>
+                            <div class="col-auto">
+                                <label class="sr-only" for="duracao">Duração</label>
+                                <input type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
+                            </div>
+                            <!-- <div class="col-auto">
+                                <label class="sr-only" for="publicacao">Publicação</label>
+                                <input type="date" class="form-control mb-2" placeholder="Publicação" th:field="*{episodios[__${rowStat.index}__].publicacao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].publicacao')} ? 'is-invalid'">
+                            </div> -->
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="${rowStat.index}">Remover</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
+                        </div>
                         <div class="tile-footer">
-							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<a th:href="@{/serie/temporada/detalhes/{id}(id=${temporada.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
+							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate">Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>
