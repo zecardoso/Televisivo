@@ -7,7 +7,6 @@ import java.util.UUID;
 import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.VerificarToken;
-import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.VerificarTokenRepository;
 import com.televisivo.service.RegistrarUsuarioService;
