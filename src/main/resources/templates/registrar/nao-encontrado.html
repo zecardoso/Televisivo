@@ -1,0 +1,52 @@
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layoutSimples}">
+	<head><meta charset="UTF-8"></head>
+<th:block layout:fragment="conteudo">
+	<div class="container">
+	    <input type="hidden" id="token" name="token" th:value="${token}"/> 
+	    <div th:replace="fragments/alert"></div> 
+	   
+	    <div th:if="${token_invalido} ne null">
+	    	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+	    		<i class="fa fa-check-circle"></i> 
+				<span><strong th:utext="${token_invalido}"></strong></span>
+			</div>
+			<br/>
+			<br/> 
+			<a class="btn btn-default" th:href="@{/registrar/cadastrar}">Faça o Registro para acessar o sistema</a>
+        </div>
+     	<div th:if="${token_expirado}">
+			<br />
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+	    		<i class="fa fa-check-circle"></i> 
+				<span><strong th:utext="${token_expirado}"></strong></span>
+			</div>	
+			<button class="btn btn-success btn-lg" onclick="resendToken()">Reenviar</button>
+			<script th:src="@{/js/jquery.js}"></script> 
+			<script th:inline="javascript">
+				/*<![CDATA[*/
+						var serverContext = [[@{/}]];
+						
+				        var token = $('#token').val();
+						
+						function resendToken(){
+						    $.ajax({
+						         type: "GET",	 
+						         url:serverContext + "registrar/reenviarToken?token="+token,
+			                     success : function(result) {
+	            		            window.location.href = serverContext +"login?message=" + data.message;
+	                             },
+	                             error : function(data) {
+						            window.location.href = serverContext + "login?message=" + data.responseJSON.message;
+	                             }   
+						    });
+						}
+		
+				/*]]>*/
+			</script>
+		</div>
+	</div>
+</th:block>
+
+</html>

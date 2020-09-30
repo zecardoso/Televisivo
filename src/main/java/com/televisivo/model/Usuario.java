@@ -82,7 +82,7 @@ public class Usuario implements UserDetails {
     @Column(length = 50, unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Genero genero;
 
     @Column(length = 100, nullable = false)
