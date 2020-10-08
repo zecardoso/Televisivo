@@ -126,9 +126,9 @@ public class ArtistaController {
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
-    	jasperPrint = jasperReportsService.imprimeRelatorioDownload("artista");
+    	jasperPrint = jasperReportsService.imprimeRelatorioDownload(ARTISTA);
     	response.setContentType("application/x-download");
-    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"artista.pdf\""));
+    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"artistas.pdf\""));
     	try {
 			OutputStream out = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
@@ -137,9 +137,9 @@ public class ArtistaController {
 		}
     }
     
-    @GetMapping("/pdf")
+    @GetMapping("/artistas.pdf")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
-    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador("usuario");
+    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(ARTISTA);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
     }
 }

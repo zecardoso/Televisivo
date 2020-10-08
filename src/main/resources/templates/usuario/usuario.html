@@ -76,14 +76,14 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
 								<label for="senha">Senha</label>
-								<Input class="form-control" type="password" placeholder="Senha" required th:field="*{password}" id="password" name="senha" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+								<Input th:required="${usuario.id == null} ? 'true' : null" class="form-control" type="password" placeholder="Senha" th:field="*{password}" id="password" name="senha" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
 								<div class="invalid-feedback">
 									<span th:errors="*{password}"></span>
 								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="contraSenha">Confirmar senha</label>
-								<Input class="form-control" type="password" placeholder="Confirme a senha" required th:field="*{contraSenha}" id="contraSenha" name="contraSenha" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
+								<Input th:required="${usuario.id == null} ? 'true' : null" class="form-control" type="password" placeholder="Confirme a senha" th:field="*{contraSenha}" id="contraSenha" name="contraSenha" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
 								<div class="invalid-feedback">
 									<span th:errors="*{contraSenha}"></span>
 								</div>

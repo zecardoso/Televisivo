@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.13.0.final using JasperReports Library version 6.13.0-46ada4d1be8f3c5985fd0b6146f3ed44caed6f05  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="usuario" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0aae2062-d1bb-47b1-8934-5b7ee59bbcd0">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[dGVsZXZpc2l2by51c3VhcmlvICwxNSwxNSw4YjE4NGNlNy1kYzNlLTQ1MzEtYTEyNS05ZjYzYWY1
+ZGEyZjE7]]>
+	</property>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
 	<queryString language="SQL">
 		<![CDATA[SELECT televisivo.usuario.usuario_id,
 	televisivo.usuario.email,
 	televisivo.usuario.nome
-FROM televisivo.usuario]]>
+FROM televisivo.usuario
+WHERE 
+	 televisivo.usuario.registro_deletado = '0']]>
 	</queryString>
 	<field name="usuario_id" class="java.lang.Long"/>
 	<field name="nome" class="java.lang.String"/>

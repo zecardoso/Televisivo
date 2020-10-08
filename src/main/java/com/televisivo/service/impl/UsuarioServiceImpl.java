@@ -45,11 +45,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 	// @PreAuthorize("hasPermission('ADMINISTRADOR','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
-        if (usuarioCadastrado .isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema ", usuario.getEmail()));
+        if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
+            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
+        }
+        if (usuario.getPassword().isBlank() || (usuario.getContraSenha()).isBlank()) {
+            throw new SenhaError("A senha não pode estar em branco.");
         }
         usuario.setPassword(encodePassword(usuario.getPassword()));
         usuario.setAtivo(Boolean.TRUE);
@@ -59,7 +62,20 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
 	// @PreAuthorize("hasPermission('ADMINISTRADOR','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
-        return this.save(usuario);
+        Usuario usuarioLogado = findById(usuario.getId());
+        Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
+        if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
+            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+        }
+
+        if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
+            usuario.setPassword(usuarioLogado.getPassword());
+        } else if (!usuario.getPassword().equals(usuario.getContraSenha())) {
+            throw new SenhaError("Senha incorreta.");
+        } else {
+            usuario.setPassword(encodePassword(usuario.getPassword()));
+        }
+        return usuarioRepository.save(usuario);
     }
 
     @Override

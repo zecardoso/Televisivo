@@ -112,7 +112,7 @@ public class UsuarioController {
             result.rejectValue("email", e.getMessage(), e.getMessage());
             return cadastro(usuario);
         } catch (SenhaError e) {
-            result.rejectValue("senha", e.getMessage(), e.getMessage());
+            result.rejectValue("password", e.getMessage(), e.getMessage());
             return cadastro(usuario);
         }
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
@@ -129,7 +129,10 @@ public class UsuarioController {
 		} catch(EmailCadastradoException e) {
 			result.rejectValue("email", e.getMessage(), e.getMessage());
 			return cadastro(usuario);
-		}
+		} catch (SenhaError e) {
+            result.rejectValue("password", e.getMessage(), e.getMessage());
+            return cadastro(usuario);
+        }
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
         return new ModelAndView(LISTA);
     }
@@ -159,9 +162,9 @@ public class UsuarioController {
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
-    	jasperPrint = jasperReportsService.imprimeRelatorioDownload("usuario");
+    	jasperPrint = jasperReportsService.imprimeRelatorioDownload(USUARIO);
     	response.setContentType("application/x-download");
-    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"usuario.pdf\""));
+    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"usuarios.pdf\""));
     	try {
 			OutputStream out = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
@@ -170,9 +173,9 @@ public class UsuarioController {
 		}
     }
     
-    @GetMapping("/pdf")
+    @GetMapping("/usuarios.pdf")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
-    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador("usuario");
+    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(USUARIO);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
     }
 }

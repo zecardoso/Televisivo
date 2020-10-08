@@ -126,9 +126,9 @@ public class ServicoController {
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
-    	jasperPrint = jasperReportsService.imprimeRelatorioDownload("servico");
+    	jasperPrint = jasperReportsService.imprimeRelatorioDownload(SERVICO);
     	response.setContentType("application/x-download");
-    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"servico.pdf\""));
+    	response.setHeader("Content-Disposition", String.format("attachment; filename=\"servicos.pdf\""));
     	try {
 			OutputStream out = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
@@ -137,9 +137,9 @@ public class ServicoController {
 		}
     }
     
-    @GetMapping("/pdf")
+    @GetMapping("/servicos.pdf")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
-    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador("servico");
+    	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(SERVICO);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);
     }
 }
