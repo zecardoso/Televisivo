@@ -74,15 +74,15 @@
 											<td data-tile="username" th:text="'@' + *{usuario.username}"></td>
 											<td data-tile="nome" th:text="${usuario.nome} + ' ' + *{usuario.sobrenome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/usuario/detalhes/{id}(id=${usuario.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/usuario/detalhes/{id}(id=${usuario.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
-								<a title="Adicionar" class="btn btn-success" th:href="@{/usuario/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
-								<a title="Download PDF" class="btn btn-success" th:href="@{/usuario/download}"><i class="fa fa-file-pdf-o"></i>Download PDF</a>
-								<a title="Abrir PDF" class="btn btn-success" th:href="@{/usuario/usuarios.pdf}" target="_blank"><i class="fa fa-file-pdf-o"></i>Abrir PDF</a>
+								<a title="Adicionar" class="btn btn-success" th:href="@{/usuario/cadastro}">Adicionar</a>
+								<a title="Download PDF" class="btn btn-success" th:href="@{/usuario/download}"><i class="fa fa-file-pdf-o"></i>Salvar</a>
+								<a title="Abrir PDF" class="btn btn-success" th:href="@{/usuario/usuarios.pdf}" target="_blank"><i class="fa fa-file-pdf-o"></i>Abrir</a>
 							</div>
 						</div>
 					</div>

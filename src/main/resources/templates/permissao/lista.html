@@ -62,14 +62,14 @@
 										<tr th:each="permissao :${pagina.conteudo}">
 											<td data-tile="nome" th:text="${permissao.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/permissao/detalhes/{id}(id=${permissao.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/permissao/detalhes/{id}(id=${permissao.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<div class="tile-footer">
-									<a title="Adicionar" class="btn btn-success" th:href="@{/permissao/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+									<a title="Adicionar" class="btn btn-success" th:href="@{/permissao/cadastro}">Adicionar</a>
 								</div>
 							</div>
 						</div>

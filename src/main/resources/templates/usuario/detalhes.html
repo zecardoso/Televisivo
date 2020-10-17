@@ -65,9 +65,9 @@
 							</th:block>
                         </fieldset>
                         <div class="tile-footer">
-							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/usuario/alterar/{id}(id=${usuario.id})}" aria-hidden="true" role="button"></a>
-							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/usuario/remover/{id}(id=${usuario.id})}" aria-hidden="true" role="button"></a>
-							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/usuario/lista}" aria-hidden="true" role="button"></a>
+							<a title="Alterar" class="btn btn-info" th:href="@{/usuario/alterar/{id}(id=${usuario.id})}">Alterar</a>
+							<a title="Remover" class="btn btn-danger" th:href="@{/usuario/remover/{id}(id=${usuario.id})}">Remover</a>
+							<a title="Fechar" class="btn btn-secondary" th:href="@{/usuario/lista}">Fechar</a>
 						</div>
                     </form>
                 </div>

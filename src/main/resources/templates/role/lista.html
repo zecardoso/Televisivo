@@ -53,14 +53,14 @@
 										<tr th:each="role :${pagina.conteudo}">
 											<td data-tile="nome" th:text="${role.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/role/detalhes/{id}(id=${role.id})}" class="btn btn-warning btn-sm"><i class="fa fa-search-plus"></i>Detalhes</a>
+												<a title="Detalhes" th:href="@{/role/detalhes/{id}(id=${role.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<div class="tile-footer">
-									<a title="Adicionar" class="btn btn-success" th:href="@{/role/cadastro}"><i class="fa fa-plus-circle"></i>Adicionar</a>
+									<a title="Adicionar" class="btn btn-success" th:href="@{/role/cadastro}">Adicionar</a>
 								</div>
 							</div>
 						</div>

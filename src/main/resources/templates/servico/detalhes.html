@@ -26,9 +26,9 @@
 							</div>
 						</div>
                         <div class="tile-footer">
-							<a title="Alterar" class="btn btn-info btn-lg fa fa-pencil" th:href="@{/servico/alterar/{id}(id=${servico.id})}" aria-hidden="true" servico="button"></a>
-							<a title="Remover" class="btn btn-danger btn-lg fa fa-trash" th:href="@{/servico/remover/{id}(id=${servico.id})}" aria-hidden="true" servico="button"></a>
-							<a title="Fechar" class="btn btn-secondary btn-lg fa fa-times-circle" th:href="@{/servico/lista}" aria-hidden="true" servico="button"></a>
+							<a title="Alterar" class="btn btn-info" th:href="@{/servico/alterar/{id}(id=${servico.id})}">Alterar</a>
+							<a title="Remover" class="btn btn-danger" th:href="@{/servico/remover/{id}(id=${servico.id})}">Remover</a>
+							<a title="Fechar" class="btn btn-secondary" th:href="@{/servico/lista}">Fechar</a>
 						</div>
                     </form>
                 </div>

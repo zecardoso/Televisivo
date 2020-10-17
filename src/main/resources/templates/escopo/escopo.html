@@ -36,9 +36,9 @@
 							</div>
 						</div>
                         <div class="tile-footer">
-							<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-floppy-o" aria-hidden="true"></i>Salvar</button>
-							<a th:if="${escopo.id} != null" th:href="@{/escopo/detalhes/{id}(id=${escopo.id})}" class="btn btn-secondary"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</a>
-							<button th:if="${escopo.id} == null" class="btn btn-secondary" type="submit" name="action" value="cancelar" formnovalidate="formnovalidate"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i>Cancelar</button>
+							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate">Salvar</button>
+							<a th:if="${escopo.id} != null" th:href="@{/escopo/detalhes/{id}(id=${escopo.id})}" class="btn btn-secondary">Cancelar</a>
+							<button th:if="${escopo.id} == null" class="btn btn-secondary" type="submit" name="action" value="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>
