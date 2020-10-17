@@ -21,14 +21,4 @@ public interface SerieService extends GenericService<Serie, Long> {
     void salvarTemporada(Serie serie);
     Serie adicionarTemporada(Serie serie);
     Serie removerTemporada(Serie serie, int index);
-
-    // void salvarElenco(Serie serie);
-    // Serie adicionarElenco(Serie serie);
-    // Serie removerElenco(Serie serie, int index);
-    // Serie buscarPorIdElenco(Long id);
-
-    // void salvarArtista(Serie serie);
-    // Serie adicionarArtista(Serie serie);
-    // Serie removerArtista(Serie serie, int index);
-    // Serie buscarPorIdArtista(Long id);
 }

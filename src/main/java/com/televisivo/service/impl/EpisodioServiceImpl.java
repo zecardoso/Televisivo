@@ -58,7 +58,7 @@ public class EpisodioServiceImpl implements EpisodioService {
 		try {
 			episodioRepository.deleteById(id);
 		} catch(DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("O artista de código %d não pode ser removido!", id));
+			throw new EntidadeEmUsoException(String.format("O episodio de código %d não pode ser removido!", id));
 		} catch (EmptyResultDataAccessException e){
 			throw new EpisodioNaoCadastradoException(String.format("O episodio com o código %d não foi encontrado!", id));
 		}

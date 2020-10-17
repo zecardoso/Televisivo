@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
@@ -77,8 +76,4 @@ public class Episodio implements Serializable {
 
     @ManyToMany(mappedBy = "episodios")
     private List<Usuario> usuarios = new ArrayList<>();
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "episodio_elenco", joinColumns = @JoinColumn(name = "episodio_id"), inverseJoinColumns = @JoinColumn(name = "elenco_id"))
-    private List<Elenco> elencos = new ArrayList<>();
 }
