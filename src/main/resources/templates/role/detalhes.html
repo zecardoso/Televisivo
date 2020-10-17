@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Detalhes da role</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,28 +9,26 @@
         <div class="app-title">
             <h1>Detalhes da role</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Role</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Detalhes</a></li>
             </ul>
         </div>
-        <div class="container">
+        <div class="container" th:object="${role}">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${role}" th:text="${nome}"></h3>
+				<h3 class="tile-title" th:text="*{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${role}">
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Nome</label>
-								<h4 th:text="${nome}"></h4>
-							</div>
-						</div>
-                        <div class="tile-footer">
-							<a title="Alterar" class="btn btn-info" th:href="@{/role/alterar/{id}(id=${role.id})}">Alterar</a>
-							<a title="Remover" class="btn btn-danger" th:href="@{/role/remover/{id}(id=${role.id})}">Remover</a>
-							<a title="Fechar" class="btn btn-secondary" th:href="@{/role/lista}">Fechar</a>
-						</div>
-                    </form>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <label class="control-label">Nome</label>
+                            <h4 th:text="*{nome}"></h4>
+                        </div>
+                    </div>
+                    <div class="tile-footer">
+                        <a title="Alterar" class="btn btn-info" th:href="@{../alterar/{id}(id=${role.id})}">Alterar</a>
+                        <a title="Remover" class="btn btn-danger" th:href="@{../remover/{id}(id=${role.id})}">Remover</a>
+                        <a title="Fechar" class="btn btn-secondary" th:href="@{../lista}">Fechar</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Detalhes da episódio</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,34 +9,34 @@
         <div class="app-title">
             <h1>Detalhes da episódio</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Série</li>
                 <li class="breadcrumb-item">Temporada</li>
                 <li class="breadcrumb-item">Episódio</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Detalhes</a></li>
             </ul>
         </div>
-        <div class="container">
-			<div class="tile" th:object="${episodio}">
+        <div class="container" th:object="${episodio}">
+			<div class="tile">
 				<div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div th:replace="fragments/alert"></div>
                     </div>
                 </div>
-				<h3 class="tile-title" th:object="${episodio}" th:text="'Episodio ' + *{numero}"></h3>
+				<h3 class="tile-title" th:text="'Episodio ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
 					<label class="control-label">Nome</label>
-					<h4 th:text="${nome}"></h4>
+					<h4 th:text="*{nome}"></h4>
 					<label class="control-label">Numero</label>
-					<h4 th:text="${numero}"></h4>
+					<h4 th:text="*{numero}"></h4>
 					<label class="control-label">Enredo</label>
-					<h4 th:text="${enredo}"></h4>
+					<h4 th:text="*{enredo}"></h4>
 					<label class="control-label">Duração</label>
-					<h4 th:text="${duracao}"></h4>
+					<h4 th:text="*{duracao}"></h4>
 					<!-- <label class="control-label">Publicação</label>
-					<h4 th:text="${publicacao}"></h4> -->
+					<h4 th:text="*{publicacao}"></h4> -->
 					<label class="control-label">Avaliação</label>
-					<h4 th:text="${avaliacao}"></h4>
+					<h4 th:text="*{avaliacao}"></h4>
 					<div class="tile-footer">
 						<a type="button" title="Editar" class="btn btn-info" th:href="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/alterar(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=${episodio.id})}">Editar</a>
 						<a type="button" title="Excluir" class="btn btn-danger" th:href="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/remover(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=${episodio.id})}">Excluir</a>

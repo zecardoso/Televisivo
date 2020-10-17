@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Remover direito</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,16 +9,16 @@
         <div class="app-title">
             <h1>Remover direito</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Direito</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
-        <div class="container">
+        <div class="container" th:object="${rolePermissao}">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${rolePermissao}" th:text="*{role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
+				<h3 class="tile-title" th:text="*{role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
                 <div class="tile-body tile-footer">
-					<form th:action="@{/direito/remover}" th:object="${rolePermissao}" method="post" autocomplete="off">
+					<form th:action="@{/direito/remover}" method="post" autocomplete="off">
 						<input type="hidden" th:value="*{id.role}">
 						<input type="hidden" th:value="*{id.permissao}">
 						<input type="hidden" th:value="*{id.escopo}">

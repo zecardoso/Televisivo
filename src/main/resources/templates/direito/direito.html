@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title th:text="${rolePermissao.id == null} ? 'Cadastrar direito' : 'Alterar direito'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -7,9 +7,9 @@
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="${id == null} ? 'Cadastrar direito' : 'Alterar direito'"><i class="fa fa-edit" aria-hidden="true"></i></h1>
+            <h1 th:text="${id == null} ? 'Cadastrar direito' : 'Alterar direito'"></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Direito</li>
                 <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>

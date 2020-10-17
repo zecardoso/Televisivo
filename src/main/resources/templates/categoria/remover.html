@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Remover categoria</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,26 +9,26 @@
         <div class="app-title">
             <h1>Remover categoria</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Categoria</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
-        <div class="container">
+        <div class="container" th:object="${categoria}">
 			<div class="tile">
-				<h3 class="tile-title" th:object="${categoria}" th:text="${nome}"></h3>
+				<h3 class="tile-title" th:text="*{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{/categoria/remover}" th:object="${categoria}" method="post" autocomplete="off">
+                    <form th:action="@{../remover}" method="post" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<label class="control-label">Nome</label>
-								<h4 th:text="${nome}"></h4>
+								<h4 th:text="*{nome}"></h4>
 							</div>
 						</div>
                         <div class="tile-footer">
 							<button class="btn btn-danger" type="submit">Remover</button>
-							<a th:href="@{/categoria/detalhes/{id}(id=${categoria.id})}" class="btn btn-secondary">Cancelar</a>
+							<a th:href="@{../detalhes/{id}(id=${categoria.id})}" class="btn btn-secondary">Cancelar</a>
 						</div>
                     </form>
                 </div>

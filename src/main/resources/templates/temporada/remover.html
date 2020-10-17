@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Remover temporada</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,27 +9,27 @@
         <div class="app-title">
             <h1>Remover temporada</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Série</li>
                 <li class="breadcrumb-item">Temporada</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
-        <div class="container">
-			<div class="tile" th:object="${temporada}">
+        <div class="container" th:object="${temporada}">
+			<div class="tile">
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}">Serie</h3>
                 <div class="tile-body tile-footer">
                     <label class="control-label">Ano</label>
-                    <h4 th:text="${ano}"></h4>
+                    <h4 th:text="*{ano}"></h4>
                     <label class="control-label">Avaliação</label>
-                    <h4 th:text="${avaliacao}"></h4>
+                    <h4 th:text="*{avaliacao}"></h4>
                     <label class="control-label">Quantidade de episodios</label>
-                    <h4 th:text="${qtdEpisodios}"></h4>
+                    <h4 th:text="*{qtdEpisodios}"></h4>
                 </div>
 				<label class="control-label">Episodios</label>
 				<div class="form-row" th:each="episodio : ${episodios}">
 					<div class="col-md-5 mb-1">
-						<a type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
+						<a type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="*{episodio.numero}"></span></a>
 					</div>
 				</div>
 				<form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/remover(idSerie=${temporada.serie.id}, idTemporada=${temporada.id})}" method="post" autocomplete="off">

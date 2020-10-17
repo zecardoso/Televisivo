@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layout}">
 <head>
     <title>Remover série</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
@@ -9,40 +9,40 @@
         <div class="app-title">
             <h1>Remover série</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Série</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
-        <div class="container">
-			<div class="tile" th:object="${serie}">
-				<h3 class="tile-title" th:text="${nome}">Série</h3>
+        <div class="container" th:object="${serie}">
+			<div class="tile">
+				<h3 class="tile-title" th:text="*{nome}">Série</h3>
                 <div class="tile-body tile-footer">
                     <label class="control-label">Enredo</label>
-                    <h4 th:text="${enredo}"></h4>
+                    <h4 th:text="*{enredo}"></h4>
                     <label class="control-label">Ano</label>
-                    <h4 th:text="${ano}"></h4>
+                    <h4 th:text="*{ano}"></h4>
                     <label class="control-label">Restrição de idade</label>
-                    <h4 th:text="${restricao}"></h4>
+                    <h4 th:text="*{restricao}"></h4>
                     <label class="control-label">Serviço</label>
-                    <h4 th:text="${servico.nome}"></h4>
+                    <h4 th:text="*{servico.nome}"></h4>
                     <label class="control-label">Quantidade de temporadas</label>
-                    <h4 th:text="${qtdTemporadas}"></h4>
+                    <h4 th:text="*{qtdTemporadas}"></h4>
                     <label class="control-label">Quantidade de seguidores</label>
-                    <h4 th:text="${qtdSeguidores}"></h4>
+                    <h4 th:text="*{qtdSeguidores}"></h4>
                     <label class="control-label">Categorias</label>
                     <div th:each="categoria : *{categorias}">
-                        <h4 th:text="${categoria.nome}"></h4>
+                        <h4 th:text="*{categoria.nome}"></h4>
                     </div>
                 </div>
 				<label class="control-label">Temporadas</label>
 				<div class="form-row" th:each="temporada : ${temporadas}">
 					<div class="col-md-5 mb-1">
-						<a type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="${temporada.numero}"></span></a>
-						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
+						<a type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporada.numero}"></span></a>
+						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporada.ano}"></span></a>
 					</div>
 				</div>
-                <form th:object="${serie}" th:action="@{/serie/{id}/remover(id=${serie.id})}" method="post" autocomplete="off">
+                <form th:action="@{/serie/{id}/remover(id=${serie.id})}" method="post" autocomplete="off">
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
                         <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>
