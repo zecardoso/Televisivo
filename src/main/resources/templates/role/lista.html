@@ -16,7 +16,7 @@
 				<form class="form-inline" method="GET" th:object="${roleFilter}">
 					<label class="sr-only" for="nome">Pesquisar</label>
 					<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Pesquisar">
-					<button class="app-search__button"><i class="fa fa-search"></i></button>
+					<button class="app-search__button"><i class="fa fa-search" aria-hidden="true"></i></button>
 				</form>
 			</div>
         </div>
@@ -53,14 +53,14 @@
 										<tr th:each="role :${pagina.conteudo}">
 											<td data-tile="nome" th:text="${role.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{/role/detalhes/{id}(id=${role.id})}" class="btn btn-warning btn-sm">Detalhes</a>
+												<a title="Detalhes" th:href="@{./detalhes/{id}(id=${role.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<div class="tile-footer">
-									<a title="Adicionar" class="btn btn-success" th:href="@{/role/cadastro}">Adicionar</a>
+									<a title="Adicionar" class="btn btn-success" th:href="@{./cadastro}">Adicionar</a>
 								</div>
 							</div>
 						</div>
