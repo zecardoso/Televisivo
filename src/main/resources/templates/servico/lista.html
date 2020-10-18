@@ -13,22 +13,6 @@
                 <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
             </ul>
 		</div>
-		<div class="container">
-			<div class="tile">
-                <div class="tile-body">
-					<form class="form-inline" method="GET" th:object="${servicoFilter}">
-						<div class="col-auto">
-							<div class="form-group">
-								<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome">
-							</div>
-						</div>
-						<div class="col-md-1">
-							<button type="submit" class="btn btn-md btn-primary">Pesquisar</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
         <div class="container">
 			<div class="tile">
                 <div class="tile-body">
@@ -38,16 +22,20 @@
 								<div th:replace="fragments/alert"></div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<div class="dataTables_length" id="sampleTable_length">
-									<label>
-										<select class="form-control form-control-md" id="pageSizeSelect">
-											<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
-										</select>
-									</label>
-								</div>
+						<div class="form-row">
+							<div class="form-group col-md-1">
+								<select class="form-control form-control-md" id="pageSizeSelect">
+									<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
+								</select>
 							</div>
+							<form method="GET" th:object="${servicoFilter}">
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome" aria-label="Nome">
+									<div class="input-group-append">
+										<button class="input-group-text">Pesquisar</button>
+									</div>
+								</div>
+							</form>
 						</div>
 						<div class="row">
 							<div class="col-md-12">

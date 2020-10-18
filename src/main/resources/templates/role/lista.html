@@ -12,13 +12,6 @@
                 <li class="breadcrumb-item">Role</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
             </ul>
-			<div class="app-search">
-				<form class="form-inline" method="GET" th:object="${roleFilter}">
-					<label class="sr-only" for="nome">Pesquisar</label>
-					<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Pesquisar">
-					<button class="app-search__button"><i class="fa fa-search" aria-hidden="true"></i></button>
-				</form>
-			</div>
         </div>
         <div class="container">
 			<div class="tile">
@@ -29,16 +22,20 @@
 								<div th:replace="fragments/alert"></div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<div class="dataTables_length" id="sampleTable_length">
-									<label>
-										<select class="form-control form-control-md" id="pageSizeSelect">
-											<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
-										</select>
-									</label>
-								</div>
+						<div class="form-row">
+							<div class="form-group col-md-1">
+								<select class="form-control form-control-md" id="pageSizeSelect">
+									<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
+								</select>
 							</div>
+							<form method="GET" th:object="${roleFilter}">
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome" aria-label="Nome">
+									<div class="input-group-append">
+										<button class="input-group-text">Pesquisar</button>
+									</div>
+								</div>
+							</form>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
