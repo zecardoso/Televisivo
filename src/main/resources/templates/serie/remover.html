@@ -10,8 +10,8 @@
             <h1>Remover série</i></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{#remover}">Remover</a></li>
             </ul>
         </div>
         <div class="container" th:object="${serie}">
@@ -32,17 +32,17 @@
                     <h4 th:text="*{qtdSeguidores}"></h4>
                     <label class="control-label">Categorias</label>
                     <div th:each="categoria : *{categorias}">
-                        <h4 th:text="*{categoria.nome}"></h4>
+                        <h4 th:text="${categoria.nome}"></h4>
                     </div>
                 </div>
 				<label class="control-label">Temporadas</label>
 				<div class="form-row" th:each="temporada : ${temporadas}">
 					<div class="col-md-5 mb-1">
-						<a type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="*{temporada.numero}"></span></a>
-						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="*{temporada.ano}"></span></a>
+						<a type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="${temporada.numero}"></span></a>
+						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
 					</div>
 				</div>
-                <form th:action="@{/serie/{id}/remover(id=${serie.id})}" method="post" autocomplete="off">
+                <form id="remover" th:action="@{./remover}" method="post" autocomplete="off">
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
                         <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>

@@ -38,7 +38,7 @@ FROM televisivo.serie]]>
 	<columnHeader>
 		<band height="30">
 			<staticText>
-				<reportElement x="370" y="0" width="60" height="20" uuid="597114ec-c7df-486a-8754-6c6ba4c984fd">
+				<reportElement x="360" y="0" width="60" height="20" uuid="597114ec-c7df-486a-8754-6c6ba4c984fd">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -47,7 +47,7 @@ FROM televisivo.serie]]>
 				<text><![CDATA[Temporadas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="130" y="0" width="120" height="20" uuid="6d86b3a1-ce8e-437d-b849-757aa79e579c">
+				<reportElement x="130" y="0" width="110" height="20" uuid="6d86b3a1-ce8e-437d-b849-757aa79e579c">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -65,7 +65,7 @@ FROM televisivo.serie]]>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="60" height="20" uuid="bfd5ecaa-755b-4496-998a-89c10788c1ad">
+				<reportElement x="290" y="0" width="60" height="20" uuid="bfd5ecaa-755b-4496-998a-89c10788c1ad">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -74,7 +74,7 @@ FROM televisivo.serie]]>
 				<text><![CDATA[Seguidores]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="0" width="40" height="20" uuid="d595946c-4b9b-4225-9a53-ac25825b6f1b">
+				<reportElement x="430" y="0" width="50" height="20" uuid="d595946c-4b9b-4225-9a53-ac25825b6f1b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -83,7 +83,7 @@ FROM televisivo.serie]]>
 				<text><![CDATA[Restrição]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="0" width="30" height="20" uuid="919ff6f1-ba84-439a-8342-7ff7417b672a">
+				<reportElement x="250" y="0" width="30" height="20" uuid="919ff6f1-ba84-439a-8342-7ff7417b672a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -102,31 +102,31 @@ FROM televisivo.serie]]>
 				<textFieldExpression><![CDATA[$F{serie_id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="130" y="0" width="120" height="19" uuid="05d159b6-9563-4b5b-a323-f5e13fcbdd2d">
+				<reportElement x="130" y="0" width="110" height="19" uuid="05d159b6-9563-4b5b-a323-f5e13fcbdd2d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="0" width="30" height="19" uuid="91dd8ab6-0bf5-4058-b174-f9239a37643d">
+				<reportElement x="250" y="0" width="30" height="19" uuid="91dd8ab6-0bf5-4058-b174-f9239a37643d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{ano}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="60" height="19" uuid="bc0f0767-bab2-48a2-bc29-d03740ead916">
+				<reportElement x="290" y="0" width="60" height="19" uuid="bc0f0767-bab2-48a2-bc29-d03740ead916">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{qtd_seguidores}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="370" y="0" width="60" height="19" uuid="a8bb5f2b-ff1d-4a88-8bb8-44f21582e87f">
+				<reportElement x="360" y="0" width="60" height="19" uuid="a8bb5f2b-ff1d-4a88-8bb8-44f21582e87f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{qtd_temporadas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="0" width="40" height="19" uuid="296f6e3d-9efa-44ba-97f5-29b1ebe2f3c6">
+				<reportElement x="430" y="0" width="50" height="19" uuid="296f6e3d-9efa-44ba-97f5-29b1ebe2f3c6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee5be625-ac6b-4782-a497-e8bc1721e671"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{restricao}]]></textFieldExpression>

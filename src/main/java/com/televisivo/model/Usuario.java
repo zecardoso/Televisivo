@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -120,6 +121,9 @@ public class Usuario implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "usuario_episodio", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "episodio_id"))
     private List<Episodio> episodios;
+    
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
 
     @JsonIgnore
     @Override

@@ -48,7 +48,7 @@ public class CategoriaController {
 
     @Autowired
     private JasperReportsService jasperReportsService;
-    
+
     @GetMapping("/lista")
     public ModelAndView lista(CategoriaFilter categoriaFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
@@ -122,7 +122,7 @@ public class CategoriaController {
     public String cancelar() {
         return LISTA;
     }
-    
+
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
@@ -136,7 +136,7 @@ public class CategoriaController {
 			e.printStackTrace();
 		}
     }
-    
+
     @GetMapping("/categorias.pdf")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
     	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(CATEGORIA);

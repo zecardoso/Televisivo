@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{layout}">
 <head>
-    <title>Lista de direitos</title>
+    <title>Episódios marcados</title>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1>Lista de direitos</h1>
+            <h1>Episódios marcados</h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Direito</li>
+                <li class="breadcrumb-item">Episódios</li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
             </ul>
 		</div>
@@ -22,36 +22,35 @@
 								<div th:replace="fragments/alert"></div>
 							</div>
 						</div>
-						<div class="form-row">
+						<!-- <div class="form-row">
 							<form method="GET" th:object="${rolePermissaoFilter}">
 								<div class="input-group mb-3">
 									<input type="text" class="form-control" id="nome" name="nome" th:field="*{role}" placeholder="Role" aria-label="Role">
 									<input type="text" class="form-control" id="permissao" name="permissao" th:field="*{permissao}" placeholder="Permissão" aria-label="Permissão">
-									<input type="text" class="form-control" id="escopo" name="escopo" th:field="*{escopo}" placeholder="Escopo" aria-label="Escopo">
 									<div class="input-group-append">
 										<button class="input-group-text">Pesquisar</button>
 									</div>
 								</div>
 							</form>
-						</div>
+						</div> -->
 						<div class="row">
 							<div class="col-md-12">
 								<table class="table table-bordered table-hover" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
 									<thead>
 										<tr>
-											<th scope="col">Role</th>
-											<th scope="col">Permissao</th>
-											<th scope="col">Escopo</th>
+											<th scope="col">Episodio</th>
+											<th scope="col">Temporada</th>
+											<th scope="col">Série</th>
 											<th scope="col" style="text-align: center;">Detalhes</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="rolePermissao :${lista}">
-											<td data-tile="Grupo" th:text="${rolePermissao.role.nome}"></td>
-											<td data-tile="Permissão" th:text="${rolePermissao.permissao.nome}"></td>
-											<td data-tile="Escopo" th:text="${rolePermissao.escopo.nome}"></td>
+										<tr th:each="usuarioEpisodio :${lista}">
+											<td data-tile="Episodio" th:text="${usuarioEpisodio.numero}"></td>
+											<td data-tile="Temporada" th:text="${usuarioEpisodio.temporada.numero}"></td>
+											<td data-tile="Série" th:text="${usuarioEpisodio.temporada.serie.nome}"></td>
 											<td data-tile="Remover" style="text-align: center;">
-												<a title="Remover" th:href="@{./remover/{role}/{permissao}/{escopo}(role=${rolePermissao.role.id}, permissao=${rolePermissao.permissao.id}, escopo=${rolePermissao.escopo.id})}" class="btn btn-danger btn-sm">Remover</a>
+												<a title="Remover" th:href="@{./episodios/remover/{usuario}/{episodio}(usuario=${usuarioLogado.getUsuario().getId()}, episodio=${usuarioEpisodio.id})}" class="btn btn-danger btn-sm">Remover</a>
 											</td>
 										</tr>
 									</tbody>

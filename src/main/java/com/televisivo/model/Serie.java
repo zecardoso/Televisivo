@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -66,7 +67,7 @@ public class Serie implements Serializable {
     @Column(name = "qtd_seguidores")
     private int qtdSeguidores;
 
-    @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Temporada> temporadas = new ArrayList<>();
 
     @ManyToOne(targetEntity = Servico.class, fetch = FetchType.LAZY)
@@ -76,4 +77,7 @@ public class Serie implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "serie_categoria", joinColumns = @JoinColumn(name = "serie_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
+    private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
 }

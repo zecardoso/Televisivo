@@ -10,9 +10,9 @@
             <h1>Remover episódio</i></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item">Temporada</li>
-                <li class="breadcrumb-item">Episódio</li>
+                <li class="breadcrumb-item"><a th:href="@{../../../../detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Temporada</a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}">Episódio</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
@@ -30,7 +30,9 @@
 					<h4 th:text="*{duracao}"></h4>
 					<!-- <label class="control-label">Publicação</label>
 					<h4 th:text="*{publicacao}"></h4> -->
-					<form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/remover(idSerie=${episodio.temporada.serie.id}, idTemporada=${episodio.temporada.id}, id=*{id})}" method="post" autocomplete="off">
+					<label class="control-label">Avaliação</label>
+					<h4 th:text="*{avaliacao}"></h4>
+					<form th:action="@{./remover}" method="post" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
                         <div class="tile-footer">
 							<button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>

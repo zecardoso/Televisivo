@@ -28,7 +28,7 @@ public class SerieServiceImpl implements SerieService {
 
     @Autowired
     private TemporadaRepository temporadaRepository;
-    
+
     @Override
 	@Transactional(readOnly = true)
     public List<Serie> findAll() {
@@ -76,10 +76,10 @@ public class SerieServiceImpl implements SerieService {
     public Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable) {
         return serieRepository.listaComPaginacao(serieFilter, pageable);
     }
-    
+
     @Override
-    public Long findSerieByIdTemporada(Long id) {
-        return temporadaRepository.getOne(id).getSerie().getId();
+    public Temporada findTemporadaByIdTemporada(Long id) {
+        return temporadaRepository.getOne(id);
     }
 
     @Override
@@ -88,8 +88,7 @@ public class SerieServiceImpl implements SerieService {
     }
 
     @Override
-    public void atualizarQtdTemporadas(Long id) {
-        Serie serie = getOne(id);
+    public void atualizarQtdTemporadas(Serie serie) {
         serie.setQtdTemporadas(serie.getTemporadas().size());
     }
 
@@ -98,7 +97,9 @@ public class SerieServiceImpl implements SerieService {
         if (serie.getTemporadas().size() != -1) {
             for (Temporada temporada: serie.getTemporadas()) {
                 temporada.setSerie(serie);
-                temporadaRepository.save(temporada);
+                if (temporada.getAno() != 0 && temporada.getNumero() != 0) {
+                    temporadaRepository.save(temporada);
+                }
             }
         }
     }
@@ -111,13 +112,20 @@ public class SerieServiceImpl implements SerieService {
         return serie;
     }
 
+    // @Override
+    // public Serie duplicateRow(Serie serie, Temporada temporada) {
+    //     Temporada temporadaNew = new Temporada();
+    //     temporadaNew.setNumero(temporada.getNumero()+1);
+    //     temporadaNew.setAno(temporada.getAno());
+    //     temporada.setSerie(serie);
+    //     serie.getTemporadas().add(temporadaNew);
+    //     return serie;
+    // }
+
     @Override
-    public Serie removerTemporada(Serie serie, int index) {
-        Temporada temporada = serie.getTemporadas().get(index);
+    public void removerTemporada(Temporada temporada) {
         if (temporada.getId() != null) {
             temporadaRepository.deleteById(temporada.getId());
         }
-        serie.getTemporadas().remove(index);
-        return serie;
     }
 }

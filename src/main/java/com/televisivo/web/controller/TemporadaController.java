@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.service.TemporadaService;
 
@@ -22,19 +23,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TemporadaController {
 
     private static final String TEMPORADA = "temporada";
+    private static final String EPISODIOS = "episodios";
+    private static final String EPISODIO = "episodio";
     private static final String SUCCESS = "success";
-    private static final String REDIRECT_SERIE = "redirect:/serie/";
+    private static final String REDIRECT_SERIE = "redirect:../../detalhes";
+    private static final String REDIRECT_TEMPORADA = "redirect:./detalhes";
     private static final String HTML_TEMPORADA = "/temporada/temporada";
 
     @Autowired
     private TemporadaService temporadaService;
 
-    @GetMapping("{id}")
+    @GetMapping("{id}/detalhes")
     public ModelAndView detalhar(@PathVariable("id") Long id) {
         Temporada temporada = temporadaService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/temporada/detalhes");
         modelAndView.addObject(TEMPORADA, temporada);
-        modelAndView.addObject("episodios", temporadaService.episodios(id));
+        modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
         return modelAndView;
     }
 
@@ -42,42 +46,59 @@ public class TemporadaController {
     public ModelAndView viewAlterar(@PathVariable("id") Long id) {
         Temporada temporada = temporadaService.getOne(id);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
-        Episodio episodio = new Episodio();
-        episodio.setTemporada(temporada);
-        temporada.getEpisodios().add(episodio);
         modelAndView.addObject(TEMPORADA, temporada);
+        modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
+        // if (temporada.getEpisodios().isEmpty()) {
+        //     modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
+        // }
         return modelAndView;
     }
-    
+
     @PostMapping("/{id}/alterar")
     public String alterar(@PathVariable("id") Long id, @Valid Temporada temporada, BindingResult result, RedirectAttributes attributes) {
-        Long cod = temporadaService.findSerieByIdTemporada(id);
         if (result.hasErrors()) {
             attributes.addFlashAttribute("message", "Verifique os campos!");
-            return REDIRECT_SERIE + cod + "/temporada/" + temporada.getId() + "/alterar";
+            return "redirect:./alterar";
         }
-        temporadaService.update(temporada);
         temporadaService.salvarEpisodio(temporada);
-        temporadaService.atualizarQtdEpisodios(id);
+        temporadaService.atualizarQtdEpisodios(temporada);
+        temporadaService.update(temporada);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return REDIRECT_SERIE + cod + "/temporada/" + temporada.getId();
+        return REDIRECT_TEMPORADA;
     }
 
-    @GetMapping(value = "/{id}/alterar", params = "addrow")
-    public ModelAndView adicionarEpisodio(@PathVariable("id") Long id, Temporada temporada) {
-        temporada = temporadaService.adicionarEpisodio(temporada);
+    @PostMapping(value = "/{id}/alterar", params = "addRow")
+    public ModelAndView adicionarEpisodio(@PathVariable("id") Long id, Temporada temporada, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("message", "Verifique os campos!");
+            return viewAlterar(id);
+        }
+        temporadaService.salvarEpisodio(temporada);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
-        modelAndView.addObject(TEMPORADA, temporada);
+        modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
+        modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
         return modelAndView;
     }
 
-    @GetMapping(value = "/{id}/alterar", params = "removerow")
+    @PostMapping(value = "/{id}/alterar", params = "removeRow")
     public ModelAndView removerEpisodio(@PathVariable("id") Long id, Temporada temporada, HttpServletRequest request) {
-        int index = Integer.parseInt(request.getParameter("removerow"));
-        temporada = temporadaService.removerEpisodio(temporada, index);
+        Episodio episodio = temporadaService.findEpisodioByIdEpisodio(Long.parseLong(request.getParameter("removeRow")));
+        temporadaService.removerEpisodio(episodio);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
-        temporadaService.atualizarQtdEpisodios(id);
+        temporadaService.atualizarQtdEpisodios(temporada);
+        modelAndView.addObject(TEMPORADA, episodio.getTemporada());
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/{id}/alterar", params = "duplicateRow")
+    public ModelAndView duplicateRow(@PathVariable("id") Long id, Temporada temporada, HttpServletRequest request) {
+        Episodio episodio = temporadaService.findEpisodioByIdEpisodio(Long.parseLong(request.getParameter("duplicateRow")));
+        temporada = temporadaService.duplicateRow(temporada, episodio);
+        ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, temporada);
+        modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
+        modelAndView.addObject(EPISODIO, new Episodio());
+        temporadaService.salvarEpisodio(temporada);
         return modelAndView;
     }
 
@@ -86,22 +107,21 @@ public class TemporadaController {
         Temporada temporada = temporadaService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/temporada/remover");
         modelAndView.addObject(TEMPORADA, temporada);
-        modelAndView.addObject("episodios", temporadaService.episodios(id));
+        modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
         return modelAndView;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
-        Long cod = temporadaService.findSerieByIdTemporada(id);
+        Serie serie = temporadaService.findSerieByIdTemporada(id);
         temporadaService.deleteById(id);
-        temporadaService.atualizarQtdTemporadas(cod);
+        temporadaService.atualizarQtdTemporadas(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return REDIRECT_SERIE + cod;
+        return REDIRECT_SERIE;
     }
 
     @PostMapping(value = { "", "/", "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
-	public String cancelar(@PathVariable("id") Long id) {
-        Long idSerie = temporadaService.findSerieByIdTemporada(id);
-		return REDIRECT_SERIE + idSerie + "/temporada/" + id;
+	public String cancelar() {
+		return REDIRECT_TEMPORADA;
     }
 }

@@ -10,9 +10,9 @@
             <h1>Alterar episódio</h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item">Temporada</li>
-                <li class="breadcrumb-item">Episódio</li>
+                <li class="breadcrumb-item"><a th:href="@{../../../../detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Temporada</a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}">Episódio</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Alterar</a></li>
             </ul>
         </div>
@@ -27,6 +27,8 @@
 				<h3 class="tile-title" th:text="'Episodio ' + ${episodio.numero}"></h3>
                 <div class="tile-body tile-footer">
                     <form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/alterar(idSerie=*{temporada.serie.id}, idTemporada=*{temporada.id}, id=*{id})}" method="post" autocomplete="off">
+                        <Input type="text" hidden th:field="*{temporada.serie.id}">
+                        <Input type="text" hidden th:field="*{temporada.id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="numero">Numero</label>

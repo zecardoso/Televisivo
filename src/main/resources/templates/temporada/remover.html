@@ -10,8 +10,8 @@
             <h1>Remover temporada</i></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}">Temporada</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
             </ul>
         </div>
@@ -29,10 +29,10 @@
 				<label class="control-label">Episodios</label>
 				<div class="form-row" th:each="episodio : ${episodios}">
 					<div class="col-md-5 mb-1">
-						<a type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="*{episodio.numero}"></span></a>
+						<a type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
 					</div>
 				</div>
-				<form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/remover(idSerie=${temporada.serie.id}, idTemporada=${temporada.id})}" method="post" autocomplete="off">
+				<form th:action="@{./remover}" method="post" autocomplete="off">
 					<input type="hidden" th:field="*{id}">
 					<div class="tile-footer">
 						<button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>

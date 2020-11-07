@@ -6,7 +6,6 @@ import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.repository.EpisodioRepository;
-import com.televisivo.repository.SerieRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.service.TemporadaService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
@@ -26,9 +25,6 @@ public class TemporadaServiceImpl implements TemporadaService {
     private TemporadaRepository temporadaRepository;
 
     @Autowired
-    private SerieRepository serieRepository;
-
-    @Autowired
     private EpisodioRepository episodioRepository;
 
     @Override
@@ -36,7 +32,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     public List<Temporada> findAll() {
         return temporadaRepository.findAll();
     }
-    
+
     @Override
     public Temporada save(Temporada temporada) {
         return temporadaRepository.save(temporada);
@@ -70,13 +66,18 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
-    public Long findTemporadaByIdEpisodio(Long id) {
-        return episodioRepository.getOne(id).getTemporada().getId();
+    public Temporada findTemporadaByIdEpisodio(Long id) {
+        return episodioRepository.getOne(id).getTemporada();
     }
 
     @Override
-    public Long findSerieByIdTemporada(Long id) {
-        return temporadaRepository.getOne(id).getSerie().getId();
+    public Serie findSerieByIdTemporada(Long id) {
+        return temporadaRepository.getOne(id).getSerie();
+    }
+
+    @Override
+    public Episodio findEpisodioByIdEpisodio(Long id) {
+        return episodioRepository.getOne(id);
     }
 
     @Override
@@ -85,14 +86,12 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
-    public void atualizarQtdEpisodios(Long id) {
-        Temporada temporada = getOne(id);
+    public void atualizarQtdEpisodios(Temporada temporada) {
         temporada.setQtdEpisodios(temporada.getEpisodios().size());
     }
 
     @Override
-    public void atualizarQtdTemporadas(Long id) {
-        Serie serie = serieRepository.getOne(findSerieByIdTemporada(id));
+    public void atualizarQtdTemporadas(Serie serie) {
         serie.setQtdTemporadas(serie.getTemporadas().size());
     }
 
@@ -101,7 +100,9 @@ public class TemporadaServiceImpl implements TemporadaService {
         if (temporada.getEpisodios().size() != -1) {
             for (Episodio episodio: temporada.getEpisodios()) {
                 episodio.setTemporada(temporada);
-                episodioRepository.save(episodio);
+                if (!episodio.getNome().isEmpty() && episodio.getNumero() != 0){
+                    episodioRepository.save(episodio);
+                }
             }
         }
     }
@@ -113,14 +114,23 @@ public class TemporadaServiceImpl implements TemporadaService {
         temporada.getEpisodios().add(episodio);
         return temporada;
     }
-    
+
     @Override
-    public Temporada removerEpisodio(Temporada temporada, int index) {
-        Episodio episodio = temporada.getEpisodios().get(index);
+    public void removerEpisodio(Episodio episodio) {
         if (episodio.getId() != null) {
             episodioRepository.deleteById(episodio.getId());
         }
-        temporada.getEpisodios().remove(index);
+    }
+
+    @Override
+    public Temporada duplicateRow(Temporada temporada, Episodio episodio) {
+        Episodio episodioNew = new Episodio();
+        episodioNew.setNome(episodio.getNome());
+        episodioNew.setNumero(episodio.getNumero()+1);
+        episodioNew.setDuracao(episodio.getDuracao());
+        episodioNew.setEnredo(episodio.getEnredo());
+        episodio.setTemporada(temporada);
+        temporada.getEpisodios().add(episodioNew);
         return temporada;
     }
 }

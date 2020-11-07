@@ -13,6 +13,7 @@ import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Categoria;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Servico;
+import com.televisivo.model.Temporada;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.service.CategoriaService;
@@ -46,15 +47,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SerieController {
 
     private static final String SERIE = "serie";
+    private static final String TEMPORADA = "temporada";
     private static final String TEMPORADAS = "temporadas";
     private static final String SUCCESS = "success";
     private static final String LISTA = "redirect:/serie/lista";
+    private static final String REDIRECT_SERIE = "redirect:./detalhes";
     private static final String HTML_SERIE = "/serie/serie";
-    private static final String HTML_SERIE_TEMPORADA = "/serie/serie/temporada";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private SerieService serieService;
-    
+
     @Autowired
     private ServicoService servicoService;
 
@@ -63,7 +67,7 @@ public class SerieController {
 
     @Autowired
     private JasperReportsService jasperReportsService;
-    
+
     @GetMapping("/lista")
     public ModelAndView lista(SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
@@ -75,33 +79,26 @@ public class SerieController {
         return modelAndView;
     }
 
-    @GetMapping()
+    @GetMapping("/cadastro")
     public ModelAndView viewSalvar(Serie serie) {
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serie);
         return modelAndView;
     }
 
-    @GetMapping("/{id}/temporadas")
-    public ModelAndView viewSalvarTemporada(Serie serie) {
-        ModelAndView modelAndView = new ModelAndView(HTML_SERIE_TEMPORADA);
-        modelAndView.addObject(SERIE, serie);
-        modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie.getId()));
-        return modelAndView;
-    }
-
-    @PostMapping()
+    @PostMapping("/salvar")
     public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return "redirect:/serie";
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:/serie/cadastro";
         }
         serieService.save(serie);
         serieService.salvarTemporada(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-		return "redirect:/serie/" + serie.getId() + "/alterar";
+        return "redirect:/serie/" + serie.getId() + "/alterar";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{id}/detalhes")
     public ModelAndView detalhar(@PathVariable("id") Long id) {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/serie/detalhes");
@@ -113,45 +110,65 @@ public class SerieController {
     @GetMapping("/{id}/alterar")
     public ModelAndView viewAlterar(@PathVariable("id") Long id) {
         Serie serie = serieService.getOne(id);
-        serie = serieService.adicionarTemporada(serie);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serie);
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        if (serie.getTemporadas().isEmpty()) {
+            modelAndView.addObject(TEMPORADA, serieService.adicionarTemporada(serie));
+        }
         return modelAndView;
     }
 
     @PostMapping("/{id}/alterar")
     public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return "redirect:/serie/" + serie.getId() + "/alterar";
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./alterar";
         }
-        serieService.update(serie);
         serieService.salvarTemporada(serie);
-        serieService.atualizarQtdTemporadas(id);
+        serieService.atualizarQtdTemporadas(serie);
+        serieService.update(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return "redirect:/serie/" + serie.getId();
+        return REDIRECT_SERIE;
     }
 
-    // @PostMapping(value = "/{id}/alterar", params = "addRow")
-    // public ModelAndView adicionarTemporada(@PathVariable("id") Long id, Serie serie) {
-    //     serie = serieService.adicionarTemporada(serie);
-    //     ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
-    //     modelAndView.addObject(SERIE, serie);
-    //     return modelAndView;
-    // }
+    @PostMapping(value = "/{id}/alterar", params = "addRow")
+    public ModelAndView adicionarTemporada(@PathVariable("id") Long id, Serie serie, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return viewAlterar(id);
+        }
+        serieService.salvarTemporada(serie);
+        serieService.atualizarQtdTemporadas(serie);
+        ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
+        modelAndView.addObject(SERIE, serieService.adicionarTemporada(serie));
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        return modelAndView;
+    }
 
-    // @PostMapping(value = "/{id}/alterar", params = "removeRow")
-    // public ModelAndView removerTemporada(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
-    //     int index = Integer.parseInt(request.getParameter("removeRow"));
-    //     serie = serieService.removerTemporada(serie, index);
+    @PostMapping(value = "/{id}/alterar", params = "removeRow")
+    public ModelAndView removerTemporada(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
+        Temporada temporada = serieService.findTemporadaByIdTemporada(Long.parseLong(request.getParameter("removeRow")));
+        serieService.removerTemporada(temporada);
+        ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
+        serieService.atualizarQtdTemporadas(serie);
+        modelAndView.addObject(SERIE, temporada.getSerie());
+        return modelAndView;
+    }
+
+    // @PostMapping(value = "/{id}/alterar", params = "duplicateRow")
+    // public ModelAndView duplicateRow(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
+    //     Temporada temporada = serieService.findTemporadaByIdTemporada(Long.parseLong(request.getParameter("duplicateRow")));
+    //     serie = serieService.duplicateRow(serie, temporada);
     //     ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
-    //     serieService.atualizarQtdTemporadas(id);
     //     modelAndView.addObject(SERIE, serie);
+    //     modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+    //     modelAndView.addObject(TEMPORADA, new Temporada());
     //     return modelAndView;
     // }
 
     @GetMapping("/{id}/remover")
-    public ModelAndView viewRemover(@PathVariable("id") Long id) {
-        Serie serie = serieService.getOne(id);
+    public ModelAndView viewRemover(@PathVariable("id") Long id, Serie serie) {
         ModelAndView modelAndView = new ModelAndView("/serie/remover");
         modelAndView.addObject(SERIE, serie);
         modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
@@ -169,22 +186,22 @@ public class SerieController {
 	public List<Servico> getServicos() {
 		return servicoService.findAll();
     }
-    
+
     @ModelAttribute("categorias")
 	public List<Categoria> getCategorias() {
 		return categoriaService.findAll();
     }
-    
+
     @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
 	public String cancelar(@PathVariable("id") Long id) {
-		return "redirect:/serie/{id}";
+		return REDIRECT_SERIE;
     }
 
     @PostMapping(value = { "", "/" }, params = "cancelar")
 	public String cancelar() {
 		return LISTA;
     }
-    
+
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
@@ -198,8 +215,8 @@ public class SerieController {
 			e.printStackTrace();
 		}
     }
-    
-    @GetMapping("/series.pdf")
+
+    @GetMapping("/series")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
     	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(SERIE);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);

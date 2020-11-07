@@ -14,11 +14,12 @@ public interface SerieService extends GenericService<Serie, Long> {
     List<Serie> buscarNome(String nome);
     Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable);
 
-    Long findSerieByIdTemporada(Long id);
+    Temporada findTemporadaByIdTemporada(Long id);
     List<Temporada> temporadas(Long id);
-    void atualizarQtdTemporadas(Long id);
+    void atualizarQtdTemporadas(Serie serie);
 
     void salvarTemporada(Serie serie);
     Serie adicionarTemporada(Serie serie);
-    Serie removerTemporada(Serie serie, int index);
+    void removerTemporada(Temporada temporada);
+    // Serie duplicateRow(Serie serie, Temporada temporada);
 }

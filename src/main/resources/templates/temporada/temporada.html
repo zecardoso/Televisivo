@@ -10,8 +10,8 @@
             <h1>Alterar temporada</h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}">Temporada</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#}">Alterar</a></li>
             </ul>
         </div>
@@ -25,7 +25,7 @@
                 </div>
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/alterar(idSerie=*{serie.id}, idTemporada=*{id})}" method="post" autocomplete="off">
+                    <form th:action="@{./alterar}" method="post" autocomplete="off">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <Input hidden th:field="*{serie}">
@@ -69,7 +69,11 @@
                                 <input type="date" class="form-control mb-2" placeholder="Publicação" th:field="*{episodios[__${rowStat.index}__].publicacao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].publicacao')} ? 'is-invalid'">
                             </div> -->
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="${rowStat.index}">Remover</button>
+                                <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
+                                <button th:if="*{episodios[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>
+                            </div>
+                            <div class="col-auto">
+                                <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-secondary mb-2" name="duplicateRow" th:value="*{episodios[__${rowStat.index}__].id}">Duplicar</button>
                             </div>
                         </div>
                         <div class="form-group">

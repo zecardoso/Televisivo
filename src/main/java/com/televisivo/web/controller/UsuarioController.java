@@ -10,20 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
+import com.televisivo.model.Episodio;
 import com.televisivo.model.Role;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.UsuarioFilter;
 import com.televisivo.repository.pagination.Pagina;
+import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.JasperReportsService;
 import com.televisivo.service.RoleService;
 import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +42,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 @Controller
 @RequestMapping(value = "/usuario")
 public class UsuarioController {
 
     private static final String USUARIO = "usuario";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "redirect:/usuario/lista";
-    
+    private static final String LISTA_URL = "redirect:/usuario/lista";
+    private static final String LISTA = "lista";
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -58,7 +63,7 @@ public class UsuarioController {
 
     @Autowired
     private JasperReportsService jasperReportsService;
-    
+
     @GetMapping("/lista")
     public ModelAndView lista(UsuarioFilter usuarioFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
@@ -67,6 +72,30 @@ public class UsuarioController {
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
         modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", pagina);
+        return modelAndView;
+    }
+
+    @GetMapping("/series")
+    public ModelAndView listaseries(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        ModelAndView modelAndView = new ModelAndView("/usuario_serie/lista");
+        List<Serie> lista = usuarioService.findAllSeries(usuarioLogado);
+        modelAndView.addObject(LISTA, lista);
+        return modelAndView;
+    }
+
+    @GetMapping("/series/arquivadas")
+    public ModelAndView listaseriesarq(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        ModelAndView modelAndView = new ModelAndView("/usuario_serie/lista");
+        List<Serie> lista = usuarioService.findAllSeriesArq(usuarioLogado);
+        modelAndView.addObject(LISTA, lista);
+        return modelAndView;
+    }
+
+    @GetMapping("/episodios")
+    public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        ModelAndView modelAndView = new ModelAndView("/usuario_episodio/lista");
+        List<Episodio> lista = usuarioService.listaEpisodio(usuarioLogado);
+        modelAndView.addObject(LISTA, lista);
         return modelAndView;
     }
 
@@ -116,7 +145,7 @@ public class UsuarioController {
             return cadastro(usuario);
         }
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return new ModelAndView(LISTA);
+        return new ModelAndView(LISTA_URL);
     }
 
     @PostMapping("/alterar")
@@ -125,7 +154,7 @@ public class UsuarioController {
             return cadastro(usuario);
         }
         try {
-			usuarioService.update(usuario);	
+			usuarioService.update(usuario);
 		} catch(EmailCadastradoException e) {
 			result.rejectValue("email", e.getMessage(), e.getMessage());
 			return cadastro(usuario);
@@ -134,14 +163,14 @@ public class UsuarioController {
             return cadastro(usuario);
         }
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return new ModelAndView(LISTA);
+        return new ModelAndView(LISTA_URL);
     }
-    
+
     @PostMapping("/remover")
     public ModelAndView remover(Usuario usuario, BindingResult result, RedirectAttributes attributes) {
         usuarioService.deleteById(usuario.getId());
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return new ModelAndView(LISTA);
+        return new ModelAndView(LISTA_URL);
     }
 
     @ModelAttribute("roles")
@@ -156,9 +185,9 @@ public class UsuarioController {
 
     @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
 	public String cancelar() {
-		return LISTA;
+		return LISTA_URL;
 	}
-    
+
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {
     	JasperPrint jasperPrint = null;
@@ -172,7 +201,7 @@ public class UsuarioController {
 			e.printStackTrace();
 		}
     }
-    
+
     @GetMapping("/usuarios.pdf")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
     	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(USUARIO);

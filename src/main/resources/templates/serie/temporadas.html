@@ -17,23 +17,23 @@
         </div>
         <div class="container">
 			<div class="tile" th:object="${serie}">
-				<h3 class="tile-title" th:text="${nome}">Serie</h3>
+				<h3 class="tile-title" th:text="*{nome}">Serie</h3>
                 <div class="tile-body tile-footer">
                     <label class="control-label">Enredo</label>
-                    <h4 th:text="${enredo}"></h4>
+                    <h4 th:text="*{enredo}"></h4>
                     <label class="control-label">Ano</label>
-                    <h4 th:text="${ano}"></h4>
+                    <h4 th:text="*{ano}"></h4>
                     <label class="control-label">Restrição de idade</label>
-                    <h4 th:text="${restricao}"></h4>
+                    <h4 th:text="*{restricao}"></h4>
                     <label class="control-label">Serviço</label>
-                    <h4 th:text="${servico.nome}"></h4>
+                    <!-- <h4 th:text="${serie.servico.nome}"></h4> -->
                     <label class="control-label">Quantidade de temporadas</label>
-                    <h4 th:text="${qtdTemporadas}"></h4>
+                    <h4 th:text="*{qtdTemporadas}"></h4>
                     <label class="control-label">Quantidade de seguidores</label>
-                    <h4 th:text="${qtdSeguidores}"></h4>
+                    <h4 th:text="*{qtdSeguidores}"></h4>
                     <label class="control-label">Categorias</label>
                     <div th:each="categoria : *{categorias}">
-                        <h4 th:text="${categoria.nome}"></h4>
+                        <h4 th:text="*{categoria.nome}"></h4>
                     </div>
                 </div>
                 <label class="control-label">Temporadas</label>

@@ -42,7 +42,7 @@
                         <div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
-                                    <label for="permissaoid" class="control-label">Permissão</label>
+                                    <label for="permissaoid" class="control-label">Grupo</label>
                                     <select class="form-control" required th:field="*{permissao}" id="permissaoid" name="permissaoid">
                                         <option value="">Selecione uma opção</option>
                                         <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" th:classappend="${#fields.hasErrors('permissao')} ? 'is-invalid'"></option>
@@ -56,7 +56,7 @@
                         <div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
-                                    <label for="escopoid" class="control-label">Escopo</label>
+                                    <label for="escopoid" class="control-label">Grupo</label>
                                     <select class="form-control" required th:field="*{escopo}" id="escopoid" name="escopoid">
                                         <option value="">Selecione uma opção</option>
                                         <option th:each="escopo : ${escopos}" th:value="${escopo.id}" th:text="${escopo.nome}" th:classappend="${#fields.hasErrors('escopo')} ? 'is-invalid'"></option>

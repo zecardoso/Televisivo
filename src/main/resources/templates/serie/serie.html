@@ -10,8 +10,9 @@
             <h1 th:text="${id == null} ? 'Cadastrar série' : 'Alterar série'"></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Série</li>
-                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li th:if="${id == null}" class="breadcrumb-item"><a th:href="@{#}">Série</a></li>
+                <li th:if="${id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{#salvar}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
@@ -24,7 +25,8 @@
                 </div>
 				<h3 class="tile-title" th:text="${id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="${id == null} ? @{/serie} : @{/serie/{id}/alterar(id=${id})}" method="post" autocomplete="off">
+                    <form onkeydown="return event.key != 'Enter';" th:action="${id == null} ? @{./salvar} : @{./alterar}" method="post" autocomplete="off">
+                        <input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
 								<label for="nome">Nome</label>
@@ -97,14 +99,15 @@
                                     <input type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="${rowStat.index}">Remover</button>
+                                    <button th:if="*{temporadas[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{temporadas[__${rowStat.index}__].id}">Remover</button>
+                                    <button th:if="*{temporadas[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
                             </div>
                         </div>
-                        <div class="tile-footer">
+                        <div id="salvar" class="tile-footer">
                             <button class="btn btn-success" type="submit" th:text="${serie.id == null} ? 'Próximo' : 'Salvar'" formnovalidate="formnovalidate"></button>
                             <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
                         </div>

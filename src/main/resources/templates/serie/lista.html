@@ -50,16 +50,16 @@
 										<tr th:each="serie :${pagina.conteudo}">
 											<td data-tile="nome" th:text="${serie.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{./{id}(id=${serie.id})}" class="btn btn-warning btn-sm">Detalhes</a>
+												<a title="Detalhes" th:href="@{./{id}/detalhes(id=${serie.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
 								</table>
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<div class="tile-footer">
-									<a title="Adicionar" class="btn btn-success" th:href="@{.}"></i>Adicionar</a>
+									<a title="Adicionar" class="btn btn-success" th:href="@{./cadastro}"></i>Adicionar</a>
 									<a title="Download PDF" class="btn btn-success" th:href="@{./download}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Salvar</a>
-									<a title="Abrir PDF" class="btn btn-success" th:href="@{./series.pdf}" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Abrir</a>
+									<a title="Abrir PDF" class="btn btn-success" th:href="@{./series}" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Abrir</a>
 								</div>
 							</div>
 						</div>
@@ -73,7 +73,7 @@
 			$(document).ready(function(){
 				changePageAndSize();
 			});
-			
+
 			function changePageAndSize(){
 				$('#pageSizeSelect').change(function(e){
 					window.location.replace("/serie/lista?tamanho="+this.value+"&pagina=0");

@@ -63,7 +63,7 @@
 								<div th:replace="fragments/pagination :: pagination"></div>
 								<a title="Adicionar" class="btn btn-success" th:href="@{./cadastro}">Adicionar</a>
 								<a title="Download PDF" class="btn btn-success" th:href="@{./download}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Salvar</a>
-								<a title="Abrir PDF" class="btn btn-success" th:href="@{./usuarios.pdf}" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Abrir</a>
+								<a title="Abrir PDF" class="btn btn-success" th:href="@{./usuarios}" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Abrir</a>
 							</div>
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 			$(document).ready(function(){
 				changePageAndSize();
 			});
-			
+
 			function changePageAndSize(){
 				$('#pageSizeSelect').change(function(e){
 					window.location.replace("/usuario/lista?size="+this.value+"&page=0");

@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.televisivo.model.Episodio;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.filters.UsuarioFilter;
+import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
@@ -31,22 +34,35 @@ public class UsuarioServiceImpl implements UsuarioService {
     private PasswordEncoder passwordEncoder;
 
     private String encodePassword(String password) {
-		return passwordEncoder.encode(password);
-	}
-    
+        return passwordEncoder.encode(password);
+    }
+
     @Override
-	@Transactional(readOnly = true)
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    @Transactional(readOnly = true)
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
     @Override
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','INSERIR')")
+	@Transactional(readOnly = true)
+    public List<Serie> findAllSeries(UsuarioSistema usuarioLogado) {
+        return usuarioRepository.findAllSeries(usuarioLogado.getUsuario().getId(), false);
+    }
+    
+    @Override
+	@Transactional(readOnly = true)
+    public List<Serie> findAllSeriesArq(UsuarioSistema usuarioLogado) {
+        return usuarioRepository.findAllSeries(usuarioLogado.getUsuario().getId(), true);
+    }
+
+    @Override
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(
+                    String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
@@ -60,12 +76,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','ATUALIZAR')")
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         Usuario usuarioLogado = findById(usuario.getId());
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(
+                    String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
 
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
@@ -79,20 +96,20 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-	@Transactional(readOnly = true)
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    @Transactional(readOnly = true)
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public Usuario getOne(Long id) {
-		return usuarioRepository.getOne(id);
+        return usuarioRepository.getOne(id);
     }
 
     @Override
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
 
     @Override
-	// @PreAuthorize("hasPermission('ADMINISTRADOR','EXCLUIR')")
+    // @PreAuthorize("hasPermission('ADMINISTRADOR','EXCLUIR')")
     public void deleteById(Long id) {
         try {
             usuarioRepository.deleteById(id);
@@ -139,5 +156,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void blockedUsuario(Usuario usuario) {
         usuario.setAtivo(Boolean.FALSE);
         usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public List<Episodio> listaEpisodio(UsuarioSistema usuarioLogado) {
+        return usuarioRepository.getOne(usuarioLogado.getUsuario().getId()).getEpisodios();
     }
 }
