@@ -9,16 +9,16 @@
         <div class="app-title">
             <h1 th:text="${id == null} ? 'Cadastrar direito' : 'Alterar direito'"></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Direito</li>
-                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li class="breadcrumb-item"><a href="#" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
 			<div class="tile">
 				<h3 class="tile-title" th:text="${rolePermissao.id == null} ? 'Novo direito' : *{rolePermissao.nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${rolePermissao}" th:action="${rolePermissao.id == null} ? @{/direito/adicionar} : @{/direito/alterar}" method="post" autocomplete="off">
+                    <form th:object="${rolePermissao}" th:action="${rolePermissao.id == null} ? @{/direito/adicionar} : @{/direito/alterar}" method="POST" autocomplete="off">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12">
 								<div th:replace="fragments/validation :: validation"></div>

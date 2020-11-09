@@ -120,7 +120,7 @@ public class TemporadaController {
         return REDIRECT_SERIE;
     }
 
-    @PostMapping(value = { "", "/", "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
 	public String cancelar() {
 		return REDIRECT_TEMPORADA;
     }

@@ -27,10 +27,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
-    
+
     @Autowired
     private UsuarioAuditoriaRepository usuarioAuditoriaRepository;
-    
+
     @Override
 	@Transactional(readOnly = true)
     public List<Role> findAll() {
@@ -40,15 +40,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role save(Role role) {
         role = roleRepository.save(role);
-        saveUsuarioAuditoria(role, TelevisivoConfig.INCLUSAO);
+        // saveUsuarioAuditoria(role, TelevisivoConfig.INCLUSAO);
         return role;
     }
 
     @Override
     public Role update(Role role) {
-        role = roleRepository.save(role);
-        saveUsuarioAuditoria(role, TelevisivoConfig.ALTERACAO);
-        return role;
+        // saveUsuarioAuditoria(role, TelevisivoConfig.ALTERACAO);
+        return save(role);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteById(Long id) {
         try {
-            saveUsuarioAuditoria(getOne(id), TelevisivoConfig.EXCLUSAO);
+            // saveUsuarioAuditoria(getOne(id), TelevisivoConfig.EXCLUSAO);
             roleRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("A Role de código %d não pode ser removida.", id));
@@ -97,6 +96,6 @@ public class RoleServiceImpl implements RoleService {
 		usuarioAuditoria.getAuditoria().setUsuario(TelevisivoConfig.pegarUsuario());
 		usuarioAuditoria.getAuditoria().setTipoOperacao(operacao);
 		usuarioAuditoria.setRole(role);
-        usuarioAuditoriaRepository.save(usuarioAuditoria); 		
+        usuarioAuditoriaRepository.save(usuarioAuditoria);
 	}
 }

@@ -15,7 +15,7 @@ public interface SerieService extends GenericService<Serie, Long> {
     Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable);
 
     Temporada findTemporadaByIdTemporada(Long id);
-    List<Temporada> temporadas(Long id);
+    List<Temporada> temporadas(Serie serie);
     void atualizarQtdTemporadas(Serie serie);
 
     void salvarTemporada(Serie serie);

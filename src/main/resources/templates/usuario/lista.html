@@ -8,9 +8,9 @@
         <div class="app-title">
             <h1>Lista de usuários</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Usuário</li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
+                <li class="breadcrumb-item"><a href="#">Listar</a></li>
             </ul>
         </div>
 		<div class="container">
@@ -55,7 +55,7 @@
 											<td data-tile="username" th:text="'@' + *{usuario.username}"></td>
 											<td data-tile="nome" th:text="${usuario.nome} + ' ' + *{usuario.sobrenome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{./detalhes/{id}(id=${usuario.id})}" class="btn btn-warning btn-sm">Detalhes</a>
+												<a title="Detalhes" th:href="@{./{id}/detalhes(id=${usuario.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>

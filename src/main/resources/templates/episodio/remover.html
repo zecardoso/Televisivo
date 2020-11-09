@@ -9,11 +9,11 @@
         <div class="app-title">
             <h1>Remover episódio</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{../../../../detalhes}">Série</a></li>
                 <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Temporada</a></li>
                 <li class="breadcrumb-item"><a th:href="@{./detalhes}">Episódio</a></li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
+                <li class="breadcrumb-item"><a href="#">Remover</a></li>
             </ul>
         </div>
         <div class="container" th:object="${episodio}">
@@ -32,11 +32,11 @@
 					<h4 th:text="*{publicacao}"></h4> -->
 					<label class="control-label">Avaliação</label>
 					<h4 th:text="*{avaliacao}"></h4>
-					<form th:action="@{./remover}" method="post" autocomplete="off">
+					<form th:action="@{./remover}" method="POST" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
                         <div class="tile-footer">
-							<button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>
-							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+							<button type="submit" class="btn btn-danger">Remover</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>

@@ -9,8 +9,8 @@
         <div class="app-title">
             <h1 th:text="${id == null} ? 'Cadastrar série' : 'Alterar série'"></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li th:if="${id == null}" class="breadcrumb-item"><a th:href="@{#}">Série</a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li th:if="${id == null}" class="breadcrumb-item"><a href="#">Série</a></li>
                 <li th:if="${id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#salvar}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
@@ -25,7 +25,7 @@
                 </div>
 				<h3 class="tile-title" th:text="${id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form onkeydown="return event.key != 'Enter';" th:action="${id == null} ? @{./salvar} : @{./alterar}" method="post" autocomplete="off">
+                    <form onkeydown="return event.key != 'Enter';" th:action="${id == null} ? @{./salvar} : @{./alterar}" method="POST" autocomplete="off">
                         <input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
@@ -91,11 +91,11 @@
                             <div class="form-row align-items-center" th:each="temporadas, rowStat :*{temporadas}">
                                 <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
                                 <div class="col-auto">
-                                    <label class="sr-only" for="numero">Name</label>
+                                    <label class="sr-only" for="numero">Número</label>
                                     <input type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
                                 </div>
                                 <div class="col-auto">
-                                    <label class="sr-only" for="ano">Name</label>
+                                    <label class="sr-only" for="ano">Ano</label>
                                     <input type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
                                 </div>
                                 <div class="col-auto">
@@ -109,7 +109,7 @@
                         </div>
                         <div id="salvar" class="tile-footer">
                             <button class="btn btn-success" type="submit" th:text="${serie.id == null} ? 'Próximo' : 'Salvar'" formnovalidate="formnovalidate"></button>
-                            <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                            <button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
                         </div>
                     </form>
                 </div>

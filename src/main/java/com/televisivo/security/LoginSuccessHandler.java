@@ -37,7 +37,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             persistentTokenBasedRememberMeServices.loginSuccess(request, response, authentication);
         }
         updateLoginUsuario(usuarioLogado.getUsuario());
-        redirectStrategy.sendRedirect(request, response, "/home");
+        redirectStrategy.sendRedirect(request, response, "/");
     }
 
     private void updateLoginUsuario(Usuario usuario) {

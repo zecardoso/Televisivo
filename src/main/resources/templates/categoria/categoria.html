@@ -9,22 +9,22 @@
         <div class="app-title">
             <h1 th:text="${id == null} ? 'Cadastrar categoria' : 'Alterar categoria'"></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Categoria</li>
-                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="${id == null} ? @{#} : @{./detalhes}">Categoria</a></li>
+                <li class="breadcrumb-item"><a th:href="@{#salvar}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
-				<h3 class="tile-title" th:text="${categoria.id == null} ? 'Nova categoria' : *{categoria.nome}"></h3>
+			<div class="tile" th:object="${categoria}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/validation :: validation"></div>
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
+				<h3 class="tile-title" th:text="*{id == null} ? 'Nova categoria' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${categoria}" th:action="${categoria.id == null} ? @{/categoria/adicionar} : @{/categoria/alterar}" method="post" autocomplete="off">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div th:replace="fragments/validation :: validation"></div>
-								<div th:replace="fragments/alert"></div>
-							</div>
-                        </div>
+                    <form th:action="${id == null} ? @{./salvar} : @{./alterar}" method="POST" autocomplete="off">
 						<input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
@@ -35,10 +35,9 @@
 								</div>
 							</div>
 						</div>
-                        <div class="tile-footer">
-							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate">Salvar</button>
-							<a th:if="${categoria.id} != null" th:href="@{/categoria/detalhes/{id}(id=${categoria.id})}" class="btn btn-secondary">Cancelar</a>
-							<button th:if="${categoria.id} == null" class="btn btn-secondary" type="submit" name="action" value="cancelar">Cancelar</button>
+                        <div id="salvar" class="tile-footer">
+							<button class="btn btn-success" type="submit">Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
 						</div>
                     </form>
                 </div>

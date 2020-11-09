@@ -50,8 +50,7 @@ public class SerieController {
     private static final String TEMPORADA = "temporada";
     private static final String TEMPORADAS = "temporadas";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "redirect:/serie/lista";
-    private static final String REDIRECT_SERIE = "redirect:./detalhes";
+    private static final String DETALHES = "redirect:./detalhes";
     private static final String HTML_SERIE = "/serie/serie";
     private static final String MESSAGE = "message";
     private static final String VERIFIQUE = "Verifique os campos!";
@@ -95,7 +94,7 @@ public class SerieController {
         serieService.save(serie);
         serieService.salvarTemporada(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return "redirect:/serie/" + serie.getId() + "/alterar";
+        return "redirect:./" + serie.getId() + "/alterar";
     }
 
     @GetMapping("{id}/detalhes")
@@ -103,7 +102,7 @@ public class SerieController {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/serie/detalhes");
         modelAndView.addObject(SERIE, serie);
-        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
         return modelAndView;
     }
 
@@ -112,7 +111,7 @@ public class SerieController {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serie);
-        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
         if (serie.getTemporadas().isEmpty()) {
             modelAndView.addObject(TEMPORADA, serieService.adicionarTemporada(serie));
         }
@@ -129,7 +128,7 @@ public class SerieController {
         serieService.atualizarQtdTemporadas(serie);
         serieService.update(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return REDIRECT_SERIE;
+        return DETALHES;
     }
 
     @PostMapping(value = "/{id}/alterar", params = "addRow")
@@ -142,7 +141,7 @@ public class SerieController {
         serieService.atualizarQtdTemporadas(serie);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serieService.adicionarTemporada(serie));
-        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
         return modelAndView;
     }
 
@@ -168,10 +167,11 @@ public class SerieController {
     // }
 
     @GetMapping("/{id}/remover")
-    public ModelAndView viewRemover(@PathVariable("id") Long id, Serie serie) {
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
+        Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/serie/remover");
         modelAndView.addObject(SERIE, serie);
-        modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
+        modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
         return modelAndView;
     }
 
@@ -179,7 +179,7 @@ public class SerieController {
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         serieService.deleteById(id);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return LISTA;
+        return "redirect:../lista";
     }
 
     @ModelAttribute("servicos")
@@ -193,13 +193,13 @@ public class SerieController {
     }
 
     @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
-	public String cancelar(@PathVariable("id") Long id) {
-		return REDIRECT_SERIE;
+	public String cancelar() {
+        return DETALHES;
     }
 
-    @PostMapping(value = { "", "/" }, params = "cancelar")
-	public String cancelar() {
-		return LISTA;
+    @PostMapping(value = { "/salvar" }, params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
     }
 
     @GetMapping("/download")

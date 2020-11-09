@@ -52,8 +52,11 @@ public class UsuarioController {
 
     private static final String USUARIO = "usuario";
     private static final String SUCCESS = "success";
-    private static final String LISTA_URL = "redirect:/usuario/lista";
     private static final String LISTA = "lista";
+    private static final String DETALHES = "redirect:./detalhes";
+    private static final String ALTERAR = "redirect:./alterar";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private UsuarioService usuarioService;
@@ -100,77 +103,73 @@ public class UsuarioController {
     }
 
     @GetMapping("/cadastro")
-    public ModelAndView cadastro(Usuario usuario) {
+    public ModelAndView viewSalvar(Usuario usuario) {
         ModelAndView modelAndView = new ModelAndView("/usuario/usuario");
         modelAndView.addObject(USUARIO, usuario);
         return modelAndView;
     }
 
-    @GetMapping("/detalhes/{id}")
+    @GetMapping("/{id}/detalhes")
     public ModelAndView detalhes(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/usuario/detalhes");
-        Usuario usuario = usuarioService.getOne(id);
-        modelAndView.addObject(USUARIO, usuario);
+        modelAndView.addObject(USUARIO, usuarioService.getOne(id));
         return modelAndView;
     }
 
-    @GetMapping("/alterar/{id}")
-    public ModelAndView alterarId(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("/usuario/usuario");
-        Usuario usuario = usuarioService.getOne(id);
-        modelAndView.addObject(USUARIO, usuario);
-        return modelAndView;
+    @GetMapping("/{id}/alterar")
+    public ModelAndView viewAlterar(@PathVariable("id") Long id) {
+        return viewSalvar(usuarioService.getOne(id));
     }
 
-    @GetMapping("/remover/{id}")
-    public ModelAndView removerId(@PathVariable("id") Long id) {
+    @GetMapping("/{id}/remover")
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/usuario/remover");
-        Usuario usuario = usuarioService.getOne(id);
-        modelAndView.addObject(USUARIO, usuario);
+        modelAndView.addObject(USUARIO, usuarioService.getOne(id));
         return modelAndView;
     }
 
-    @PostMapping("/adicionar")
-    public ModelAndView adicionar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(usuario);
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./cadastro";
         }
         try {
             usuarioService.save(usuario);
         } catch (EmailCadastradoException e) {
             result.rejectValue("email", e.getMessage(), e.getMessage());
-            return cadastro(usuario);
+            return "redirect:./cadastro";
         } catch (SenhaError e) {
             result.rejectValue("password", e.getMessage(), e.getMessage());
-            return cadastro(usuario);
+            return "redirect:./cadastro";
         }
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return new ModelAndView(LISTA_URL);
+        return "redirect:./lista";
     }
 
-    @PostMapping("/alterar")
-    public ModelAndView alterar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/{id}/alterar")
+    public String alterar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(usuario);
+            return ALTERAR;
         }
         try {
 			usuarioService.update(usuario);
 		} catch(EmailCadastradoException e) {
 			result.rejectValue("email", e.getMessage(), e.getMessage());
-			return cadastro(usuario);
+			return ALTERAR;
 		} catch (SenhaError e) {
             result.rejectValue("password", e.getMessage(), e.getMessage());
-            return cadastro(usuario);
+            return ALTERAR;
         }
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return new ModelAndView(LISTA_URL);
+        return DETALHES;
     }
 
-    @PostMapping("/remover")
-    public ModelAndView remover(Usuario usuario, BindingResult result, RedirectAttributes attributes) {
-        usuarioService.deleteById(usuario.getId());
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        usuarioService.deleteById(id);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return new ModelAndView(LISTA_URL);
+        return "redirect:../lista";
     }
 
     @ModelAttribute("roles")
@@ -183,10 +182,15 @@ public class UsuarioController {
         return Genero.values();
     }
 
-    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
-	public String cancelar() {
-		return LISTA_URL;
-	}
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    public String cancelar() {
+        return DETALHES;
+    }
+
+    @PostMapping(value = "/salvar", params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
+    }
 
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {

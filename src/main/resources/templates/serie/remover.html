@@ -9,7 +9,7 @@
         <div class="app-title">
             <h1>Remover série</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
                 <li class="breadcrumb-item"><a th:href="@{#remover}">Remover</a></li>
             </ul>
@@ -42,7 +42,7 @@
 						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
 					</div>
 				</div>
-                <form id="remover" th:action="@{./remover}" method="post" autocomplete="off">
+                <form id="remover" th:action="@{./remover}" method="POST" autocomplete="off">
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
                         <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>

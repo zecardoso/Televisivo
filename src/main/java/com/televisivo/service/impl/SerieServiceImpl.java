@@ -83,8 +83,8 @@ public class SerieServiceImpl implements SerieService {
     }
 
     @Override
-    public List<Temporada> temporadas(Long id) {
-        return serieRepository.temporadas(id);
+    public List<Temporada> temporadas(Serie serie) {
+        return serieRepository.temporadas(serie.getId());
     }
 
     @Override

@@ -8,9 +8,9 @@
         <div class="app-title">
             <h1>Lista de permissões</h1>
 			<ul class="app-breadcrumb breadcrumb">
-				<li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+				<li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
 				<li class="breadcrumb-item">Permissão</li>
-				<li class="breadcrumb-item"><a th:href="@{#}">Listar</a></li>
+				<li class="breadcrumb-item"><a href="#">Listar</a></li>
 			</ul>
         </div>
         <div class="container">
@@ -42,7 +42,7 @@
 								<table class="table table-bordered table-hover" id="sampleTable" permissao="grid" aria-describedby="sampleTable_info">
 									<thead>
 										<tr>
-											<th scope="col">Name</th>
+											<th scope="col">Nome</th>
 											<th scope="col" style="text-align: center;">Detalhes</th>
 										</tr>
 									</thead>
@@ -50,7 +50,7 @@
 										<tr th:each="permissao :${pagina.conteudo}">
 											<td data-tile="nome" th:text="${permissao.nome}"></td>
 											<td data-tile="Detalhes" style="text-align: center;">
-												<a title="Detalhes" th:href="@{./detalhes/{id}(id=${permissao.id})}" class="btn btn-warning btn-sm">Detalhes</a>
+												<a title="Detalhes" th:href="@{./{id}/detalhes(id=${permissao.id})}" class="btn btn-warning btn-sm">Detalhes</a>
 											</td>
 										</tr>
 									</tbody>
@@ -71,7 +71,7 @@
 			$(document).ready(function(){
 				changePageAndSize();
 			});
-			
+
 			function changePageAndSize(){
 				$('#pageSizeSelect').change(function(e){
 					window.location.replace("/permissao/lista?size="+this.value+"&page=0");

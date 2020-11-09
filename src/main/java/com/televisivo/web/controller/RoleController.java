@@ -30,7 +30,9 @@ public class RoleController {
 
     private static final String ROLE = "role";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "redirect:/role/lista";
+    private static final String DETALHES = "redirect:./detalhes";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private RoleService roleService;
@@ -47,65 +49,65 @@ public class RoleController {
     }
 
     @GetMapping("/cadastro")
-    public ModelAndView cadastro(Role role) {
+    public ModelAndView viewSalvar(Role role) {
         ModelAndView modelAndView = new ModelAndView("/role/role");
         modelAndView.addObject(ROLE, role);
         return modelAndView;
     }
 
-    @GetMapping("/detalhes/{id}")
+    @GetMapping("/{id}/detalhes")
     public ModelAndView detalhes(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/role/detalhes");
-        Role role = roleService.getOne(id);
-        modelAndView.addObject(ROLE, role);
+        modelAndView.addObject(ROLE, roleService.getOne(id));
         return modelAndView;
     }
 
-    @GetMapping("/alterar/{id}")
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("/role/role");
-        Role role = roleService.getOne(id);
-        modelAndView.addObject(ROLE, role);
-        return modelAndView;
+    @GetMapping("/{id}/alterar")
+    public ModelAndView viewAlterar(@PathVariable("id") Long id) {
+        return viewSalvar(roleService.getOne(id));
     }
 
-    @GetMapping("/remover/{id}")
-    public ModelAndView removerId(@PathVariable("id") Long id) {
+    @GetMapping("/{id}/remover")
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/role/remover");
-        Role role = roleService.getOne(id);
-        modelAndView.addObject(ROLE, role);
+        modelAndView.addObject(ROLE, roleService.getOne(id));
         return modelAndView;
     }
 
-    @PostMapping("/adicionar")
-    public ModelAndView adicionar(@Valid Role role, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid Role role, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(role);
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./cadastro";
         }
         roleService.save(role);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:./lista";
     }
 
-    @PostMapping("/alterar")
-    public ModelAndView alterar(@Valid Role role, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/{id}/alterar")
+    public String alterar(@Valid Role role, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(role);
+            return "redirect:./alterar";
         }
         roleService.update(role);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return new ModelAndView(LISTA);
+        return DETALHES;
     }
 
-    @PostMapping("/remover")
-    public ModelAndView remover(Role role, BindingResult result, RedirectAttributes attributes) {
-        roleService.deleteById(role.getId());
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        roleService.deleteById(id);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:../lista";
+    }
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    public String cancelar() {
+        return DETALHES;
     }
 
-    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
-	public String cancelar() {
-		return LISTA;
-	}
+    @PostMapping(value = { "/salvar" }, params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
+    }
 }

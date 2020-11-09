@@ -9,26 +9,27 @@
         <div class="app-title">
             <h1>Detalhes do serviço</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Usuário</li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Detalhes</a></li>
+                <li class="breadcrumb-item"><a href="#">Detalhes</a></li>
             </ul>
         </div>
         <div class="container" th:object="${servico}">
 			<div class="tile">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
 				<h3 class="tile-title" th:text="*{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <label class="control-label">Nome</label>
-                            <h4 th:text="*{nome}"></h4>
-                        </div>
-                    </div>
-                    <div class="tile-footer">
-                        <a title="Alterar" class="btn btn-info" th:href="@{../alterar/{id}(id=${servico.id})}">Alterar</a>
-                        <a title="Remover" class="btn btn-danger" th:href="@{../remover/{id}(id=${servico.id})}">Remover</a>
-                        <a title="Fechar" class="btn btn-secondary" th:href="@{../lista}">Fechar</a>
-                    </div>
+                    <label class="control-label">Nome</label>
+                    <h4 th:text="*{nome}"></h4>
+                </div>
+                <div class="tile-footer">
+                    <a title="Alterar" class="btn btn-info" th:href="@{./alterar}">Alterar</a>
+                    <a title="Remover" class="btn btn-danger" th:href="@{./remover}">Remover</a>
+                    <a title="Fechar" class="btn btn-secondary" th:href="@{../lista}">Fechar</a>
                 </div>
             </div>
         </div>

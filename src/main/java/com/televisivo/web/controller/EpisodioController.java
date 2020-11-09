@@ -22,7 +22,7 @@ public class EpisodioController {
 
     private static final String EPISODIO = "episodio";
     private static final String REDIRECT_TEMPORADA = "redirect:../.././detalhes";
-    private static final String REDIRECT_EPISODIO = "redirect:./detalhes";
+    private static final String DETALHES = "redirect:./detalhes";
     private static final String HTML_EPISODIO = "/episodio/episodio";
 
     @Autowired
@@ -51,7 +51,7 @@ public class EpisodioController {
         }
         episodioService.update(episodio);
         attributes.addFlashAttribute("success", "Registro alterado com sucesso.");
-        return REDIRECT_EPISODIO;
+        return DETALHES;
     }
 
     @GetMapping("/{id}/remover")
@@ -71,8 +71,8 @@ public class EpisodioController {
         return REDIRECT_TEMPORADA;
     }
 
-    @PostMapping(value = { "", "/", "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
 	public String cancelar(@PathVariable("id") Long id) {
-		return REDIRECT_EPISODIO;
+		return DETALHES;
     }
 }

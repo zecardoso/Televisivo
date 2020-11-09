@@ -9,49 +9,31 @@
         <div class="app-title">
             <h1>Remover direito</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Direito</li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}"></a>Direito</li>
+                <li class="breadcrumb-item"><a href="#remover">Remover</a></li>
             </ul>
         </div>
         <div class="container" th:object="${rolePermissao}">
 			<div class="tile">
 				<h3 class="tile-title" th:text="*{role.nome} + ' | ' + *{permissao.nome} + ' | ' + *{escopo.nome}"></h3>
                 <div class="tile-body tile-footer">
-					<form th:action="@{/direito/remover}" method="post" autocomplete="off">
-						<input type="hidden" th:value="*{id.role}">
-						<input type="hidden" th:value="*{id.permissao}">
-						<input type="hidden" th:value="*{id.escopo}">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Role</label>
-									<h4 th:text="*{role.nome}"></h4>
-								</div>
-							</div>
-                        </div>
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Permissao</label>
-									<h4 th:text="*{permissao.nome}"></h4>
-								</div>
-							</div>
-                        </div>
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label class="control-label">Escopo</label>
-									<h4 th:text="*{escopo.nome}"></h4>
-								</div>
-							</div>
-						</div>
-                        <div class="tile-footer">
-							<button class="btn btn-danger" type="submit"></i>Remover</button>
-							<button type="submit" class="btn btn-secondary" name="action" value="cancelar">Cancelar</button>
-						</div>
-                    </form>
+					<label class="control-label">Role</label>
+					<h4 th:text="*{role.nome}"></h4>
+					<label class="control-label">Permissao</label>
+					<h4 th:text="*{permissao.nome}"></h4>
+					<label class="control-label">Escopo</label>
+					<h4 th:text="*{escopo.nome}"></h4>
                 </div>
+				<form id="remover" th:action="@{./remover}" method="POST">
+					<input type="hidden" th:value="*{id.role}">
+					<input type="hidden" th:value="*{id.permissao}">
+					<input type="hidden" th:value="*{id.escopo}">
+					<div class="tile-footer">
+						<button class="btn btn-danger" type="submit"></i>Remover</button>
+						<button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+					</div>
+				</form>
             </div>
         </div>
 	</section>

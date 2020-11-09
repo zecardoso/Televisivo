@@ -5,6 +5,7 @@ import java.util.ArrayList;
 // import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Episodio implements Serializable {
     @NotNull(message = "O número deve ser informado.")
 	@Column(nullable = false)
     private int numero;
-    
+
     @Size(min = 3, max = 40, message = "O nome deve ter entre {min} e {max} caracteres.")
 	@NotBlank(message = "O nome deve ser informado.")
 	@NotNull(message = "O nome deve ser informado.")
@@ -74,6 +75,6 @@ public class Episodio implements Serializable {
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))
     private Temporada temporada;
 
-    @ManyToMany(mappedBy = "episodios")
+    @ManyToMany(mappedBy = "episodios", cascade = CascadeType.ALL)
     private List<Usuario> usuarios = new ArrayList<>();
 }

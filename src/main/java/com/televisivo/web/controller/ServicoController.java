@@ -41,7 +41,9 @@ public class ServicoController {
 
     private static final String SERVICO = "servico";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "redirect:/servico/lista";
+    private static final String DETALHES = "redirect:./detalhes";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private ServicoService servicoService;
@@ -61,67 +63,68 @@ public class ServicoController {
     }
 
     @GetMapping("/cadastro")
-    public ModelAndView cadastro(Servico servico) {
+    public ModelAndView viewSalvar(Servico servico) {
         ModelAndView modelAndView = new ModelAndView("/servico/servico");
         modelAndView.addObject(SERVICO, servico);
         return modelAndView;
     }
 
-    @GetMapping("/detalhes/{id}")
+    @GetMapping("/{id}/detalhes")
     public ModelAndView detalhes(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/servico/detalhes");
-        Servico servico = servicoService.getOne(id);
-        modelAndView.addObject(SERVICO, servico);
+        modelAndView.addObject(SERVICO, servicoService.getOne(id));
         return modelAndView;
     }
 
-    @GetMapping("/alterar/{id}")
-    public ModelAndView alterarId(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("/servico/servico");
-        Servico servico = servicoService.getOne(id);
-        modelAndView.addObject(SERVICO, servico);
-        return modelAndView;
+    @GetMapping("/{id}/alterar")
+    public ModelAndView viewAlterar(@PathVariable("id") Long id) {
+        return viewSalvar(servicoService.getOne(id));
     }
 
-    @GetMapping("/remover/{id}")
-    public ModelAndView removerId(@PathVariable("id") Long id) {
-        Servico servico = servicoService.getOne(id);
+    @GetMapping("/{id}/remover")
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/servico/remover");
-        modelAndView.addObject(SERVICO, servico);
+        modelAndView.addObject(SERVICO, servicoService.getOne(id));
         return modelAndView;
     }
 
-    @PostMapping(value = "/adicionar")
-    public ModelAndView adicionar(@Valid Servico servico, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid Servico servico, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(servico);
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./cadastro";
         }
         servicoService.save(servico);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:./lista";
     }
 
-    @PostMapping(value = "/alterar")
-    public ModelAndView update(@Valid Servico servico, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/{id}/alterar")
+    public String alterar(@Valid Servico servico, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(servico);
+            return "redirect:./alterar";
         }
         servicoService.update(servico);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return new ModelAndView(LISTA);
+        return DETALHES;
     }
 
-    @PostMapping(value = "/remover")
-    public ModelAndView remover(Servico servico, BindingResult result, RedirectAttributes attributes) {
-        servicoService.deleteById(servico.getId());
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        servicoService.deleteById(id);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:../lista";
     }
 
-    @PostMapping(value = {"/adicionar", "/alterar", "/remover"}, params = "action=cancelar")
-	public String cancelar() {
-		return LISTA;
-	}
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    public String cancelar() {
+        return DETALHES;
+    }
+
+    @PostMapping(value = { "/salvar" }, params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
+    }
 
     @GetMapping("/download")
     public void imprimeRelatorioDownload(HttpServletResponse response) {

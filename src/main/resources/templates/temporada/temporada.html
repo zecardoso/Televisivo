@@ -9,10 +9,10 @@
         <div class="app-title">
             <h1>Alterar temporada</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Série</a></li>
                 <li class="breadcrumb-item"><a th:href="@{./detalhes}">Temporada</a></li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Alterar</a></li>
+                <li class="breadcrumb-item"><a href="#salvar">Alterar</a></li>
             </ul>
         </div>
         <div class="container">
@@ -25,7 +25,7 @@
                 </div>
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{./alterar}" method="post" autocomplete="off">
+                    <form th:action="@{./alterar}" method="POST" autocomplete="off">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <Input hidden th:field="*{serie}">
@@ -79,9 +79,9 @@
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
                         </div>
-                        <div class="tile-footer">
-							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate">Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                        <div id="salvar" class="tile-footer">
+							<button class="btn btn-success" type="submit">Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar" formnovalidate>Cancelar</button>
 						</div>
                     </form>
                 </div>

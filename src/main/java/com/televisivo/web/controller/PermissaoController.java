@@ -28,9 +28,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/permissao")
 public class PermissaoController {
 
-    private static final String ESCOPO = "permissao";
+    private static final String PERMISSAO = "permissao";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "redirect:/permissao/lista";
+    private static final String DETALHES = "redirect:./detalhes";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private PermissaoService permissaoService;
@@ -47,65 +49,66 @@ public class PermissaoController {
     }
 
     @GetMapping("/cadastro")
-    public ModelAndView cadastro(Permissao permissao) {
+    public ModelAndView viewSalvar(Permissao permissao) {
         ModelAndView modelAndView = new ModelAndView("/permissao/permissao");
-        modelAndView.addObject(ESCOPO, permissao);
+        modelAndView.addObject(PERMISSAO, permissao);
         return modelAndView;
     }
 
-    @GetMapping("/detalhes/{id}")
+    @GetMapping("/{id}/detalhes")
     public ModelAndView detalhes(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/permissao/detalhes");
-        Permissao permissao = permissaoService.getOne(id);
-        modelAndView.addObject(ESCOPO, permissao);
+        modelAndView.addObject(PERMISSAO, permissaoService.getOne(id));
         return modelAndView;
     }
 
-    @GetMapping("/alterar/{id}")
-    public ModelAndView buscar(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("/permissao/permissao");
-        Permissao permissao = permissaoService.getOne(id);
-        modelAndView.addObject(ESCOPO, permissao);
-        return modelAndView;
+    @GetMapping("/{id}/alterar")
+    public ModelAndView viewAlterar(@PathVariable("id") Long id) {
+        return viewSalvar(permissaoService.getOne(id));
     }
 
-    @GetMapping("/remover/{id}")
-    public ModelAndView removerId(@PathVariable("id") Long id) {
+    @GetMapping("/{id}/remover")
+    public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/permissao/remover");
-        Permissao permissao = permissaoService.getOne(id);
-        modelAndView.addObject(ESCOPO, permissao);
+        modelAndView.addObject(PERMISSAO, permissaoService.getOne(id));
         return modelAndView;
     }
 
-    @PostMapping(value = "/adicionar")
-    public ModelAndView adicionar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(permissao);
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./cadastro";
         }
         permissaoService.save(permissao);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:./lista";
     }
 
-    @PostMapping(value = "/alterar")
-    public ModelAndView alterar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/{id}/alterar")
+    public String alterar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return cadastro(permissao);
+            return "redirect:./alterar";
         }
         permissaoService.update(permissao);
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return new ModelAndView(LISTA);
+        return DETALHES;
     }
 
-    @PostMapping(value = "/remover")
-    public ModelAndView remover(Permissao permissao, BindingResult result, RedirectAttributes attributes) {
-        permissaoService.deleteById(permissao.getId());
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        permissaoService.deleteById(id);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
-        return new ModelAndView(LISTA);
+        return "redirect:../lista";
     }
 
-    @PostMapping(value = { "/adicionar", "/alterar", "/remover" }, params = "action=cancelar")
-	public String cancelar() {
-		return LISTA;
-	}
+    @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")
+    public String cancelar() {
+        return DETALHES;
+    }
+
+    @PostMapping(value = { "/salvar" }, params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
+    }
 }

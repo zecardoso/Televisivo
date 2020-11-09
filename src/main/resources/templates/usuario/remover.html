@@ -9,64 +9,48 @@
         <div class="app-title">
             <h1>Remover usuário</i></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Usuário</li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Remover</a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{./detalhes}"></a>Usuário</li>
+                <li class="breadcrumb-item"><a href="#remover">Remover</a></li>
             </ul>
         </div>
         <div class="container" th:object="${usuario}">
 			<div class="tile">
 				<h3 class="tile-title" th:text="*{nome} + ' ' + *{sobrenome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{../remover}" method="post" autocomplete="off">
+					<input type="hidden" th:field="*{id}">
+					<label class="control-label">Nome</label>
+					<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>
+					<label class="control-label">Username</label>
+					<h4 th:text="*{username}"></h4>
+					<label class="control-label">Email</label>
+					<h4 th:text="*{email}"></h4>
+					<label class="control-label">Gênero</label>
+					<h4 th:text="*{genero.descricao}"></h4>
+					<div class="row">
+						<div class="col-md-1 mb-3">
+							<div class="make-switch switch-large">
+								<label class="control-label">Situação</label>
+								<input disabled type="checkbox" class="form-control js-status" data-off-color="danger" data-on-text="Ativo" data-off-text="Inativo" id="ativo" name="ativo" th:field="*{ativo}">
+							</div>
+						</div>
+					</div>
+					<label class="control-label">Roles</label>
+					<th:block th:each="role : ${roles}">
+						<div class="row">
+							<div class="col-md-1 mb-3">
+								<label th:text="${role.nome}"></label>
+								<div class="make-switch switch-large">
+									<input disabled type="checkbox" th:value="${role.id}" th:field="*{roles}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
+								</div>
+							</div>
+						</div>
+					</th:block>
+					<form id="remover" th:action="@{./remover}" method="POST">
 						<input type="hidden" th:field="*{id}">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Nome</label>
-								<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Username</label>
-								<h4 th:text="*{username}"></h4>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Email</label>
-								<h4 th:text="*{email}"></h4>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<label class="control-label">Gênero</label>
-								<h4 th:text="*{genero.descricao}"></h4>
-							</div>
-						</div>
-                        <fieldset>
-							<div class="row">
-								<div class="col-md-1 mb-3">
-									<div class="make-switch switch-large">
-										<label class="control-label">Situação</label>
-										<input disabled type="checkbox" class="form-control js-status" data-off-color="danger" data-on-text="Ativo" data-off-text="Inativo" id="ativo" name="ativo" th:field="*{ativo}">
-                                    </div>
-								</div>
-							</div>
-							<th:block th:each="role : ${roles}">
-								<div class="row">
-                                	<div class="col-md-1 mb-3">
-										<label th:text="${role.nome}"></label>
-										<div class="make-switch switch-large">
-											<input disabled type="checkbox" th:value="${role.id}" th:field="*{roles}" class="js-status" data-off-color="danger" data-on-text="<i class='fa fa-check'>" data-off-text="<i class='fa fa-times'>"/>
-										</div>
-									</div>
-								</div>
-							</th:block>
-                        </fieldset>
-                        <div class="tile-footer">
-							<button class="btn btn-danger" type="submit">Remover</button>
-							<a th:href="@{../detalhes/{id}(id=${usuario.id})}" class="btn btn-secondary">Cancelar</a>
+						<div class="tile-footer">
+							<button type="submit" class="btn btn-danger">Remover</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>

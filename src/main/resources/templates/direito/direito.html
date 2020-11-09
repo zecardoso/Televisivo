@@ -9,67 +9,62 @@
         <div class="app-title">
             <h1 th:text="${id == null} ? 'Cadastrar direito' : 'Alterar direito'"></h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item">Direito</li>
-                <li class="breadcrumb-item"><a th:href="@{#}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li th:if="${id == null}" class="breadcrumb-item"><a href="#">Direito</a></li>
+                <li th:if="${id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Direito</a></li>
+                <li class="breadcrumb-item"><a href="#salvar" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
             </ul>
         </div>
         <div class="container">
-			<div class="tile">
+			<div class="tile" th:object="${rolePermissao}">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div th:replace="fragments/validation :: validation"></div>
+                        <div th:replace="fragments/alert"></div>
+                    </div>
+                </div>
 				<h3 class="tile-title" th:text="${rolePermissao.id == null} ? 'Novo direito' : *{rolePermissao.nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:object="${rolePermissao}" th:action="${rolePermissao.id == null} ? @{/direito/adicionar} : @{/direito/alterar}" method="post" autocomplete="off">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12">
-								<div th:replace="fragments/validation :: validation"></div>
-								<div th:replace="fragments/alert"></div>
-							</div>
-                        </div>
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <label for="roleid" class="control-label">Grupo</label>
-                                    <select class="form-control" required th:field="*{role}" id="roleid" name="roleid">
-                                        <option value="">Selecione uma opção</option>
-                                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.nome}" th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'"></option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <span th:errors="*{role}"></span>
-                                    </div>
+                    <form th:action="@{./salvar}" method="POST" autocomplete="off">
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="roleid" class="control-label">Grupo</label>
+                                <select class="form-control" required th:field="*{role}" id="roleid" name="roleid">
+                                    <option value="">Selecione uma opção</option>
+                                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.nome}" th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{role}"></span>
                                 </div>
 							</div>
                         </div>
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <label for="permissaoid" class="control-label">Permissão</label>
-                                    <select class="form-control" required th:field="*{permissao}" id="permissaoid" name="permissaoid">
-                                        <option value="">Selecione uma opção</option>
-                                        <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" th:classappend="${#fields.hasErrors('permissao')} ? 'is-invalid'"></option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <span th:errors="*{permissao}"></span>
-                                    </div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="permissaoid" class="control-label">Permissão</label>
+                                <select class="form-control" required th:field="*{permissao}" id="permissaoid" name="permissaoid">
+                                    <option value="">Selecione uma opção</option>
+                                    <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" th:classappend="${#fields.hasErrors('permissao')} ? 'is-invalid'"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{permissao}"></span>
                                 </div>
 							</div>
                         </div>
-                        <div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <label for="escopoid" class="control-label">Escopo</label>
-                                    <select class="form-control" required th:field="*{escopo}" id="escopoid" name="escopoid">
-                                        <option value="">Selecione uma opção</option>
-                                        <option th:each="escopo : ${escopos}" th:value="${escopo.id}" th:text="${escopo.nome}" th:classappend="${#fields.hasErrors('escopo')} ? 'is-invalid'"></option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        <span th:errors="*{escopo}"></span>
-                                    </div>
+                        <div class="form-row">
+							<div class="col-md-4 mb-3">
+                                <label for="escopoid" class="control-label">Escopo</label>
+                                <select class="form-control" required th:field="*{escopo}" id="escopoid" name="escopoid">
+                                    <option value="">Selecione uma opção</option>
+                                    <option th:each="escopo : ${escopos}" th:value="${escopo.id}" th:text="${escopo.nome}" th:classappend="${#fields.hasErrors('escopo')} ? 'is-invalid'"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <span th:errors="*{escopo}"></span>
                                 </div>
 							</div>
                         </div>
-                        <div class="tile-footer">
-							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate">Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="action" value="cancelar">Cancelar</button>
+                        <div id="salvar" class="tile-footer">
+							<button class="btn btn-success" type="submit" name="salvar">Salvar</button>
+							<button class="btn btn-secondary" type="submit" formnovalidate name="cancelar">Cancelar</button>
 						</div>
                     </form>
                 </div>

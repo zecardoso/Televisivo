@@ -9,11 +9,11 @@
         <div class="app-title">
             <h1>Alterar episódio</h1>
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/home}"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{../../../../detalhes}">Série</a></li>
                 <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Temporada</a></li>
                 <li class="breadcrumb-item"><a th:href="@{./detalhes}">Episódio</a></li>
-                <li class="breadcrumb-item"><a th:href="@{#}">Alterar</a></li>
+                <li class="breadcrumb-item"><a href="#salvar">Alterar</a></li>
             </ul>
         </div>
         <div class="container">
@@ -26,7 +26,7 @@
                 </div>
 				<h3 class="tile-title" th:text="'Episodio ' + ${episodio.numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{/serie/{idSerie}/temporada/{idTemporada}/episodio/{id}/alterar(idSerie=*{temporada.serie.id}, idTemporada=*{temporada.id}, id=*{id})}" method="post" autocomplete="off">
+                    <form th:action="@{./alterar}" method="POST" autocomplete="off">
                         <Input type="text" hidden th:field="*{temporada.serie.id}">
                         <Input type="text" hidden th:field="*{temporada.id}">
                         <div class="form-row">
@@ -74,9 +74,9 @@
                                 </div>
 							</div>
 						</div> -->
-                        <div class="tile-footer">
-							<button class="btn btn-success" type="submit" formnovalidate="formnovalidate"></i>Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                        <div id="salvar" class="tile-footer">
+							<button class="btn btn-success" type="submit">Salvar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
 						</div>
                     </form>
                 </div>

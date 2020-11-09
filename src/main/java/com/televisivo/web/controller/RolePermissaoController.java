@@ -30,12 +30,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/direito")
 public class RolePermissaoController {
 
+    private static final String SUCCESS = "success";
+    private static final String MESSAGE = "message";
+    private static final String VERIFIQUE = "Verifique os campos!";
+
     @Autowired
     private RoleService roleService;
 
     @Autowired
     private PermissaoService permissaoService;
-    
+
     @Autowired
     private EscopoService escopoService;
 
@@ -51,26 +55,30 @@ public class RolePermissaoController {
     }
 
     @GetMapping("/cadastro")
-    public ModelAndView cadastro(RolePermissao rolePermissao) {
+    public ModelAndView viewSalvar(RolePermissao rolePermissao) {
         ModelAndView modelAndView = new ModelAndView("/direito/direito");
         modelAndView.addObject("rolePermissao", rolePermissao);
         return modelAndView;
     }
 
-    @PostMapping("/adicionar")
-    public ModelAndView adicionar(@Valid RolePermissao rolePermissao, RedirectAttributes attributes) {
+    @PostMapping("/salvar")
+    public String salvar(@Valid RolePermissao rolePermissao, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            return "redirect:./cadastro";
+        }
         RolePermissaoId id = new RolePermissaoId();
         id.setRole(rolePermissao.getRole().getId());
         id.setPermissao(rolePermissao.getPermissao().getId());
         id.setEscopo(rolePermissao.getEscopo().getId());
         rolePermissao.setId(id);
         rolePermissaoService.save(rolePermissao);
-        attributes.addFlashAttribute("success", "Registro adicionado com sucesso.");
-        return new ModelAndView("redirect:/direito/lista");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        return "redirect:./lista";
     }
 
-    @GetMapping("/remover/{roleId}/{permissaoId}/{escopoId}")
-    public ModelAndView removerId(@PathVariable("roleId") Long roleId, @PathVariable("permissaoId") Long permissaoId, @PathVariable("escopoId") Long escopoId) {
+    @GetMapping("/{roleId}/{permissaoId}/{escopoId}/remover")
+    public ModelAndView viewRemover(@PathVariable("roleId") Long roleId, @PathVariable("permissaoId") Long permissaoId, @PathVariable("escopoId") Long escopoId) {
         RolePermissaoId id = new RolePermissaoId();
         id.setRole(roleId);
         id.setPermissao(permissaoId);
@@ -80,12 +88,16 @@ public class RolePermissaoController {
         modelAndView.addObject("rolePermissao", rolePermissao);
         return modelAndView;
     }
-    
-    @PostMapping(value = "/remover")
-    public ModelAndView remover(RolePermissao rolePermissao, BindingResult result, RedirectAttributes attributes) {
-        rolePermissaoService.deleteById(rolePermissao.getId());
-        attributes.addFlashAttribute("success", "Registro removido com sucesso.");
-        return new ModelAndView("/direito/lista");
+
+    @PostMapping("/{roleId}/{permissaoId}/{escopoId}/remover")
+    public String remover(@PathVariable("roleId") Long roleId, @PathVariable("permissaoId") Long permissaoId, @PathVariable("escopoId") Long escopoId, RedirectAttributes attributes) {
+        RolePermissaoId id = new RolePermissaoId();
+        id.setRole(roleId);
+        id.setPermissao(permissaoId);
+        id.setEscopo(escopoId);
+        rolePermissaoService.deleteById(id);
+        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        return "redirect:../../../lista";
     }
 
     @ModelAttribute("roles")
@@ -103,8 +115,13 @@ public class RolePermissaoController {
         return escopoService.findAll();
     }
 
-    @PostMapping(value = { "/adicionar", "/alterar", "/remover" }, params = "action=cancelar")
-	public String cancelar() {
-		return "redirect:/direito/lista";
+    @PostMapping(value = "/{id}/{id}/{id}/remover", params = "cancelar")
+    public String cancelar() {
+        return "redirect:../../../lista";
+    }
+
+    @PostMapping(value = "/salvar", params = "cancelar")
+	public String cancelarCadastro() {
+		return "redirect:./lista";
     }
 }
