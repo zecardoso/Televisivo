@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{layout}">
 <head>
-    <title th:text="${serie.id == null} ? 'Cadastrar série' : 'Alterar série'"></title>
+    <title th:text="*{id == null} ? 'Cadastrar série' : 'Alterar série'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="${id == null} ? 'Cadastrar série' : 'Alterar série'"></h1>
+            <h1 th:text="*{id == null} ? 'Cadastrar série' : 'Alterar série'"></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li th:if="${id == null}" class="breadcrumb-item"><a href="#">Série</a></li>
-                <li th:if="${id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
-                <li class="breadcrumb-item"><a th:href="@{#salvar}" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li th:if="*{id == null}" class="breadcrumb-item"><a href="#">Série</a></li>
+                <li th:if="*{id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Série</a></li>
+                <li class="breadcrumb-item"><a th:href="@{#salvar}" th:text="*{id == null} ? 'Cadastrar' : 'Alterar'"></a></li>
             </ul>
         </div>
         <div class="container">
@@ -23,14 +23,14 @@
                         <div th:replace="fragments/alert"></div>
                     </div>
                 </div>
-				<h3 class="tile-title" th:text="${id == null} ? 'Nova série' : *{nome}"></h3>
+				<h3 class="tile-title" th:text="*{id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form onkeydown="return event.key != 'Enter';" th:action="${id == null} ? @{./salvar} : @{./alterar}" method="POST" autocomplete="off">
+                    <form onkeydown="return event.key != 'Enter';" th:action="*{id == null} ? @{./salvar} : @{./alterar}" method="POST">
                         <input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
 								<label for="nome">Nome</label>
-								<Input class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+								<Input required class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
 								<div class="invalid-feedback">
 									<span th:errors="*{nome}"></span>
 								</div>
@@ -39,7 +39,7 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="enredo">Enredo</label>
-                                <Input class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{enredo}"></span>
                                 </div>
@@ -48,7 +48,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="ano">Ano</label>
-                                <Input class="form-control" type="number" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
+                                <Input required class="form-control" type="number" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{ano}"></span>
                                 </div>
@@ -57,7 +57,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="restricao">Restrição de idade</label>
-                                <Input class="form-control" type="number" placeholder="Enter Restriction" th:field="*{restricao}" id="restricao" name="restricao" th:classappend="${#fields.hasErrors('restricao')} ? 'is-invalid'">
+                                <Input required class="form-control" type="number" placeholder="Enter Restriction" th:field="*{restricao}" id="restricao" name="restricao" th:classappend="${#fields.hasErrors('restricao')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{restricao}"></span>
                                 </div>
@@ -66,7 +66,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label>Serviço</label>
-                                <select class="form-control" th:field="*{servico}" id="servico" name="servico">
+                                <select required class="form-control" th:field="*{servico}" id="servico" name="servico">
                                     <option value="">Selecione uma opção</option>
                                     <option th:each="servico : ${servicos}" th:value="${servico.id}" th:text="${servico.nome}" th:classappend="${#fields.hasErrors('servico')} ? 'is-invalid'"></option>
                                 </select>
@@ -86,17 +86,17 @@
                                 </div>
                             </th:block>
                         </div>
-                        <div th:if="${serie.id} != null">
+                        <div th:if="${id} != null">
                             <label class="control-label">Temporadas</label>
                             <div class="form-row align-items-center" th:each="temporadas, rowStat :*{temporadas}">
                                 <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
                                 <div class="col-auto">
                                     <label class="sr-only" for="numero">Número</label>
-                                    <input type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
+                                    <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
                                 </div>
                                 <div class="col-auto">
                                     <label class="sr-only" for="ano">Ano</label>
-                                    <input type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
+                                    <input required type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
                                 </div>
                                 <div class="col-auto">
                                     <button th:if="*{temporadas[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{temporadas[__${rowStat.index}__].id}">Remover</button>
@@ -108,8 +108,8 @@
                             </div>
                         </div>
                         <div id="salvar" class="tile-footer">
-                            <button class="btn btn-success" type="submit" th:text="${serie.id == null} ? 'Próximo' : 'Salvar'" formnovalidate="formnovalidate"></button>
-                            <button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+                            <button class="btn btn-success" type="submit" th:text="*{id == null} ? 'Próximo' : 'Salvar'"></button>
+                            <button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
                         </div>
                     </form>
                 </div>

@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.televisivo.model.Episodio;
-import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.filters.UsuarioFilter;
-import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
@@ -42,18 +39,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
-    }
-
-    @Override
-	@Transactional(readOnly = true)
-    public List<Serie> findAllSeries(UsuarioSistema usuarioLogado) {
-        return usuarioRepository.findAllSeries(usuarioLogado.getUsuario().getId(), false);
-    }
-    
-    @Override
-	@Transactional(readOnly = true)
-    public List<Serie> findAllSeriesArq(UsuarioSistema usuarioLogado) {
-        return usuarioRepository.findAllSeries(usuarioLogado.getUsuario().getId(), true);
     }
 
     @Override
@@ -156,10 +141,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void blockedUsuario(Usuario usuario) {
         usuario.setAtivo(Boolean.FALSE);
         usuarioRepository.save(usuario);
-    }
-
-    @Override
-    public List<Episodio> listaEpisodio(UsuarioSistema usuarioLogado) {
-        return usuarioRepository.getOne(usuarioLogado.getUsuario().getId()).getEpisodios();
     }
 }

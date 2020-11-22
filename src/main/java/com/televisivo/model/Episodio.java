@@ -2,7 +2,7 @@ package com.televisivo.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-// import java.util.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,13 +17,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-// import javax.persistence.Temporal;
-// import javax.persistence.TemporalType;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-// import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,10 +66,10 @@ public class Episodio implements Serializable {
 	@Column(nullable = false)
     private int duracao;
 
-    // @DateTimeFormat(pattern = "dd/MM/yyyy")
-    // @Temporal(TemporalType.TIMESTAMP)
-    // @Column(nullable = false, columnDefinition = "DATE")
-    // private Date publicacao;
+    @DateTimeFormat(pattern = "mm/dd/yyyy")
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false, columnDefinition = "DATE")
+    private Date publicacao;
 
     @ManyToOne(targetEntity = Temporada.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))

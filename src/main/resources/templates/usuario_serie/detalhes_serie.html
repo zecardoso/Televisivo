@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{layout}">
+<head>
+    <title>Detalhes da série</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Detalhes da série</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item">Série</li>
+                <li class="breadcrumb-item"><a href="#">Detalhes</a></li>
+            </ul>
+        </div>
+        <div class="tile" th:object="${serie}">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div th:replace="fragments/alert"></div>
+                </div>
+            </div>
+            <h3 class="tile-title" th:text="*{nome}">Série</h3>
+            <div class="tile-body tile-footer">
+                <label class="control-label">Enredo</label>
+                <h4 th:text="*{enredo}"></h4>
+                <label class="control-label">Ano</label>
+                <h4 th:text="*{ano}"></h4>
+                <label class="control-label">Restrição de idade</label>
+                <h4 th:text="*{restricao}"></h4>
+                <label class="control-label">Serviço</label>
+                <h4 th:text="*{servico.nome}"></h4>
+                <label class="control-label">Quantidade de temporadas</label>
+                <h4 th:text="*{qtdTemporadas}"></h4>
+                <label class="control-label">Quantidade de seguidores</label>
+                <h4 th:text="*{qtdSeguidores}"></h4>
+                <label class="control-label">Categorias</label>
+                <div th:each="categoria : *{categorias}">
+                    <h4 th:text="${categoria.nome}"></h4>
+                </div>
+            </div>
+            <label class="control-label">Temporadas</label>
+            <div class="form-row" th:each="temporada : ${temporadas}">
+                <div class="col-md-5 mb-1">
+                    <a th:href="@{./temporada/{idTemporada}/detalhes(idTemporada=${temporada.id})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="${temporada.numero}"></span></a>
+                    <a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
+                </div>
+            </div>
+            <div class="tile-footer">
+                <button title="Voltar" class="btn btn-secondary" onclick="document.location='../'">Voltar</button>
+            </div>
+        </div>
+	</section>
+</body>
+</html>

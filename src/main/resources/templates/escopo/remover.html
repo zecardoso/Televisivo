@@ -21,11 +21,11 @@
                     <label class="control-label">Nome</label>
                     <h4 th:text="*{nome}"></h4>
                 </div>
-                <form id="remover" th:action="@{./remover}" method="POST" autocomplete="off">
+                <form id="remover" th:action="@{./remover}" method="POST">
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
-                        <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>
-                        <button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Remover</button>
+                        <button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
                     </div>
                 </form>
             </div>

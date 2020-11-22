@@ -36,14 +36,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/categoria")
+@RequestMapping("/categoria")
 public class CategoriaController {
 
     private static final String CATEGORIA = "categoria";
     private static final String SUCCESS = "success";
     private static final String DETALHES = "redirect:./detalhes";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
+    private static final String FAIL = "fail";
 
     @Autowired
     private CategoriaService categoriaService;
@@ -91,7 +90,7 @@ public class CategoriaController {
     @PostMapping("/salvar")
     public String salvar(@Valid Categoria categoria, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./cadastro";
         }
         categoriaService.save(categoria);
@@ -102,6 +101,7 @@ public class CategoriaController {
     @PostMapping("/{id}/alterar")
     public String alterar(@Valid Categoria categoria, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./alterar";
         }
         categoriaService.update(categoria);
@@ -121,7 +121,7 @@ public class CategoriaController {
         return DETALHES;
     }
 
-    @PostMapping(value = { "/salvar" }, params = "cancelar")
+    @PostMapping(value = "/salvar", params = "cancelar")
 	public String cancelarCadastro() {
 		return "redirect:./lista";
     }

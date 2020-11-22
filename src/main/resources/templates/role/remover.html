@@ -11,7 +11,7 @@
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
                 <li class="breadcrumb-item">Role</li>
-                <li class="breadcrumb-item"><a href="#">Remover</a></li>
+                <li class="breadcrumb-item"><a href="#remover">Remover</a></li>
             </ul>
         </div>
         <div class="container" th:object="${role}">
@@ -25,7 +25,7 @@
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
                         <button type="submit" class="btn btn-danger">Remover</button>
-                        <button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+                        <button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
                     </div>
                 </form>
             </div>

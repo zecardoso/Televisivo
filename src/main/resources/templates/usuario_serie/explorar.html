@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{layout}">
+<head>
+    <title>Lista de séries</title>
+</head>
+<body>
+	<section layout:fragment="body">
+		<div class="app-title">
+			<h1>Lista de séries</h1>
+			<ul class="app-breadcrumb breadcrumb">
+				<li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+				<li class="breadcrumb-item">Série</li>
+				<li class="breadcrumb-item"><a href="#">Explorar</a></li>
+			</ul>
+		</div>
+		<div class="tile">
+			<a th:href="@{/series}" type="button" class="btn btn-primary">Explorar <span class="badge badge-light" th:text="${usuarioLogado.getUsuario().getQtdSeries()}"></span></a>
+			<a th:href="@{/series/salvas}" type="button" class="btn btn-primary">Salvas <span class="badge badge-light" th:text="${usuarioLogado.getUsuario().getQtdSeries()}"></span></a>
+			<a th:href="@{/series/arquivadas}" type="button" class="btn btn-primary">Arquivadas <span class="badge badge-light" th:text="${usuarioLogado.getUsuario().getQtdSeriesArq()}"></span></a>
+		</div>
+		<div class="tile">
+			<div class="tile-body">
+				<div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<div th:replace="fragments/alert"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-1">
+							<select class="form-control form-control-md" id="pageSizeSelect">
+								<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
+							</select>
+						</div>
+						<form method="GET" th:object="${serieFilter}">
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome" aria-label="Nome">
+								<div class="input-group-append">
+									<button class="input-group-text">Pesquisar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="card-columns">
+						<div class="card" th:each="serie :${pagina.conteudo}">
+							<form th:action="@{/series/salvar}" method="POST">
+								<div class="card-body">
+									<a class="card-link" th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="card-title" th:text="*{serie.nome}"></h5></a>
+									<p class="card-text" th:text="*{serie.enredo}"></p>
+									<button class="btn btn-success" type="submit" name="salvar" th:value="*{serie.id}">Salvar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div th:replace="fragments/pagination :: pagination"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<th:block layout:fragment="javascript-extra">
+		<script>
+			$(document).ready(function(){
+				changePageAndSize();
+			});
+
+			function changePageAndSize(){
+				$('#pageSizeSelect').change(function(e){
+					window.location.replace("/series?tamanho="+this.value+"&pagina=0");
+				});
+			}
+		</script>
+	</th:block>
+</body>
+</html>

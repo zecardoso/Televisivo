@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -24,7 +24,7 @@
         </div>
         <div class="login-box">
             <form class="login-form" method="POST" th:action="@{/login}">
-                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>Login</h3>
+                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user" aria-hidden="true"></i>Login</h3>
                 <div class="form-group">
                     <label class="control-label">Usuário</label>
                     <input class="form-control" type="text" id="email" name="email" placeholder="E-mail" autofocus>
@@ -44,20 +44,20 @@
                     </div>
                 </div>
                 <div class="form-group btn-container">
-                    <button class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>Entrar</button>
+                    <button class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw" aria-hidden="true"></i>Entrar</button>
                 </div>
             </form>
             <form class="forget-form" action="index.html">
-                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Esqueceu a senha</h3>
+                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock" aria-hidden="true"></i>Esqueceu a senha</h3>
                 <div class="form-group">
                     <label class="control-label">Email</label>
                     <input class="form-control" type="text" placeholder="Email">
                 </div>
                 <div class="form-group btn-container">
-                    <button class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>Redefinir</button>
+                    <button class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw" aria-hidden="true"></i>Redefinir</button>
                 </div>
                 <div class="form-group mt-3">
-                    <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i>Volte ao login</a></p>
+                    <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw" aria-hidden="true"></i>Volte ao login</a></p>
                 </div>
             </form>
         </div>

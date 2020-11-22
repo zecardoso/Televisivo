@@ -32,11 +32,11 @@
 						<a type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
 					</div>
 				</div>
-				<form id="remover" th:action="@{./remover}" method="POST" autocomplete="off">
+				<form id="remover" th:action="@{./remover}" method="POST">
 					<input type="hidden" th:field="*{id}">
 					<div class="tile-footer">
 						<button type="submit" class="btn btn-danger">Remover</button>
-						<button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+						<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
 					</div>
 				</form>
             </div>

@@ -25,12 +25,12 @@
                 </div>
 				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{./alterar}" method="POST" autocomplete="off">
+                    <form th:action="@{./alterar}" method="POST">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <Input hidden th:field="*{serie}">
                                 <label for="numero">Numero</label>
-                                <Input class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{numero}"></span>
                                 </div>
@@ -39,7 +39,7 @@
 						<div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="ano">Ano</label>
-                                <Input class="form-control" type="text" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{ano}"></span>
                                 </div>
@@ -50,24 +50,24 @@
                             <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
                             <div class="col-auto">
                                 <label class="sr-only" for="numero">Número da temporada</label>
-                                <input type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
+                                <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
                                 <label class="sr-only" for="nome">Nome do episodio</label>
-                                <input type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
+                                <input required type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
                                 <label class="sr-only" for="enredo">Enredo</label>
-                                <input type="text" class="form-control mb-2" placeholder="Enredo" th:field="*{episodios[__${rowStat.index}__].enredo}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].enredo')} ? 'is-invalid'">
+                                <input required type="text" class="form-control mb-2" placeholder="Enredo" th:field="*{episodios[__${rowStat.index}__].enredo}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].enredo')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
                                 <label class="sr-only" for="duracao">Duração</label>
-                                <input type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
+                                <input required type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
                             </div>
-                            <!-- <div class="col-auto">
+                            <div class="col-auto">
                                 <label class="sr-only" for="publicacao">Publicação</label>
-                                <input type="date" class="form-control mb-2" placeholder="Publicação" th:field="*{episodios[__${rowStat.index}__].publicacao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].publicacao')} ? 'is-invalid'">
-                            </div> -->
+                                <input required type="date" class="form-control mb-2" placeholder="Publicação" th:field="*{episodios[__${rowStat.index}__].publicacao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].publicacao')} ? 'is-invalid'">
+                            </div>
                             <div class="col-auto">
                                 <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
                                 <button th:if="*{episodios[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>

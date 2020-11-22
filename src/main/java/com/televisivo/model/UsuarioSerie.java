@@ -2,6 +2,7 @@ package com.televisivo.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,7 @@ import lombok.ToString;
 public class UsuarioSerie implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @EmbeddedId
     private UsuarioSerieId id;
 
@@ -31,5 +32,6 @@ public class UsuarioSerie implements Serializable {
     @JoinColumn(name = "serie_id", insertable = false, updatable = false)
     private Serie serie;
 
-    private Boolean arquivada;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private Boolean arquivada = false;
 }

@@ -26,13 +26,13 @@
                 </div>
 				<h3 class="tile-title" th:text="'Episodio ' + ${episodio.numero}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{./alterar}" method="POST" autocomplete="off">
+                    <form th:action="@{./alterar}" method="POST">
                         <Input type="text" hidden th:field="*{temporada.serie.id}">
                         <Input type="text" hidden th:field="*{temporada.id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="numero">Numero</label>
-                                <Input class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{numero}"></span>
                                 </div>
@@ -41,7 +41,7 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="nome">Nome</label>
-                                <Input class="form-control" type="text" placeholder="Enter nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{nome}"></span>
                                 </div>
@@ -50,7 +50,7 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="enredo">Enredo</label>
-                                <Input class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter enredo" th:field="*{enredo}" id="enredo" name="enredo" th:classappend="${#fields.hasErrors('enredo')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{enredo}"></span>
                                 </div>
@@ -59,21 +59,21 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="duracao">Duração</label>
-                                <Input class="form-control" type="text" placeholder="Enter duracao" th:field="*{duracao}" id="duracao" name="duracao" th:classappend="${#fields.hasErrors('duracao')} ? 'is-invalid'">
+                                <Input required class="form-control" type="text" placeholder="Enter duracao" th:field="*{duracao}" id="duracao" name="duracao" th:classappend="${#fields.hasErrors('duracao')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{duracao}"></span>
                                 </div>
 							</div>
 						</div>
-                        <!-- <div class="form-row">
+                        <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="publicacao">Publicação</label>
-                                <Input class="form-control" type="date" placeholder="Enter publicacao" th:field="*{publicacao}" id="publicacao" name="publicacao" th:classappend="${#fields.hasErrors('publicacao')} ? 'is-invalid'">
+                                <Input required class="form-control" type="date" th:field="*{publicacao}" id="publicacao" name="publicacao" th:classappend="${#fields.hasErrors('publicacao')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{publicacao}"></span>
                                 </div>
 							</div>
-						</div> -->
+						</div>
                         <div id="salvar" class="tile-footer">
 							<button class="btn btn-success" type="submit">Salvar</button>
 							<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>

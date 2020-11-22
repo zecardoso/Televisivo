@@ -27,9 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "registrar")
+@RequestMapping("registrar")
 public class RegistrarUsuarioController {
-    
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 

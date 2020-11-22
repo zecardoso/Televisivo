@@ -25,14 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/permissao")
+@RequestMapping("/permissao")
 public class PermissaoController {
 
     private static final String PERMISSAO = "permissao";
     private static final String SUCCESS = "success";
     private static final String DETALHES = "redirect:./detalhes";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
+    private static final String FAIL = "fail";
 
     @Autowired
     private PermissaoService permissaoService;
@@ -77,7 +76,7 @@ public class PermissaoController {
     @PostMapping("/salvar")
     public String salvar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./cadastro";
         }
         permissaoService.save(permissao);
@@ -88,6 +87,7 @@ public class PermissaoController {
     @PostMapping("/{id}/alterar")
     public String alterar(@Valid Permissao permissao, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./alterar";
         }
         permissaoService.update(permissao);
@@ -107,7 +107,7 @@ public class PermissaoController {
         return DETALHES;
     }
 
-    @PostMapping(value = { "/salvar" }, params = "cancelar")
+    @PostMapping(value = "/salvar", params = "cancelar")
 	public String cancelarCadastro() {
 		return "redirect:./lista";
     }

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{layout}">
 <head>
-    <title th:text="${rolePermissao.id == null} ? 'Cadastrar direito' : 'Alterar direito'"></title>
+    <title th:text="*{id == null} ? 'Cadastrar direito' : 'Alterar direito'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="${id == null} ? 'Cadastrar direito' : 'Alterar direito'"></h1>
+            <h1 th:text="*{id == null} ? 'Cadastrar direito' : 'Alterar direito'"></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li th:if="${id == null}" class="breadcrumb-item"><a href="#">Direito</a></li>
-                <li th:if="${id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Direito</a></li>
-                <li class="breadcrumb-item"><a href="#salvar" th:text="${id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li th:if="*{id == null}" class="breadcrumb-item"><a href="#">Direito</a></li>
+                <li th:if="*{id != null}"class="breadcrumb-item"><a th:href="@{./detalhes}">Direito</a></li>
+                <li class="breadcrumb-item"><a href="#salvar" th:text="*{id == null} ? 'Cadastrar' : 'Alterar'"></a></li>
             </ul>
         </div>
         <div class="container">
@@ -23,13 +23,13 @@
                         <div th:replace="fragments/alert"></div>
                     </div>
                 </div>
-				<h3 class="tile-title" th:text="${rolePermissao.id == null} ? 'Novo direito' : *{rolePermissao.nome}"></h3>
+				<h3 class="tile-title" th:text="*{id == null} ? 'Novo direito' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="@{./salvar}" method="POST" autocomplete="off">
+                    <form th:action="@{./salvar}" method="POST">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="roleid" class="control-label">Grupo</label>
-                                <select class="form-control" required th:field="*{role}" id="roleid" name="roleid">
+                                <select required class="form-control" th:field="*{role}" id="roleid" name="roleid">
                                     <option value="">Selecione uma opção</option>
                                     <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.nome}" th:classappend="${#fields.hasErrors('role')} ? 'is-invalid'"></option>
                                 </select>
@@ -41,7 +41,7 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="permissaoid" class="control-label">Permissão</label>
-                                <select class="form-control" required th:field="*{permissao}" id="permissaoid" name="permissaoid">
+                                <select required class="form-control" th:field="*{permissao}" id="permissaoid" name="permissaoid">
                                     <option value="">Selecione uma opção</option>
                                     <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" th:classappend="${#fields.hasErrors('permissao')} ? 'is-invalid'"></option>
                                 </select>
@@ -53,7 +53,7 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label for="escopoid" class="control-label">Escopo</label>
-                                <select class="form-control" required th:field="*{escopo}" id="escopoid" name="escopoid">
+                                <select required class="form-control" th:field="*{escopo}" id="escopoid" name="escopoid">
                                     <option value="">Selecione uma opção</option>
                                     <option th:each="escopo : ${escopos}" th:value="${escopo.id}" th:text="${escopo.nome}" th:classappend="${#fields.hasErrors('escopo')} ? 'is-invalid'"></option>
                                 </select>
@@ -64,7 +64,7 @@
                         </div>
                         <div id="salvar" class="tile-footer">
 							<button class="btn btn-success" type="submit" name="salvar">Salvar</button>
-							<button class="btn btn-secondary" type="submit" formnovalidate name="cancelar">Cancelar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
 						</div>
                     </form>
                 </div>

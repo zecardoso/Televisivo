@@ -43,17 +43,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/serie")
+@RequestMapping("/serie")
 public class SerieController {
 
     private static final String SERIE = "serie";
     private static final String TEMPORADA = "temporada";
     private static final String TEMPORADAS = "temporadas";
     private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+    private static final String MESSAGE = "Verifique os campos!";
     private static final String DETALHES = "redirect:./detalhes";
     private static final String HTML_SERIE = "/serie/serie";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private SerieService serieService;
@@ -88,7 +88,7 @@ public class SerieController {
     @PostMapping("/salvar")
     public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:/serie/cadastro";
         }
         serieService.save(serie);
@@ -121,7 +121,7 @@ public class SerieController {
     @PostMapping("/{id}/alterar")
     public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:./alterar";
         }
         serieService.salvarTemporada(serie);
@@ -134,7 +134,7 @@ public class SerieController {
     @PostMapping(value = "/{id}/alterar", params = "addRow")
     public ModelAndView adicionarTemporada(@PathVariable("id") Long id, Serie serie, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, MESSAGE);
             return viewAlterar(id);
         }
         serieService.salvarTemporada(serie);
@@ -197,7 +197,7 @@ public class SerieController {
         return DETALHES;
     }
 
-    @PostMapping(value = { "/salvar" }, params = "cancelar")
+    @PostMapping(value = "/salvar", params = "cancelar")
 	public String cancelarCadastro() {
 		return "redirect:./lista";
     }

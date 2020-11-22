@@ -129,6 +129,7 @@ public class TemporadaServiceImpl implements TemporadaService {
         episodioNew.setNumero(episodio.getNumero()+1);
         episodioNew.setDuracao(episodio.getDuracao());
         episodioNew.setEnredo(episodio.getEnredo());
+        episodioNew.setPublicacao(episodio.getPublicacao());
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodioNew);
         return temporada;

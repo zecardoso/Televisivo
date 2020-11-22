@@ -19,13 +19,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/serie/{id}/temporada")
+@RequestMapping("/serie/{id}/temporada")
 public class TemporadaController {
 
     private static final String TEMPORADA = "temporada";
     private static final String EPISODIOS = "episodios";
     private static final String EPISODIO = "episodio";
     private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
     private static final String REDIRECT_SERIE = "redirect:../../detalhes";
     private static final String REDIRECT_TEMPORADA = "redirect:./detalhes";
     private static final String HTML_TEMPORADA = "/temporada/temporada";
@@ -57,7 +58,7 @@ public class TemporadaController {
     @PostMapping("/{id}/alterar")
     public String alterar(@PathVariable("id") Long id, @Valid Temporada temporada, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("message", "Verifique os campos!");
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./alterar";
         }
         temporadaService.salvarEpisodio(temporada);
@@ -70,7 +71,7 @@ public class TemporadaController {
     @PostMapping(value = "/{id}/alterar", params = "addRow")
     public ModelAndView adicionarEpisodio(@PathVariable("id") Long id, Temporada temporada, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("message", "Verifique os campos!");
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return viewAlterar(id);
         }
         temporadaService.salvarEpisodio(temporada);

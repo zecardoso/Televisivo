@@ -27,12 +27,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/direito")
+@RequestMapping("/direito")
 public class RolePermissaoController {
 
     private static final String SUCCESS = "success";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
+    private static final String FAIL = "fail";
 
     @Autowired
     private RoleService roleService;
@@ -64,7 +63,7 @@ public class RolePermissaoController {
     @PostMapping("/salvar")
     public String salvar(@Valid RolePermissao rolePermissao, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./cadastro";
         }
         RolePermissaoId id = new RolePermissaoId();

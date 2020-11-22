@@ -87,6 +87,12 @@ public class Usuario implements UserDetails {
     @Column(nullable = true)
     private Genero genero;
 
+    @Column(name = "qtd_series", nullable = true)
+    private int qtdSeries;
+
+    @Column(name = "qtd_series_arq", nullable = true)
+    private int qtdSeriesArq;
+
     @Column(length = 100, nullable = false)
     private String password;
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{layout}">
+<head>
+    <title>Detalhes da temporada</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
+</head>
+<body>
+    <section layout:fragment="body">
+        <div class="app-title">
+            <h1>Detalhes da temporada</i></h1>
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{../../detalhes}">Série</a></li>
+                <li class="breadcrumb-item">Temporada</li>
+                <li class="breadcrumb-item"><a href="#">Detalhes</a></li>
+            </ul>
+        </div>
+        <div class="tile" th:object="${temporada}">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div th:replace="fragments/alert"></div>
+                </div>
+            </div>
+            <h3 class="tile-title" th:text="'Temporada ' + *{numero}">Serie</h3>
+            <div class="tile-body tile-footer">
+                <label class="control-label">Ano</label>
+                <h4 th:text="*{ano}"></h4>
+                <label class="control-label">Avaliação</label>
+                <h4 th:text="*{avaliacao}"></h4>
+                <label class="control-label">Quantidade de episodios</label>
+                <h4 th:text="*{qtdEpisodios}"></h4>
+            </div>
+            <label class="control-label">Episodios</label>
+            <div class="form-row" th:each="episodio : ${episodios}">
+                <div class="col-md-5 mb-1">
+                    <a th:href="@{./episodio/{idEpisodio}/detalhes(idEpisodio=${episodio.id})}" type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
+                </div>
+            </div>
+            <div class="tile-footer">
+                <button title="Voltar" class="btn btn-secondary" onclick="document.location='../../detalhes'">Voltar</button>
+            </div>
+        </div>
+	</section>
+</body>
+</html>

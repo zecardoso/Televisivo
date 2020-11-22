@@ -25,14 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/escopo")
+@RequestMapping("/escopo")
 public class EscopoController {
 
     private static final String ESCOPO = "escopo";
     private static final String SUCCESS = "success";
     private static final String DETALHES = "redirect:./detalhes";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
+    private static final String FAIL = "fail";
 
     @Autowired
     private EscopoService escopoService;
@@ -78,7 +77,7 @@ public class EscopoController {
     @PostMapping("/salvar")
     public String salvar(@Valid Escopo escopo, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./cadastro";
         }
         escopoService.save(escopo);
@@ -89,6 +88,7 @@ public class EscopoController {
     @PostMapping("/{id}/alterar")
     public String alterar(@Valid Escopo escopo, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return "redirect:./alterar";
         }
         escopoService.update(escopo);
@@ -108,7 +108,7 @@ public class EscopoController {
         return DETALHES;
     }
 
-    @PostMapping(value = { "/salvar" }, params = "cancelar")
+    @PostMapping(value = "/salvar", params = "cancelar")
 	public String cancelarCadastro() {
 		return "redirect:./lista";
     }

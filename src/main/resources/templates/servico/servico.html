@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{layout}">
 <head>
-    <title th:text="${servico.id == null} ? 'Cadastrar serviço' : 'Alterar serviço'"></title>
+    <title th:text="*{id == null} ? 'Cadastrar serviço' : 'Alterar serviço'"></title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-switch.min.css}"/>
 </head>
 <body>
     <section layout:fragment="body">
         <div class="app-title">
-            <h1 th:text="${servico.id == null} ? 'Cadastrar serviço' : 'Alterar serviço'"></h1>
+            <h1 th:text="*{id == null} ? 'Cadastrar serviço' : 'Alterar serviço'"></h1>
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
-                <li class="breadcrumb-item"><a th:href="${id == null} ? @{#} : @{./detalhes}">Serviço</a></li>
-                <li class="breadcrumb-item"><a href="#salvar" th:text="${servico.id == null} ? 'Cadastrar' : 'Alterar'">Cadastrar</a></li>
+                <li class="breadcrumb-item"><a th:href="*{id == null} ? @{#} : @{./detalhes}">Serviço</a></li>
+                <li class="breadcrumb-item"><a href="#salvar" th:text="*{id == null} ? 'Cadastrar' : 'Alterar'"></a></li>
             </ul>
         </div>
         <div class="container">
@@ -22,14 +22,14 @@
                         <div th:replace="fragments/alert"></div>
                     </div>
                 </div>
-				<h3 class="tile-title" th:text="${id == null} ? 'Novo serviço' : *{nome}"></h3>
+				<h3 class="tile-title" th:text="*{id == null} ? 'Novo serviço' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form th:action="${id == null} ? @{./salvar} : @{./alterar}" method="POST" autocomplete="off">
+                    <form th:action="*{id == null} ? @{./salvar} : @{./alterar}" method="POST">
 						<input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
 								<label for="nome">Nome</label>
-								<Input class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+								<Input required class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
 								<div class="invalid-feedback">
 									<span th:errors="*{nome}"></span>
 								</div>

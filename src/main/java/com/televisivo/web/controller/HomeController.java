@@ -27,7 +27,7 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping(value = { "/login" }, method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
     public String loginPage(@RequestParam(value = "mensagem", required = false) String mensagem, Model model) {
         if (Objects.isNull(mensagem)) {
             model.addAttribute("acao", false);

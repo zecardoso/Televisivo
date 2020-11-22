@@ -10,14 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
-import com.televisivo.model.Episodio;
 import com.televisivo.model.Role;
-import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.UsuarioFilter;
 import com.televisivo.repository.pagination.Pagina;
-import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.JasperReportsService;
 import com.televisivo.service.RoleService;
 import com.televisivo.service.UsuarioService;
@@ -30,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,16 +43,15 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
-@RequestMapping(value = "/usuario")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     private static final String USUARIO = "usuario";
     private static final String SUCCESS = "success";
-    private static final String LISTA = "lista";
     private static final String DETALHES = "redirect:./detalhes";
+    private static final String CADASTRO = "redirect:./cadastro";
     private static final String ALTERAR = "redirect:./alterar";
-    private static final String MESSAGE = "message";
-    private static final String VERIFIQUE = "Verifique os campos!";
+    private static final String FAIL = "fail";
 
     @Autowired
     private UsuarioService usuarioService;
@@ -75,30 +70,6 @@ public class UsuarioController {
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
         modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", pagina);
-        return modelAndView;
-    }
-
-    @GetMapping("/series")
-    public ModelAndView listaseries(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/lista");
-        List<Serie> lista = usuarioService.findAllSeries(usuarioLogado);
-        modelAndView.addObject(LISTA, lista);
-        return modelAndView;
-    }
-
-    @GetMapping("/series/arquivadas")
-    public ModelAndView listaseriesarq(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/lista");
-        List<Serie> lista = usuarioService.findAllSeriesArq(usuarioLogado);
-        modelAndView.addObject(LISTA, lista);
-        return modelAndView;
-    }
-
-    @GetMapping("/episodios")
-    public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("/usuario_episodio/lista");
-        List<Episodio> lista = usuarioService.listaEpisodio(usuarioLogado);
-        modelAndView.addObject(LISTA, lista);
         return modelAndView;
     }
 
@@ -131,17 +102,17 @@ public class UsuarioController {
     @PostMapping("/salvar")
     public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(MESSAGE, VERIFIQUE);
-            return "redirect:./cadastro";
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+            return CADASTRO;
         }
         try {
             usuarioService.save(usuario);
         } catch (EmailCadastradoException e) {
-            result.rejectValue("email", e.getMessage(), e.getMessage());
-            return "redirect:./cadastro";
+            result.rejectValue("email", e.getMessage());
+            return CADASTRO;
         } catch (SenhaError e) {
-            result.rejectValue("password", e.getMessage(), e.getMessage());
-            return "redirect:./cadastro";
+            result.rejectValue("password", e.getMessage());
+            return CADASTRO;
         }
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
         return "redirect:./lista";
@@ -149,16 +120,17 @@ public class UsuarioController {
 
     @PostMapping("/{id}/alterar")
     public String alterar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return ALTERAR;
-        }
+        // if (result.hasErrors()) {
+        //     attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+        //     return ALTERAR;
+        // }
         try {
 			usuarioService.update(usuario);
 		} catch(EmailCadastradoException e) {
-			result.rejectValue("email", e.getMessage(), e.getMessage());
+			result.rejectValue("email", e.getMessage());
 			return ALTERAR;
 		} catch (SenhaError e) {
-            result.rejectValue("password", e.getMessage(), e.getMessage());
+            result.rejectValue("password", e.getMessage());
             return ALTERAR;
         }
         attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");

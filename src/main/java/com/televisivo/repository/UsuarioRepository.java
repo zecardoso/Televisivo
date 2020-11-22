@@ -2,7 +2,6 @@ package com.televisivo.repository;
 
 import java.util.List;
 
-import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.repository.query.UsuarioQuery;
 
@@ -19,7 +18,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>, Usuario
 
     @Query("SELECT distinct u FROM Usuario u LEFT JOIN FETCH u.roles")
     List<Usuario> findAllUsuarios();
-    
-    @Query("SELECT s FROM Serie s RIGHT JOIN UsuarioSerie u on u.serie.id = s.id WHERE u.arquivada = :arquivada AND u.usuario.id = :usuarioLogado")
-    List<Serie> findAllSeries(@Param("usuarioLogado") Long usuarioLogado, @Param("arquivada") Boolean arquivada);
 }

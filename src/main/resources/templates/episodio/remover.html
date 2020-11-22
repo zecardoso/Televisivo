@@ -28,15 +28,15 @@
 					<h4 th:text="*{enredo}"></h4>
 					<label class="control-label">Duração</label>
 					<h4 th:text="*{duracao}"></h4>
-					<!-- <label class="control-label">Publicação</label>
-					<h4 th:text="*{publicacao}"></h4> -->
+					<label class="control-label">Publicação</label>
+					<h4 th:text="*{publicacao}"></h4>
 					<label class="control-label">Avaliação</label>
 					<h4 th:text="*{avaliacao}"></h4>
-					<form th:action="@{./remover}" method="POST" autocomplete="off">
+					<form id="remover" th:action="@{./remover}" method="POST">
 						<input type="hidden" th:field="*{id}">
                         <div class="tile-footer">
 							<button type="submit" class="btn btn-danger">Remover</button>
-							<button class="btn btn-secondary" type="submit" name="cancelar">Cancelar</button>
+							<button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
 						</div>
                     </form>
                 </div>

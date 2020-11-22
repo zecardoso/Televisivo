@@ -42,11 +42,11 @@
 						<a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
 					</div>
 				</div>
-                <form id="remover" th:action="@{./remover}" method="POST" autocomplete="off">
+                <form id="remover" th:action="@{./remover}" method="POST">
                     <input type="hidden" th:field="*{id}">
                     <div class="tile-footer">
-                        <button type="submit" class="btn btn-danger" formnovalidate="formnovalidate">Remover</button>
-                        <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Remover</button>
+                        <button class="btn btn-secondary" type="submit" name="cancelar" formnovalidate>Cancelar</button>
                     </div>
                 </form>
             </div>
