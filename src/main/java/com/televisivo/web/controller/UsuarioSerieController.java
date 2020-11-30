@@ -15,6 +15,7 @@ import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.EpisodioService;
 import com.televisivo.service.SerieService;
 import com.televisivo.service.TemporadaService;
+import com.televisivo.service.UsuarioEpisodioService;
 import com.televisivo.service.UsuarioSerieService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class UsuarioSerieController {
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;
+
+    @Autowired
+    private UsuarioEpisodioService usuarioEpisodioService;
 
     @Autowired
     private SerieService serieService;
@@ -104,7 +108,7 @@ public class UsuarioSerieController {
     @GetMapping("/episodios")
     public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
         ModelAndView modelAndView = new ModelAndView("/usuario_episodio/lista");
-        List<Episodio> lista = usuarioSerieService.listaEpisodio(usuarioLogado);
+        List<Episodio> lista = usuarioEpisodioService.findAllEpisodios(usuarioLogado);
         modelAndView.addObject(LISTA, lista);
         return modelAndView;
     }
@@ -139,7 +143,7 @@ public class UsuarioSerieController {
     public String removerSal(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter("remover")));
         usuarioSerieService.atualizarQtdSeries(usuarioLogado);
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
+        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série removida com sucesso.");
         return "redirect:/series/salvas";
     }

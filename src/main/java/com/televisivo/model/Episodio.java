@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -68,13 +67,13 @@ public class Episodio implements Serializable {
 
     @DateTimeFormat(pattern = "mm/dd/yyyy")
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false, columnDefinition = "DATE")
+    @Column(nullable = true, columnDefinition = "DATE")
     private Date publicacao;
 
     @ManyToOne(targetEntity = Temporada.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))
     private Temporada temporada;
 
-    @ManyToMany(mappedBy = "episodios", cascade = CascadeType.ALL)
-    private List<Usuario> usuarios = new ArrayList<>();
+    @OneToMany(mappedBy = "episodio", fetch = FetchType.LAZY)
+    private List<UsuarioEpisodio> usuarioEpisodios = new ArrayList<>();
 }

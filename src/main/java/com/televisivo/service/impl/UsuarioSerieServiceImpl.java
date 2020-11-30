@@ -2,7 +2,6 @@ package com.televisivo.service.impl;
 
 import java.util.List;
 
-import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.UsuarioSerie;
@@ -44,11 +43,6 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     }
 
     @Override
-    public List<Episodio> listaEpisodio(UsuarioSistema usuarioLogado) {
-        return usuarioRepository.getOne(findUsuario(usuarioLogado)).getEpisodios();
-    }
-
-    @Override
     public void salvar(UsuarioSistema usuarioLogado, Long serie) {
         UsuarioSerie usuarioSerie = new UsuarioSerie();
         UsuarioSerieId id = new UsuarioSerieId();
@@ -78,13 +72,13 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     @Override
     public void atualizarQtdSeries(UsuarioSistema usuarioLogado) {
         Usuario usuario = usuarioRepository.getOne(findUsuario(usuarioLogado));
-        usuario.setQtdSeries(usuarioSerieRepository.qtd(findUsuario(usuarioLogado), false));
+        usuario.setQtdSeries(usuarioSerieRepository.qtd(usuario.getId(), false));
     }
 
     @Override
     public void atualizarQtdSeriesArq(UsuarioSistema usuarioLogado) {
         Usuario usuario = usuarioRepository.getOne(findUsuario(usuarioLogado));
-        usuario.setQtdSeriesArq(usuarioSerieRepository.qtd(findUsuario(usuarioLogado), true));
+        usuario.setQtdSeriesArq(usuarioSerieRepository.qtd(usuario.getId(), true));
     }
 
     @Override

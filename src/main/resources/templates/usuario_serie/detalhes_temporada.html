@@ -32,9 +32,13 @@
             </div>
             <label class="control-label">Episodios</label>
             <div class="form-row" th:each="episodio : ${episodios}">
-                <div class="col-md-5 mb-1">
-                    <a th:href="@{./episodio/{idEpisodio}/detalhes(idEpisodio=${episodio.id})}" type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
-                </div>
+                <form th:action="@{./detalhes}" method="POST">
+                    <div class="col-md mb-1">
+                        <a th:href="@{./episodio/{idEpisodio}/detalhes(idEpisodio=${episodio.id})}" type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
+                        <button class="btn btn-success" type="submit" name="marcarEpisodio" th:value="${episodio.id}">Marcar</button>
+                        <button class="btn btn-danger" type="submit" name="desmarcarEpisodio" th:value="${episodio.id}">Desmarcar</button>
+                    </div>
+                </form>
             </div>
             <div class="tile-footer">
                 <button title="Voltar" class="btn btn-secondary" onclick="document.location='../../detalhes'">Voltar</button>

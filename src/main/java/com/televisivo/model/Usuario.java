@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -93,6 +92,9 @@ public class Usuario implements UserDetails {
     @Column(name = "qtd_series_arq", nullable = true)
     private int qtdSeriesArq;
 
+    @Column(name = "qtd_episodios", nullable = true)
+    private int qtdEpisodios;
+
     @Column(length = 100, nullable = false)
     private String password;
 
@@ -124,10 +126,8 @@ public class Usuario implements UserDetails {
     @JoinTable(name = "usuario_categoria", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "usuario_episodio", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "episodio_id"))
-    private List<Episodio> episodios;
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<UsuarioEpisodio> usuarioEpisodios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
