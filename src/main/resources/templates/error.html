@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{layout}">
+<head>
+	<title>Error 403</title>
+</head>
+<section layout:fragment="body">
+	<div class="page-error tile">
+		<h1><i class="fa fa-exclamation-triangle" aria-hidden="true"></i><span th:text="${status}"></span></h1>
+		<h2 th:text="${error}"></h2>
+		<span th:text="${message}"></span>
+		<br/>
+		<p><a class="btn btn-primary" href="javascript:window.history.back();">Voltar a pagina anterior</a></p>
+	</div>
+</section>
+</html>
