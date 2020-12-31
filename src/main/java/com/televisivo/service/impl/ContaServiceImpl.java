@@ -29,6 +29,23 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
+    public Usuario save(Usuario usuario) {
+        Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
+        if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
+            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+        }
+        if (!usuario.getPassword().equals(usuario.getContraSenha())) {
+            throw new SenhaError("Senha incorreta.");
+        }
+        if (usuario.getPassword().isBlank() || (usuario.getContraSenha()).isBlank()) {
+            throw new SenhaError("A senha não pode estar em branco.");
+        }
+        usuario.setPassword(encodePassword(usuario.getPassword()));
+        usuario.setAtivo(Boolean.TRUE);
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
     @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         Usuario usuarioOrg = getOne(usuario.getId());

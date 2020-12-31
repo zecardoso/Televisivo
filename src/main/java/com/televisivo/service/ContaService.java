@@ -7,6 +7,7 @@ import com.televisivo.model.Usuario;
 public interface ContaService {
 
     Optional<Usuario> findUsuarioByEmail(String email);
+    Usuario save(Usuario usuario);
     Usuario update(Usuario usuario);
-	Usuario getOne(Long id);
+    Usuario getOne(Long id);
 }

@@ -1,11 +1,7 @@
 package com.televisivo.controller;
 
-import java.util.List;
-
-import com.televisivo.model.Role;
 import com.televisivo.model.enumerate.Genero;
 import com.televisivo.security.UsuarioSistema;
-import com.televisivo.service.RoleService;
 import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
@@ -33,9 +29,6 @@ public class ContaController {
 
     @Autowired
     private UsuarioService contaService;
-
-    @Autowired
-    private RoleService roleService;
 
     @GetMapping("/alterar")
     public ModelAndView viewAlterar(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
@@ -73,11 +66,6 @@ public class ContaController {
     @ModelAttribute("generos")
     public Genero[] getGeneros() {
         return Genero.values();
-    }
-
-    @ModelAttribute("roles")
-    public List<Role> getRoles() {
-        return roleService.findAll();
     }
 
     @PostMapping(value = "/alterar", params = "cancelar")

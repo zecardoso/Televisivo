@@ -4,14 +4,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Serie;
+import com.televisivo.model.Usuario;
+import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.SerieService;
 import com.televisivo.service.UsuarioService;
+import com.televisivo.service.exceptions.EmailCadastradoException;
+import com.televisivo.service.exceptions.SenhaError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -21,14 +26,25 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class HomeController {
+
+    private static final String CADASTRO = "redirect:/login";
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
+
+    @Autowired
+    private UsuarioService contaService;
 
     @Autowired
     private SerieService serieService;
@@ -53,7 +69,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
-    public String loginPage(@RequestParam(value = "mensagem", required = false) String mensagem, Model model) {
+    public ModelAndView loginPage(Usuario usuario, @RequestParam(value = "mensagem", required = false) String mensagem, Model model) {
         if (Objects.isNull(mensagem)) {
             model.addAttribute("acao", false);
         } else if (mensagem.trim().equals("true")) {
@@ -63,6 +79,24 @@ public class HomeController {
             model.addAttribute("acao", true);
             model.addAttribute("mensagem", mensagem);
         }
-        return "login";
+        ModelAndView modelAndView = new ModelAndView("login");
+        modelAndView.addObject("usuario", usuario);
+        return modelAndView;
+    }
+
+    @PostMapping("/salvar")
+    public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+            return CADASTRO;
+        }
+        contaService.save(usuario);
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        return "redirect:/";
+    }
+
+    @ModelAttribute("generos")
+    public Genero[] getGeneros() {
+        return Genero.values();
     }
 }
