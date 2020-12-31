@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping()
+    @GetMapping("*")
     public String home(@AuthenticationPrincipal UsuarioSistema usuarioLogado, ModelMap model) {
         if (usuarioLogado == null) {
             return "/login";
@@ -39,10 +39,5 @@ public class HomeController {
             model.addAttribute("mensagem", mensagem);
         }
         return "login";
-    }
-
-    @GetMapping("/403")
-    public String accessDaniedHandler() {
-        return "403";
     }
 }

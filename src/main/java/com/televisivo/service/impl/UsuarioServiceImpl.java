@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,18 +38,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
     @Override
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','INSERIR')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(
-                    String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
@@ -61,15 +64,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','ATUALIZAR')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         Usuario usuarioLogado = findById(usuario.getId());
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(
-                    String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
-
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
             usuario.setPassword(usuarioLogado.getPassword());
         } else if (!usuario.getPassword().equals(usuario.getContraSenha())) {
@@ -82,19 +84,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Usuario getOne(Long id) {
         return usuarioRepository.getOne(id);
     }
 
     @Override
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','LEITURA')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
 
     @Override
-    // @PreAuthorize("hasPermission('ADMINISTRADOR','EXCLUIR')")
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','EXCLUIR')")
     public void deleteById(Long id) {
         try {
             usuarioRepository.deleteById(id);
@@ -104,11 +109,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public List<Usuario> buscarNome(String nome) {
         return usuarioRepository.buscarNome(nome);
     }
 
     @Override
+    @Secured("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFilter, Pageable pageable) {
         return usuarioRepository.listaComPaginacao(usuarioFilter, pageable);
     }

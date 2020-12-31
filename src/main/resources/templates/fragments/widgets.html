@@ -1,17 +1,9 @@
-<div class="row" th:fragment="widgets">
-    <div class="col-md-3">
-        <div class="widget-small primary"><i class="icon fa fa-television fa-3x" aria-hidden="true"></i>
-            <div class="info">
-                <a th:href="@{/series}"><h4 style="color: white;">Explorar</h4></a>
-                <p><strong th:text="${usuarioLogado.getUsuario().getQtdSeries()}">5</strong></p>
-            </div>
-        </div>
-    </div>
+<div class="row" th:fragment="widgets" th:object="${usuarioLogado.getUsuario()}">
     <div class="col-md-3">
         <div class="widget-small info"><i class="icon fa fa-bookmark fa-3x" aria-hidden="true"></i>
             <div class="info">
                 <a th:href="@{/series/salvas}"><h4 style="color: white;	">Séries salvas</h4></a>
-                <p><strong th:text="${usuarioLogado.getUsuario().getQtdSeries()}">25</strong></p>
+                <p><strong th:text="*{qtdSeries}"></strong></p>
             </div>
         </div>
     </div>
@@ -19,7 +11,7 @@
         <div class="widget-small warning"><i class="icon fa fa-archive fa-3x" aria-hidden="true"></i>
             <div class="info">
                 <a th:href="@{/series/arquivadas}"><h4 style="color: white;">Arquivadas</h4></a>
-                <p><strong th:text="${usuarioLogado.getUsuario().getQtdSeriesArq()}"></strong></p>
+                <p><strong th:text="*{qtdSeriesArq}"></strong></p>
             </div>
         </div>
     </div>
@@ -27,7 +19,7 @@
         <div class="widget-small danger"><i class="icon fa fa-star fa-3x" aria-hidden="true"></i>
             <div class="info">
                 <a th:href="@{/series/salvas}"><h4 style="color: white;	">Episódios</h4></a>
-                <p><strong th:text="${usuarioLogado.getUsuario().getQtdEpisodios()}">25</strong></p>
+                <p><strong th:text="*{qtdEpisodios}"></strong></p>
             </div>
         </div>
     </div>

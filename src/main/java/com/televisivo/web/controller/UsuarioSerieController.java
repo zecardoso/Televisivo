@@ -52,11 +52,11 @@ public class UsuarioSerieController {
     @Autowired
     private EpisodioService episodioService;
 
-    @GetMapping("/series")
+    @GetMapping()
     public ModelAndView lista(SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         Pagina<Serie> paginaPagina = new Pagina<>(serieService.listaComPaginacao(serieFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/explorar");
+        ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
         modelAndView.addObject("tamanho", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", paginaPagina);
@@ -116,7 +116,6 @@ public class UsuarioSerieController {
     @PostMapping(value = "/series/salvar", params = "salvar")
     public String salvar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.salvar(usuarioLogado, Long.parseLong(request.getParameter("salvar")));
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série salva com sucesso.");
         return "redirect:/series";
     }
@@ -124,8 +123,6 @@ public class UsuarioSerieController {
     @PostMapping(value = "/series/arquivar", params = "arquivar")
     public String arquivar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("arquivar")), true);
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
-        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série arquivada com sucesso.");
         return "redirect:/series/salvas";
     }
@@ -133,8 +130,6 @@ public class UsuarioSerieController {
     @PostMapping(value = "/series/desarquivar", params = "desarquivar")
     public String desarquivar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("desarquivar")), false);
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
-        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série desarquivada com sucesso.");
         return "redirect:/series/arquivadas";
     }
@@ -142,8 +137,6 @@ public class UsuarioSerieController {
     @PostMapping(value = "/series/arquivar", params = "remover")
     public String removerSal(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter("remover")));
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
-        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série removida com sucesso.");
         return "redirect:/series/salvas";
     }
@@ -151,8 +144,6 @@ public class UsuarioSerieController {
     @PostMapping(value = "/series/desarquivar", params = "remover")
     public String removerArq(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter("remover")));
-        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
-        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         attributes.addFlashAttribute(SUCCESS, "Série removida com sucesso.");
         return "redirect:/series/arquivadas";
     }

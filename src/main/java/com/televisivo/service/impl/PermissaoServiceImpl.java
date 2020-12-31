@@ -14,34 +14,41 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Secured("hasRole('ADMINISTRADOR')")
 public class PermissaoServiceImpl implements PermissaoService {
 
     @Autowired
     private PermissaoRepository permissaoRepository;
-    
+
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('PERMISSAO','LEITURA')")
     public List<Permissao> findAll() {
         return permissaoRepository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasPermission('PERMISSAO','INSERIR')")
     public Permissao save(Permissao permissao) {
         return permissaoRepository.save(permissao);
     }
 
     @Override
+    @PreAuthorize("hasPermission('PERMISSAO','ATUALIZAR')")
     public Permissao update(Permissao permissao) {
         return permissaoRepository.save(permissao);
     }
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('PERMISSAO','LEITURA')")
     public Permissao getOne(Long id) {
         return permissaoRepository.getOne(id);
     }
@@ -52,6 +59,7 @@ public class PermissaoServiceImpl implements PermissaoService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('PERMISSAO','EXCLUIR')")
     public void deleteById(Long id) {
         try {
             permissaoRepository.deleteById(id);
@@ -63,11 +71,13 @@ public class PermissaoServiceImpl implements PermissaoService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('PERMISSAO','LEITURA')")
     public List<Permissao> buscarNome(String nome) {
         return buscarNome(nome);
     }
 
     @Override
+    @PreAuthorize("hasPermission('PERMISSAO','LEITURA')")
     public Page<Permissao> listaComPaginacao(PermissaoFilter permissaoFilter, Pageable pageable) {
         return permissaoRepository.listaComPaginacao(permissaoFilter, pageable);
     }

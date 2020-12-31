@@ -38,6 +38,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
         id.setUsuario(findUsuario(usuarioLogado));
         usuarioEpisodio.setId(id);
         usuarioEpisodioRepository.save(usuarioEpisodio);
+        atualizarQtdEpisodios(usuarioLogado);
     }
 
     @Override
@@ -46,6 +47,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
         id.setEpisodio(episodioId);
         id.setUsuario(findUsuario(usuarioLogado));
         usuarioEpisodioRepository.deleteById(id);
+        atualizarQtdEpisodios(usuarioLogado);
     }
 
     @Override

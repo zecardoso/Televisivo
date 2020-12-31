@@ -155,17 +155,6 @@ public class SerieController {
         return modelAndView;
     }
 
-    // @PostMapping(value = "/{id}/alterar", params = "duplicateRow")
-    // public ModelAndView duplicateRow(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
-    //     Temporada temporada = serieService.findTemporadaByIdTemporada(Long.parseLong(request.getParameter("duplicateRow")));
-    //     serie = serieService.duplicateRow(serie, temporada);
-    //     ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
-    //     modelAndView.addObject(SERIE, serie);
-    //     modelAndView.addObject(TEMPORADAS, serieService.temporadas(id));
-    //     modelAndView.addObject(TEMPORADA, new Temporada());
-    //     return modelAndView;
-    // }
-
     @GetMapping("/{id}/remover")
     public ModelAndView viewRemover(@PathVariable("id") Long id) {
         Serie serie = serieService.getOne(id);

@@ -18,11 +18,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Secured("hasRole('ADMINISTRADOR')")
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -33,11 +36,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('ROLE','LEITURA')")
     public List<Role> findAll() {
         return roleRepository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','INSERIR')")
     public Role save(Role role) {
         role = roleRepository.save(role);
         // saveUsuarioAuditoria(role, TelevisivoConfig.INCLUSAO);
@@ -45,6 +50,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','ATUALIZAR')")
     public Role update(Role role) {
         // saveUsuarioAuditoria(role, TelevisivoConfig.ALTERACAO);
         return save(role);
@@ -52,16 +58,19 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('ROLE','LEITURA')")
     public Role getOne(Long id) {
         return roleRepository.getOne(id);
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','LEITURA')")
     public Role findById(Long id) {
         return roleRepository.findById(id).orElseThrow(() -> new RoleNaoCadastradaException(id));
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','EXCLUIR')")
     public void deleteById(Long id) {
         try {
             // saveUsuarioAuditoria(getOne(id), TelevisivoConfig.EXCLUSAO);
@@ -74,18 +83,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','LEITURA')")
     public List<Role> buscarNome(String nome) {
         return roleRepository.buscarNome(nome);
     }
 
     @Override
+    @PreAuthorize("hasPermission('ROLE','LEITURA')")
     public Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable) {
         return roleRepository.listaComPaginacao(roleFilter, pageable);
-    }
-
-    @Override
-    public Role findRole(String role) {
-        return null;
     }
 
     @Override

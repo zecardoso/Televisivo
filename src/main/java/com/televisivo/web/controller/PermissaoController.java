@@ -14,6 +14,7 @@ import com.televisivo.service.PermissaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +68,7 @@ public class PermissaoController {
     }
 
     @GetMapping("/{id}/remover")
+    @PreAuthorize("hasPermission('PERMISSAO','INSEXCLUIRERIR')")
     public ModelAndView viewRemover(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("/permissao/remover");
         modelAndView.addObject(PERMISSAO, permissaoService.getOne(id));

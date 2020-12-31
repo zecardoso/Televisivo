@@ -14,11 +14,14 @@ import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Secured("hasRole('ADMINISTRADOR')")
 public class TemporadaServiceImpl implements TemporadaService {
 
     @Autowired
@@ -29,32 +32,38 @@ public class TemporadaServiceImpl implements TemporadaService {
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('TEMPORADA','LEITURA')")
     public List<Temporada> findAll() {
         return temporadaRepository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','INSERIR')")
     public Temporada save(Temporada temporada) {
         return temporadaRepository.save(temporada);
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','ATUALIZAR')")
     public Temporada update(Temporada temporada) {
         return save(temporada);
     }
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('TEMPORADA','LEITURA')")
     public Temporada getOne(Long id) {
         return temporadaRepository.getOne(id);
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','LEITURA')")
     public Temporada findById(Long id) {
         return temporadaRepository.findById(id).orElseThrow(() -> new TemporadaNaoCadastradaException(id));
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void deleteById(Long id) {
 		try {
 			temporadaRepository.deleteById(id);
@@ -81,6 +90,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','LEITURA')")
     public List<Episodio> episodios(Long id) {
         return temporadaRepository.episodios(id);
     }
@@ -96,6 +106,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','INSERIR')")
     public void salvarEpisodio(Temporada temporada) {
         if (temporada.getEpisodios().size() != -1) {
             for (Episodio episodio: temporada.getEpisodios()) {
@@ -108,6 +119,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','INSERIR')")
     public Temporada adicionarEpisodio(Temporada temporada) {
         Episodio episodio = new Episodio();
         episodio.setTemporada(temporada);
@@ -116,6 +128,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void removerEpisodio(Episodio episodio) {
         if (episodio.getId() != null) {
             episodioRepository.deleteById(episodio.getId());
@@ -123,6 +136,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('TEMPORADA','INSERIR')")
     public Temporada duplicateRow(Temporada temporada, Episodio episodio) {
         Episodio episodioNew = new Episodio();
         episodioNew.setNome(episodio.getNome());

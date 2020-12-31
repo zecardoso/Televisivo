@@ -50,6 +50,7 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         id.setUsuario(findUsuario(usuarioLogado));
         usuarioSerie.setId(id);
         usuarioSerieRepository.save(usuarioSerie);
+        atualizarQtdSeries(usuarioLogado);
     }
 
     @Override
@@ -59,6 +60,7 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         id.setUsuario(findUsuario(usuarioLogado));
         UsuarioSerie usuarioSerie = usuarioSerieRepository.getOne(id);
         usuarioSerie.setArquivada(arquivada);
+        atualizarQtdSeriesArq(usuarioLogado);
     }
 
     @Override
@@ -67,6 +69,8 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         id.setSerie(serie);
         id.setUsuario(findUsuario(usuarioLogado));
         usuarioSerieRepository.deleteById(id);
+        atualizarQtdSeries(usuarioLogado);
+        atualizarQtdSeriesArq(usuarioLogado);
     }
 
     @Override

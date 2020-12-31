@@ -12,11 +12,14 @@ import com.televisivo.service.exceptions.EpisodioNaoCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Secured("hasRole('ADMINISTRADOR')")
 public class EpisodioServiceImpl implements EpisodioService {
 
     @Autowired
@@ -24,32 +27,39 @@ public class EpisodioServiceImpl implements EpisodioService {
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public List<Episodio> findAll() {
         return episodioRepository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','INSERIR')")
     public Episodio save(Episodio episodio) {
+        atualizarQtdEpisodios(episodio.getTemporada());
         return episodioRepository.save(episodio);
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Episodio update(Episodio episodio) {
         return episodioRepository.save(episodio);
     }
 
     @Override
 	@Transactional(readOnly = true)
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Episodio getOne(Long id) {
         return episodioRepository.getOne(id);
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Episodio findById(Long id) {
         return episodioRepository.findById(id).orElseThrow(() -> new EpisodioNaoCadastradoException(id));
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','EXCLUIR')")
     public void deleteById(Long id) {
 		try {
 			episodioRepository.deleteById(id);
@@ -57,10 +67,12 @@ public class EpisodioServiceImpl implements EpisodioService {
 			throw new EntidadeEmUsoException(String.format("O episodio de código %d não pode ser removido!", id));
 		} catch (EmptyResultDataAccessException e){
 			throw new EpisodioNaoCadastradoException(String.format("O episodio com o código %d não foi encontrado!", id));
-		}
+        }
+        atualizarQtdEpisodios(findTemporadaByIdEpisodio(id));
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Temporada findTemporadaByIdEpisodio(Long id) {
         return episodioRepository.getOne(id).getTemporada();
     }

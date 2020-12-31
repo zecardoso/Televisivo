@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
-import com.televisivo.model.Temporada;
 import com.televisivo.service.EpisodioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +78,7 @@ public class EpisodioController {
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
-        Temporada temporada = episodioService.findTemporadaByIdEpisodio(id);
         episodioService.deleteById(id);
-        episodioService.atualizarQtdEpisodios(temporada);
         attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
         return REDIRECT_TEMPORADA;
     }

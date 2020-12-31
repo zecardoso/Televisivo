@@ -27,6 +27,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String ADMINISTRADOR = "ADMINISTRADOR";
+
     @Autowired
     private LoginAuthenticationProvider loginAuthenticationProvider;
 
@@ -51,15 +53,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/").permitAll()
-            .antMatchers("/static/**").permitAll()
-            .antMatchers("/js/**").permitAll()
-            .antMatchers("/img/**").permitAll()
-            .antMatchers("/css/**").permitAll()
-            .antMatchers("/resources/**").permitAll()
+            .antMatchers("/resources").permitAll()
+            .antMatchers("/css").permitAll()
+            .antMatchers("/fontawesome").permitAll()
+            .antMatchers("/js").permitAll()
             .antMatchers("/login").permitAll()
-            .antMatchers("/registrar/**").permitAll()
-            .antMatchers("/recuperar/**").permitAll()
-            .antMatchers("/usuarios/**").permitAll()
+            .antMatchers("/categoria/**").hasRole(ADMINISTRADOR)
+            .antMatchers("/servico/**").hasRole(ADMINISTRADOR)
+            .antMatchers("/role/**").hasRole(ADMINISTRADOR)
+            .antMatchers("/permissao/**").hasRole(ADMINISTRADOR)
+            .antMatchers("/escopo/**").hasRole(ADMINISTRADOR)
             .anyRequest().authenticated();
 
         http.formLogin()
@@ -106,7 +109,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
-    
+
     @Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/resources/**");
@@ -116,7 +119,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices(UserDetailsService userDetailsService) {
         PersistentTokenBasedRememberMeServices persistentTokenBasedServices = new PersistentTokenBasedRememberMeServices("LEMBRARID", userDetailsService, persistentTokenRepository);
