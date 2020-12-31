@@ -30,16 +30,16 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
         if ("".equals(email)) {
-            throw new EmailUsuarioDeveSerInformadoException("O email do usuario deve ser informado!");
+            throw new EmailUsuarioDeveSerInformadoException("O email deve ser informado!");
         }
         if ("".equals(password)) {
-            throw new SenhaUsuarioDeveSerInformadaException("A senha do usuario deve ser informada!");
+            throw new SenhaUsuarioDeveSerInformadaException("A senha deve ser informada!");
         }
         Optional<Usuario> usuario = usuarioService.loginUsuarioByEmail(email);
         if (!usuario.isPresent()) {
-            throw new UsernameNotFoundException("Usuario nao esta cadastrado!");
+            throw new UsernameNotFoundException("E-mail não está cadastrado!");
         }
-        if (email.equals(usuario.get().getEmail()) && usuario.get().isAtivo() == Boolean.FALSE) {
+        if (Boolean.FALSE.equals(email.equals(usuario.get().getEmail()) && usuario.get().isAtivo())) {
             throw new LockedException("Usuario bloqueado no sistema!");
         }
         if (email.equals(usuario.get().getEmail()) && BCrypt.checkpw(password, usuario.get().getPassword())) {

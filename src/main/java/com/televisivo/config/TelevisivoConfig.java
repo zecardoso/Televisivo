@@ -24,7 +24,7 @@ public class TelevisivoConfig {
 	public static final int TOKEN_VALID = 1;
 	public static final int TOKEN_EXPIRED = 2;
 	public static final int TOKEN_INVALID = 0;
-	
+
 	public static Usuario pegarUsuario() {
 		UsuarioSistema usuarioSistema = (UsuarioSistema) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return usuarioSistema.getUsuario();

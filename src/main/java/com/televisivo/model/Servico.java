@@ -24,7 +24,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@SequenceGenerator(name = "servico_sequence", sequenceName = "servico_sequence", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "servico_sequence", sequenceName = "servico_sequence", allocationSize = 1)
 public class Servico implements Serializable {
 
     private static final long serialVersionUID = -6011359642344617832L;
@@ -32,7 +32,7 @@ public class Servico implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "servico_sequence")
-    @Column(name = "servico_id")
+    @Column(name = "servico_id", updatable = false)
     private Long id;
 
     @Size(min = 3, max = 40, message = "O nome deve ter entre {min} e {max} caracteres.")

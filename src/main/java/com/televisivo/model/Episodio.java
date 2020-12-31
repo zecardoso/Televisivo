@@ -2,7 +2,6 @@ package com.televisivo.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,13 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +27,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@SequenceGenerator(name = "episodio_sequence", sequenceName = "episodio_sequence", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "episodio_sequence", sequenceName = "episodio_sequence", allocationSize = 1)
 public class Episodio implements Serializable {
 
     private static final long serialVersionUID = 1144598121866007606L;
@@ -40,7 +35,7 @@ public class Episodio implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "episodio_sequence")
-    @Column(name = "episodio_id")
+    @Column(name = "episodio_id", updatable = false)
     private Long id;
 
     @NotNull(message = "O número deve ser informado.")
@@ -64,11 +59,6 @@ public class Episodio implements Serializable {
     @NotNull(message = "A duração deve ser informada.")
 	@Column(nullable = false)
     private int duracao;
-
-    @DateTimeFormat(pattern = "mm/dd/yyyy")
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = true, columnDefinition = "DATE")
-    private Date publicacao;
 
     @ManyToOne(targetEntity = Temporada.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))

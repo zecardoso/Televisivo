@@ -22,12 +22,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 @Service
 public class JasperReportsServiceImpl implements JasperReportsService {
 
-	private static final String DIR_RELATORIOS = "/relatorios/";
-	private Map<String, Object> params = new HashMap<String, Object>();
-		
+	private static final String DIR_RELATORIOS = "/reports/";
+	private Map<String, Object> params = new HashMap<>();
+
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Override
 	public JasperPrint imprimeRelatorioDownload(String file) {
 		params.put(JRParameter.REPORT_LOCALE, new Locale("pt", "BR"));
@@ -55,7 +55,7 @@ public class JasperReportsServiceImpl implements JasperReportsService {
 		}
 		return null;
 	}
-	
+
 	private Connection conexao() {
 		try {
 			return dataSource.getConnection();

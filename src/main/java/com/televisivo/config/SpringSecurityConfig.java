@@ -52,17 +52,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/resources").permitAll()
-            .antMatchers("/css").permitAll()
-            .antMatchers("/fontawesome").permitAll()
-            .antMatchers("/js").permitAll()
-            .antMatchers("/login").permitAll()
-            .antMatchers("/categoria/**").hasRole(ADMINISTRADOR)
-            .antMatchers("/servico/**").hasRole(ADMINISTRADOR)
-            .antMatchers("/role/**").hasRole(ADMINISTRADOR)
-            .antMatchers("/permissao/**").hasRole(ADMINISTRADOR)
-            .antMatchers("/escopo/**").hasRole(ADMINISTRADOR)
+            .antMatchers("/", "/css/**", "/fontawesome/**", "/js/**", "/login").permitAll()
+            .antMatchers("/categoria/**", "/direito/**", "/servico/**", "/role/**", "/permissao/**", "/escopo/**", "/serie/**").hasRole(ADMINISTRADOR)
             .anyRequest().authenticated();
 
         http.formLogin()
@@ -89,7 +80,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.expiredUrl("/?mensagem=true")
             .sessionRegistry(sessionRegistry()).and()
             .sessionFixation()
-            .none();
+            .newSession();
 
         http.exceptionHandling()
             .accessDeniedPage("/403");
