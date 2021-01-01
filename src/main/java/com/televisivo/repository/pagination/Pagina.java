@@ -15,8 +15,8 @@ public class Pagina<T> {
     private Page<T> page;
     private UriComponentsBuilder uriComponentsBuilder;
     private int pageSize;
-    private List<PaginaItem> items;
-    private int numeroAtual;
+    private List<PageItem> items;
+    private int currentNumber;
 
     public Pagina(Page<T> page, int pageSize, HttpServletRequest httpServletRequest) {
         this.page = page;
@@ -25,89 +25,97 @@ public class Pagina<T> {
         this.pageSize = pageSize;
 
         items = new ArrayList<>();
-        numeroAtual = page.getNumber() + 1;
+        currentNumber = page.getNumber() + 1;
 
         int start;
-        int tamanho;
-        
+        int size;
+
         if (page.getTotalPages() <= pageSize) {
             start = 1;
-            tamanho = page.getTotalPages();
+            size = page.getTotalPages();
         } else {
-            if (numeroAtual <= pageSize - pageSize / 2) {
+            if (currentNumber <= pageSize - pageSize / 2) {
                 start = 1;
-                tamanho = pageSize;
-            } else if (numeroAtual >= page.getTotalPages() - pageSize / 2) {
+                size = pageSize;
+            } else if (currentNumber >= page.getTotalPages() - pageSize / 2) {
                 start = page.getTotalPages() - pageSize + 1;
-                tamanho = pageSize;
+                size = pageSize;
             } else {
-                start = numeroAtual - pageSize / 2;
-                tamanho = pageSize;
+                start = currentNumber - pageSize / 2;
+                size = pageSize;
             }
         }
-        for (int i = 0; i < tamanho; i++) {
-            items.add(new PaginaItem(start + i, (start + i) == numeroAtual));
+        for (int i = 0; i < size; i++) {
+            items.add(new PageItem(start + i, (start + i) == currentNumber));
         }
     }
 
-    public List<PaginaItem> getItems() {
-        return items;
-    }
+	public List<PageItem> getItems() {
+		return items;
+	}
 
-    public List<T> getConteudo() {
-        return page.getContent();
-    }
+	public List<T> getConteudo() {
+		return page.getContent();
+	}
 
-    public boolean isVazia() {
-        return page.getContent().isEmpty();
-    }
+	public boolean isVazia() {
+		return page.getContent().isEmpty();
+	}
 
-    public int getAtual() {
-        return page.getNumber();
-    }
+	public int getAtual() {
+		return page.getNumber();
+	}
 
-    public int getNumero() {
-        return numeroAtual;
-    }
+	public int getNumber() {
+		return currentNumber;
+	}
 
-    public int getPageSize() {
-        return pageSize;
-    }
+	public boolean isPrimeira() {
+		return page.isFirst();
+	}
 
-    public boolean isPrimeira() {
-        return page.isFirst();
-    }
+	public boolean isUltima() {
+		return page.isLast();
+	}
 
-    public boolean isUltima() {
-        return page.isLast();
-    }
+	public int getTotal() {
+		return page.getTotalPages();
+	}
 
-    public int getTotal() {
-        return page.getTotalPages();
-    }
+	public long getTotalElementos() {
+		return page.getTotalElements();
+	}
 
-    public long getTotalElementos() {
-        return page.getTotalElements();
-    }
+	public int getSize() {
+		return page.getSize();
+	}
 
-    public int getTamanho() {
-        return page.getSize();
-    }
+	public boolean isFirstPage() {
+		return page.isFirst();
+	}
 
-    public boolean isAnterior() {
-        return page.hasPrevious();
-    }
+	public boolean isLastPage() {
+		return page.isLast();
+	}
 
-    public boolean isProxima() {
-        return page.hasNext();
-    }
+	public boolean isHasPreviousPage() {
+		return page.hasPrevious();
+	}
 
-    public String urlPagina(int tamanho, int pagina, String sort, String dir) {
-        return uriComponentsBuilder.replaceQueryParam("pagina", pagina, "tamanho", tamanho, "sort", sort, "dir", dir).build(true).encode().toUriString();
-    }
+	public boolean isHasNextPage() {
+		return page.hasNext();
+	}
 
-    public String urlOrdenada(String propriedade) {
-        UriComponentsBuilder uriComponentsBuilderOrder = UriComponentsBuilder.fromUriString(uriComponentsBuilder.build(true).encode().toUriString());
+	public int getPageSize() {
+		return pageSize;
+	}
+
+    public String urlPagina(int size, int pagina) {
+		return uriComponentsBuilder.replaceQueryParam("page", pagina, "size", size).build(true).encode().toUriString();
+	}
+
+	public String urlOrdenada(String propriedade) {
+		UriComponentsBuilder uriComponentsBuilderOrder = UriComponentsBuilder.fromUriString(uriComponentsBuilder.build(true).encode().toUriString());
         String valorSort = String.format("%s", propriedade);
         String valorDir = String.format("%s", inverterDirecao(propriedade));
         return uriComponentsBuilderOrder.replaceQueryParam("sort", valorSort).replaceQueryParam("dir", valorDir).build(true).encode().toUriString();
@@ -122,15 +130,21 @@ public class Pagina<T> {
         return direcao;
     }
 
-    public boolean descendente(String propriedade) {
-        return inverterDirecao(propriedade).equals("asc");
-    }
+	public class PageItem {
+		private int number;
+		private boolean current;
 
-    public boolean ordenada(String propriedade) {
-		Order order = page.getSort().getOrderFor(propriedade); 
-		if (order == null) {
-			return false;
+		public PageItem(int number, boolean current) {
+			this.number = number;
+			this.current = current;
 		}
-		return page.getSort().getOrderFor(propriedade) != null;
+
+		public int getNumber() {
+			return this.number;
+		}
+
+		public boolean isCurrent() {
+			return this.current;
+		}
 	}
 }

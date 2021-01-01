@@ -73,7 +73,7 @@ public class SerieController {
         Pagina<Serie> paginaPagina = new Pagina<>(serieService.listaComPaginacao(serieFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
         ModelAndView modelAndView = new ModelAndView("/serie/lista");
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
-        modelAndView.addObject("tamanho", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
+        modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", paginaPagina);
         return modelAndView;
     }

@@ -45,7 +45,7 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
         if (!StringUtils.isEmpty(usuarioFilter.getUsername())) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Usuario_.USERNAME)), "%" + usuarioFilter.getUsername() + "%"));
         }
-        
+
         if (!StringUtils.isEmpty(usuarioFilter.getNome())) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get(Usuario_.NOME)), "%" + usuarioFilter.getNome() + "%"));
         }
@@ -103,7 +103,7 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
     public Optional<Usuario> loginUsuarioByEmail(String email) {
 		return findUsuarioByEmail(email);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public List<Permission> findRolePermissaoByUsuarioId(Long id) {

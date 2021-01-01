@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/conta")
 public class ContaController {
 
-    private static final String USUARIO = "usuario";
+    private static final String USUARIO = "usuarioLogado";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private static final String DETALHES = "redirect:/conta";

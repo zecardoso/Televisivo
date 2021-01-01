@@ -14,7 +14,7 @@
                 <li class="breadcrumb-item"><a href="#">Detalhes</a></li>
             </ul>
         </div>
-		<div class="tile" th:object="${usuario}">
+		<div class="tile" th:object="${usuarioLogado}">
 			<h3 class="tile-title" th:text="*{nome} + ' ' + *{sobrenome}"></h3>
 			<div class="tile-body tile-footer">
 				<label class="control-label">Nome</label>

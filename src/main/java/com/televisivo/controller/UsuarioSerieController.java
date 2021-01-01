@@ -30,7 +30,7 @@ public class UsuarioSerieController {
     private static final String LISTA = "lista";
     private static final String SERIE = "serie";
     private static final String SUCCESS = "success";
-    private static final String USUARIO = "usuario";
+    private static final String USUARIO = "usuarioLogado";
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;

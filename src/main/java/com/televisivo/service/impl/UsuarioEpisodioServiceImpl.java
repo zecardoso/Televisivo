@@ -52,7 +52,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
 
     @Override
     public void atualizarQtdEpisodios(UsuarioSistema usuarioLogado) {
-        Usuario usuario = usuarioRepository.getOne(usuarioLogado.getUsuario().getId());
+        Usuario usuario = usuarioRepository.getOne(findUsuario(usuarioLogado));
         usuario.setQtdEpisodios(usuarioEpisodioRepository.qtd(usuario.getId()));
     }
 

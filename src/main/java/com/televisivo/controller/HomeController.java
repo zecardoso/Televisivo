@@ -15,8 +15,6 @@ import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.SerieService;
 import com.televisivo.service.UsuarioService;
-import com.televisivo.service.exceptions.EmailCadastradoException;
-import com.televisivo.service.exceptions.SenhaError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -39,9 +37,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class HomeController {
 
-    private static final String CADASTRO = "redirect:/login";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    private static final String USUARIO = "usuarioLogado";
 
     @Autowired
     private UsuarioService contaService;
@@ -52,9 +50,16 @@ public class HomeController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("*")
+    public ModelAndView lista(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        ModelAndView modelAndView = new ModelAndView("fragments/header");
+        modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        return modelAndView;
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
-    public ModelAndView lista(@AuthenticationPrincipal UsuarioSistema usuarioLogado, ModelMap model, SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
+    public ModelAndView lista(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         if (usuarioLogado == null) {
             return new ModelAndView("login");
         }
@@ -62,9 +67,9 @@ public class HomeController {
         Pagina<Serie> paginaPagina = new Pagina<>(serieService.listaComPaginacao(serieFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
-        modelAndView.addObject("tamanho", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
+        modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", paginaPagina);
-        modelAndView.addObject("usuario", usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         return modelAndView;
     }
 
@@ -80,7 +85,7 @@ public class HomeController {
             model.addAttribute("mensagem", mensagem);
         }
         ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.addObject("usuario", usuario);
+        modelAndView.addObject(USUARIO, usuario);
         return modelAndView;
     }
 
@@ -88,7 +93,7 @@ public class HomeController {
     public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
-            return CADASTRO;
+            return "redirect:/login";
         }
         contaService.save(usuario);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");

@@ -1,29 +1,29 @@
 <div class="row" th:fragment="pagination">
     <div class="col-xs-12 col-md-5">
-        <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite" th:text="'Mostrando ' + ${pagina.tamanho * (pagina.numero - 1) + 1}  + ' página com ' +  ${pagina.ultima ? pagina.totalElementos : pagina.tamanho * (pagina.numero - 1)+ pagina.tamanho} + ' de ' + ${pagina.totalElementos} + ' registros.'"></div>
+        <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite" th:text="'Mostrando ' + ${pagina.size * (pagina.number - 1) + 1}  + ' página com ' +  ${pagina.ultima ? pagina.totalElementos : pagina.size * (pagina.number - 1)+ pagina.size} + ' de ' + ${pagina.totalElementos} + ' registros.'"></div>
     </div>
     <div class="col-xs-12 col-md-7" th:if="${not pagina.vazia}">
         <ul class='pagination pull-right'>
             <li th:class="${pagina.primeira}?'disabled':''">
                 <span th:if='${pagina.primeira}' th:class="page-link">Primeira</span>
-                <a th:if='${not pagina.primeira}' th:href='@{${pagina.urlPagina(tamanho, 0)}}' th:class="page-link">Primeira</a>
+                <a th:if='${not pagina.primeira}' th:href='@{${pagina.urlPagina(size, 0)}}' th:class="page-link">Primeira</a>
             </li>
-            <li th:class="${pagina.anterior}? '' : 'disabled'">
-                <span th:if='${not pagina.anterior}' th:class="page-link"><span class="fa fa-chevron-left"></span></span>
-                <a th:if='${pagina.anterior}' th:href='@{${pagina.urlPagina(tamanho, pagina.numero-2)}}' th:class="page-link" title='Ir para a pagina anterior'><span class="fa fa-chevron-left"></span></a>
+            <li th:class="${pagina.hasPreviousPage}? '' : 'disabled'">
+                <span th:if='${not pagina.hasPreviousPage}' th:class="page-link"><span class="fa fa-chevron-left"></span></span>
+                <a th:if='${pagina.hasPreviousPage}' th:href='@{${pagina.urlPagina(size, pagina.number-2)}}' th:class="page-link" title='Ir para a pagina anterior'><span class="fa fa-chevron-left"></span></a>
             </li>
-            <li th:each='item : ${pagina.items}' th:class="${item.atual}? 'page-item active' : ''">
-                <span th:if='${item.atual}' th:text='${item.numero}' th:class="page-link">1</span>
-                <a th:if='${not item.atual}' th:class="page-link" th:href='@{${pagina.urlPagina(tamanho, item.numero-1)}}'><span th:text='${item.numero}'>1</span></a>
+            <li th:each='item : ${pagina.items}' th:class="${item.current}? 'page-item active' : ''">
+                <span th:if='${item.current}' th:text='${item.number}' th:class="page-link">1</span>
+                <a th:if='${not item.current}' th:class="page-link" th:href='@{${pagina.urlPagina(size, item.number-1)}}'><span th:text='${item.number}'>1</span></a>
             </li>
-            <li th:class="${pagina.proxima}? '' : 'disabled'">
-                <span th:if='${not pagina.proxima}' th:class="page-link">
+            <li th:class="${pagina.hasNextPage}? '' : 'disabled'">
+                <span th:if='${not pagina.hasNextPage}' th:class="page-link">
                 <span class="fa fa-chevron-right"></span></span>
-                <a th:if='${pagina.proxima}' th:class="page-link" th:href='@{${pagina.urlPagina(tamanho, pagina.numero+1)}}' title='Ir para a próxima pagina'><span class="fa fa-chevron-right"></span></a>
+                <a th:if='${pagina.hasNextPage}' th:class="page-link" th:href='@{${pagina.urlPagina(size, pagina.number)}}' title='Ir para a próxima pagina'><span class="fa fa-chevron-right"></span></a>
             </li>
             <li th:class="${pagina.ultima}? 'disabled' : ''">
                 <span th:if='${pagina.ultima}' th:class="page-link">Última</span>
-                <a th:if='${not pagina.ultima}' th:class="page-link" th:href='@{${pagina.urlPagina(tamanho, pagina.total-1)}}'>Última</a>
+                <a th:if='${not pagina.ultima}' th:class="page-link" th:href='@{${pagina.urlPagina(size, pagina.total-1)}}'>Última</a>
             </li>
         </ul>
     </div>
