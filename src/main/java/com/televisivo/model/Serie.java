@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -80,4 +81,10 @@ public class Serie implements Serializable {
 
     @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
     private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
+
+    @Transient
+    private boolean salva;
+
+    @Transient
+    private boolean arquivada;
 }

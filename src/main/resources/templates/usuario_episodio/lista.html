@@ -13,7 +13,6 @@
                 <li class="breadcrumb-item"><a href="#">Listar</a></li>
             </ul>
 		</div>
-		<div th:replace="fragments/alert"></div>
 		<div th:replace="fragments/widgets :: widgets"></div>
 		<div class="tile">
 			<div class="tile-body">
@@ -36,13 +35,13 @@
 								</thead>
 								<tbody>
 									<tr th:each="usuarioEpisodio :${lista}">
-										<td data-tile="Episodio" th:text="${usuarioEpisodio.numero}"></td>
+										<td data-tile="Episodio" th:text="${usuarioEpisodio.nome}"></td>
 										<td data-tile="Temporada" th:text="${usuarioEpisodio.temporada.numero}"></td>
 										<td data-tile="Série" th:text="${usuarioEpisodio.temporada.serie.nome}"></td>
 										<td data-tile="Dermarcar" style="text-align: center;">
 											<form th:action="@{/episodios}" method="POST">
 												<div class="col-md mb-1">
-													<button class="btn btn-danger" type="submit" name="desmarcarEpisodio" th:value="${usuarioEpisodio.id}">Desmarcar</button>
+													<button class="btn btn-danger" type="submit" name="desmarcar" th:value="${usuarioEpisodio.id}">Desmarcar</button>
 												</div>
 											</form>
 										</td>

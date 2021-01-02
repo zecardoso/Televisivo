@@ -8,6 +8,7 @@ import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.filters.UsuarioFilter;
 import com.televisivo.service.UsuarioService;
+import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
 import com.televisivo.service.exceptions.UsuarioNaoCadastradoException;
@@ -50,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
-            throw new SenhaError("Senha incorreta.");
+            throw new ConfirmeSenhaNaoInformadaException("Senha incorreta.");
         }
         if (usuario.getPassword().isBlank() || (usuario.getContraSenha()).isBlank()) {
             throw new SenhaError("A senha não pode estar em branco.");

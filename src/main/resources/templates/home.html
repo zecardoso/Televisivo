@@ -32,11 +32,12 @@
 		</div>
 		<div class="card-columns">
 			<div class="card" th:each="serie :${pagina.conteudo}">
-				<form th:action="@{/salvar}" method="POST">
+				<form th:action="@{/acao}" method="POST">
 					<div class="card-body">
 						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="card-title" th:text="*{serie.nome}"></h5></a>
 						<p class="card-text" th:text="*{serie.enredo}"></p>
-						<button class="btn btn-success" type="submit" name="salvar" th:value="*{serie.id}">Salvar</button>
+                        <button th:class="${serie.salva} ? 'btn btn-secondary' : (${serie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${serie.salva} ? 'arquivar' : (${serie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${serie.id}" th:text="${serie.salva} ? 'Arquivar' : (${serie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>
+						<button th:if="${serie.salva} OR ${serie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{serie.id}">Remover</button>
 					</div>
 				</form>
 			</div>

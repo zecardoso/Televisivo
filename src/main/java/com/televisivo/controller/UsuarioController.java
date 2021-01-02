@@ -18,6 +18,7 @@ import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.service.JasperReportsService;
 import com.televisivo.service.RoleService;
 import com.televisivo.service.UsuarioService;
+import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
 
@@ -112,6 +113,9 @@ public class UsuarioController {
             return CADASTRO;
         } catch (SenhaError e) {
             result.rejectValue("password", e.getMessage());
+            return CADASTRO;
+        } catch (ConfirmeSenhaNaoInformadaException e) {
+            result.rejectValue("contraSenha", e.getMessage());
             return CADASTRO;
         }
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");

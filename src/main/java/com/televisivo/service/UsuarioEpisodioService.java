@@ -8,8 +8,8 @@ import com.televisivo.security.UsuarioSistema;
 public interface UsuarioEpisodioService {
 
     Long findUsuario(UsuarioSistema usuarioLogado);
-    void marcarEpisodio(UsuarioSistema usuarioLogado, Long episodio);
-    void desmarcarEpisodio(UsuarioSistema usuarioLogado, Long episodio);
+    void marcar(UsuarioSistema usuarioLogado, Long episodio);
+    void desmarcar(UsuarioSistema usuarioLogado, Long episodio);
     void atualizarQtdEpisodios(UsuarioSistema usuarioLogado);
     List<Episodio> findAllEpisodios(UsuarioSistema usuarioLogado);
 }

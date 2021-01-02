@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{layoutUsuario}">
 <head>
-    <title>Séries salvas</title>
+    <title th:text="'Série ' + *{title}"></title>
 </head>
 <body>
 	<section layout:fragment="body">
 		<div class="app-title">
-			<h1>Séries salvas</h1>
+			<h1 th:text="'Série ' + *{title}"></h1>
 			<ul class="app-breadcrumb breadcrumb">
 				<li class="breadcrumb-item"><a href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a></li>
 				<li class="breadcrumb-item">Série</li>
-				<li class="breadcrumb-item"><a href="#">Salvas</a></li>
+				<li class="breadcrumb-item"><a href="#" th:text="*{title}"></a></li>
 			</ul>
 		</div>
 		<div th:replace="fragments/alert"></div>
 		<div th:replace="fragments/widgets :: widgets"></div>
-		<form th:action="@{/series/arquivar}" method="POST">
+		<form th:action="*{title} == 'salvas' ? @{/series/salva} : @{/series/arquivada}" method="POST">
 			<div class="card-columns">
 				<div class="card" th:each="usuarioSerie :${lista}">
 					<div class="card-body">
 						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${usuarioSerie.id})}"><h5 class="card-title" th:text="*{usuarioSerie.nome}"></h5></a>
 						<p class="card-text" th:text="*{usuarioSerie.enredo}"></p>
-						<button class="btn btn-secondary" type="submit" name="arquivar" th:value="*{usuarioSerie.id}">Arquivar</button>
+						<button th:class="*{title == 'salvas' ? 'btn btn-success' : 'btn btn-secondary'}" type="submit" th:name="*{title == 'salvas' ? 'arquivar' : 'desarquivar'}" th:value="*{usuarioSerie.id}" th:text="*{title == 'salvas'} ? 'Arquivar' : 'Desarquivar'"></button>
 						<button class="btn btn-danger" type="submit" name="remover" th:value="*{usuarioSerie.id}">Remover</button>
 					</div>
 				</div>

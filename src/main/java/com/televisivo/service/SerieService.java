@@ -21,5 +21,4 @@ public interface SerieService extends GenericService<Serie, Long> {
     void salvarTemporada(Serie serie);
     Serie adicionarTemporada(Serie serie);
     void removerTemporada(Temporada temporada);
-    // Serie duplicateRow(Serie serie, Temporada temporada);
 }

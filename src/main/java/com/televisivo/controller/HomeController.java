@@ -13,7 +13,7 @@ import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.security.UsuarioSistema;
-import com.televisivo.service.SerieService;
+import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,17 +44,10 @@ public class HomeController {
     private UsuarioService contaService;
 
     @Autowired
-    private SerieService serieService;
-
-    @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("*")
-    public ModelAndView lista(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("fragments/header");
-        modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
-        return modelAndView;
-    }
+    @Autowired
+    private UsuarioSerieService usuarioSerieService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
@@ -64,11 +56,11 @@ public class HomeController {
             return new ModelAndView("login");
         }
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-        Pagina<Serie> paginaPagina = new Pagina<>(serieService.listaComPaginacao(serieFilter, pageable), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
+        Pagina<Serie> pagina = new Pagina<>(usuarioSerieService.listaComPaginacao(serieFilter, pageable, usuarioLogado), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
         ModelAndView modelAndView = new ModelAndView("home");
         modelAndView.addObject("pageSizes", TelevisivoConfig.PAGE_SIZES);
         modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
-        modelAndView.addObject("pagina", paginaPagina);
+        modelAndView.addObject("pagina", pagina);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         return modelAndView;
     }

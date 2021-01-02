@@ -35,8 +35,7 @@
                 <form th:action="@{./detalhes}" method="POST">
                     <div class="col-md mb-1">
                         <a th:href="@{./episodio/{idEpisodio}/detalhes(idEpisodio=${episodio.id})}" type="button" class="btn btn-primary">Episodio <span class="badge badge-light" th:text="${episodio.numero}"></span></a>
-                        <button class="btn btn-success" type="submit" name="marcarEpisodio" th:value="${episodio.id}">Marcar</button>
-                        <button class="btn btn-danger" type="submit" name="desmarcarEpisodio" th:value="${episodio.id}">Desmarcar</button>
+                        <button th:class="${episodio.marcado ? 'btn btn-danger' : 'btn btn-success'}" type="submit" th:name="${episodio.marcado ? 'desmarcar' : 'marcar'}" th:value="${episodio.id}" th:text="${episodio.marcado ? 'Desmarcar' : 'Marcar'}"></button>
                     </div>
                 </form>
             </div>
