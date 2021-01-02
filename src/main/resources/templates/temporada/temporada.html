@@ -65,10 +65,6 @@
                                 <input required type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
-                                <label class="sr-only" for="publicacao">Publicação</label>
-                                <input required type="date" class="form-control mb-2" placeholder="Publicação" th:field="*{episodios[__${rowStat.index}__].publicacao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].publicacao')} ? 'is-invalid'">
-                            </div>
-                            <div class="col-auto">
                                 <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
                                 <button th:if="*{episodios[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>
                             </div>

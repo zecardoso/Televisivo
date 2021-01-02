@@ -31,7 +31,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
     }
 
     @Override
-    public void marcarEpisodio(UsuarioSistema usuarioLogado, Long episodioId) {
+    public void marcar(UsuarioSistema usuarioLogado, Long episodioId) {
         UsuarioEpisodio usuarioEpisodio = new UsuarioEpisodio();
         UsuarioEpisodioId id = new UsuarioEpisodioId();
         id.setEpisodio(episodioId);
@@ -42,7 +42,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
     }
 
     @Override
-    public void desmarcarEpisodio(UsuarioSistema usuarioLogado, Long episodioId) {
+    public void desmarcar(UsuarioSistema usuarioLogado, Long episodioId) {
         UsuarioEpisodioId id = new UsuarioEpisodioId();
         id.setEpisodio(episodioId);
         id.setUsuario(findUsuario(usuarioLogado));
@@ -52,7 +52,7 @@ public class UsuarioEpisodioServiceImpl implements UsuarioEpisodioService {
 
     @Override
     public void atualizarQtdEpisodios(UsuarioSistema usuarioLogado) {
-        Usuario usuario = usuarioRepository.getOne(usuarioLogado.getUsuario().getId());
+        Usuario usuario = usuarioRepository.getOne(findUsuario(usuarioLogado));
         usuario.setQtdEpisodios(usuarioEpisodioRepository.qtd(usuario.getId()));
     }
 

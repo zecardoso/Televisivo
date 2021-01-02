@@ -19,4 +19,7 @@ public interface UsuarioEpisodioRepository extends JpaRepository<UsuarioEpisodio
 
     @Query("SELECT count(u) FROM UsuarioEpisodio u WHERE u.usuario.id = :usuarioLogado")
     int qtd(@Param("usuarioLogado") Long usuarioLogado);
+
+    @Query("SELECT count(u) FROM UsuarioEpisodio u WHERE u.usuario.id = :usuarioLogado AND u.episodio.id = :episodio")
+    int marcado(@Param("usuarioLogado") Long usuarioLogado, @Param("episodio") Long episodio);
 }

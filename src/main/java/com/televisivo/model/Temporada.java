@@ -26,7 +26,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@SequenceGenerator(name = "temporada_sequence", sequenceName = "temporada_sequence", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "temporada_sequence", sequenceName = "temporada_sequence", allocationSize = 1)
 public class Temporada implements Serializable {
 
     private static final long serialVersionUID = 8837111332892294543L;
@@ -34,7 +34,7 @@ public class Temporada implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "temporada_sequence")
-    @Column(name = "temporada_id")
+    @Column(name = "temporada_id", updatable = false)
     private Long id;
 
     @NotNull(message = "O número deve ser informado.")

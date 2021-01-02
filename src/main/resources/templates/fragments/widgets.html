@@ -1,4 +1,4 @@
-<div class="row" th:fragment="widgets" th:object="${usuarioLogado.getUsuario()}">
+<div class="row" th:fragment="widgets" th:object="${usuarioLogado}">
     <div class="col-md-3">
         <div class="widget-small info"><i class="icon fa fa-bookmark fa-3x" aria-hidden="true"></i>
             <div class="info">
@@ -18,7 +18,7 @@
     <div class="col-md-3">
         <div class="widget-small danger"><i class="icon fa fa-star fa-3x" aria-hidden="true"></i>
             <div class="info">
-                <a th:href="@{/series/salvas}"><h4 style="color: white;	">Episódios</h4></a>
+                <a th:href="@{/episodios}"><h4 style="color: white;	">Episódios</h4></a>
                 <p><strong th:text="*{qtdEpisodios}"></strong></p>
             </div>
         </div>

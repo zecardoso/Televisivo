@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" layout:decorate="~{layout}">
+<html lang="pt-br" layout:decorate="~{layoutUsuario}">
 <head>
     <title>Episódios marcados</title>
 </head>
@@ -13,6 +13,7 @@
                 <li class="breadcrumb-item"><a href="#">Listar</a></li>
             </ul>
 		</div>
+		<div th:replace="fragments/widgets :: widgets"></div>
 		<div class="tile">
 			<div class="tile-body">
 				<div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
@@ -21,17 +22,6 @@
 							<div th:replace="fragments/alert"></div>
 						</div>
 					</div>
-					<!-- <div class="form-row">
-						<form method="GET" th:object="${rolePermissaoFilter}">
-							<div class="input-group mb-3">
-								<input type="text" class="form-control" id="nome" name="nome" th:field="*{role}" placeholder="Role" aria-label="Role">
-								<input type="text" class="form-control" id="permissao" name="permissao" th:field="*{permissao}" placeholder="Permissão" aria-label="Permissão">
-								<div class="input-group-append">
-									<button class="input-group-text">Pesquisar</button>
-								</div>
-							</div>
-						</form>
-					</div> -->
 					<div class="row">
 						<div class="col-md-12">
 							<table class="table table-bordered table-hover" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
@@ -40,16 +30,20 @@
 										<th scope="col">Episodio</th>
 										<th scope="col">Temporada</th>
 										<th scope="col">Série</th>
-										<th scope="col" style="text-align: center;">Detalhes</th>
+										<th scope="col" style="text-align: center;">Dermarcar</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="usuarioEpisodio :${lista}">
-										<td data-tile="Episodio" th:text="${usuarioEpisodio.numero}"></td>
+										<td data-tile="Episodio" th:text="${usuarioEpisodio.nome}"></td>
 										<td data-tile="Temporada" th:text="${usuarioEpisodio.temporada.numero}"></td>
 										<td data-tile="Série" th:text="${usuarioEpisodio.temporada.serie.nome}"></td>
-										<td data-tile="Remover" style="text-align: center;">
-											<a title="Remover" th:href="@{./episodios/remover/{usuario}/{episodio}(usuario=${usuarioLogado.getUsuario().getId()}, episodio=${usuarioEpisodio.id})}" class="btn btn-danger btn-sm">Remover</a>
+										<td data-tile="Dermarcar" style="text-align: center;">
+											<form th:action="@{/episodios}" method="POST">
+												<div class="col-md mb-1">
+													<button class="btn btn-danger" type="submit" name="desmarcar" th:value="${usuarioEpisodio.id}">Desmarcar</button>
+												</div>
+											</form>
 										</td>
 									</tr>
 								</tbody>
@@ -68,7 +62,7 @@
 
 			function changePageAndSize(){
 				$('#pageSizeSelect').change(function(e){
-					window.location.replace("/usuario/lista?size="+this.value+"&page=0");
+					window.location.replace("/usuario/lista?size="+this.value);
 				});
 			}
 		</script>

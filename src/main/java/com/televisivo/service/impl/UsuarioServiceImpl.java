@@ -8,6 +8,7 @@ import com.televisivo.model.Usuario;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.repository.filters.UsuarioFilter;
 import com.televisivo.service.UsuarioService;
+import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
 import com.televisivo.service.exceptions.UsuarioNaoCadastradoException;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,14 +38,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
@@ -53,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
-            throw new SenhaError("Senha incorreta.");
+            throw new ConfirmeSenhaNaoInformadaException("Senha incorreta.");
         }
         if (usuario.getPassword().isBlank() || (usuario.getContraSenha()).isBlank()) {
             throw new SenhaError("A senha não pode estar em branco.");
@@ -64,41 +62,41 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
-        Usuario usuarioLogado = findById(usuario.getId());
+        Usuario usuarioOrg = findById(usuario.getId());
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
             throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
-            usuario.setPassword(usuarioLogado.getPassword());
+            usuario.setPassword(usuarioOrg.getPassword());
         } else if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
         } else {
             usuario.setPassword(encodePassword(usuario.getPassword()));
         }
+        usuario.setQtdEpisodios(usuarioOrg.getQtdEpisodios());
+        usuario.setQtdSeries(usuarioOrg.getQtdSeries());
+        usuario.setQtdSeriesArq(usuarioOrg.getQtdSeriesArq());
+        usuario.setLastLogin(usuarioOrg.getLastLogin());
         return usuarioRepository.save(usuario);
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Usuario getOne(Long id) {
         return usuarioRepository.getOne(id);
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoCadastradoException(id));
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','EXCLUIR')")
     public void deleteById(Long id) {
         try {
@@ -109,14 +107,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public List<Usuario> buscarNome(String nome) {
         return usuarioRepository.buscarNome(nome);
     }
 
     @Override
-    @Secured("hasRole('ADMINISTRADOR')")
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
     public Page<Usuario> listaComPaginacao(UsuarioFilter usuarioFilter, Pageable pageable) {
         return usuarioRepository.listaComPaginacao(usuarioFilter, pageable);

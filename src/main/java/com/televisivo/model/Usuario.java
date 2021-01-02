@@ -16,9 +16,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,7 +50,8 @@ import lombok.ToString;
 @SQLDelete(sql = "UPDATE usuario SET registro_deletado = true WHERE usuario_id = ?")
 @Where(clause = TelevisivoConfig.NAO_DELETADO)
 @WhereJoinTable(clause = TelevisivoConfig.NAO_DELETADO)
-@SequenceGenerator(name = "usuario_sequence", sequenceName = "usuario_sequence", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "usuario_sequence", sequenceName = "usuario_sequence", allocationSize = 1)
+@Table(uniqueConstraints = { @UniqueConstraint(name = "email_unique", columnNames = "email"), @UniqueConstraint(name = "username_unique", columnNames = "username") })
 public class Usuario implements UserDetails {
 
     private static final long serialVersionUID = 3598850498230758819L;
@@ -56,13 +59,13 @@ public class Usuario implements UserDetails {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_sequence")
-    @Column(name = "usuario_id")
+    @Column(name = "usuario_id", updatable = false)
     private Long id;
 
     @Size(min = 3, max = 40, message = "O username deve ter entre {min} e {max} caracteres.")
     @NotBlank(message = "O usernome deve ser informado.")
     @NotNull(message = "O usernome deve ser informado.")
-    @Column(length = 40, unique = true, nullable = false)
+    @Column(length = 40, nullable = false)
     private String username;
 
     @Size(min = 3, max = 40, message = "O nome deve ter entre {min} e {max} caracteres.")
@@ -80,7 +83,7 @@ public class Usuario implements UserDetails {
     @Size(min = 3, max = 50, message = "O e-mail deve ter entre {min} e {max} caracteres.")
     @NotBlank(message = "O e-mail deve ser informado.")
     @NotNull(message = "O e-mail deve ser informado.")
-    @Column(length = 50, unique = true, nullable = false)
+    @Column(length = 50, nullable = false)
     private String email;
 
     @Column(nullable = true)
@@ -120,11 +123,6 @@ public class Usuario implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "usuario_categoria", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    private List<Categoria> categorias;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<UsuarioEpisodio> usuarioEpisodios = new ArrayList<>();

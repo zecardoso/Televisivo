@@ -1,13 +1,9 @@
 package com.televisivo.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
-import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Role;
-import com.televisivo.model.UsuarioAuditoria;
 import com.televisivo.repository.RoleRepository;
-import com.televisivo.repository.UsuarioAuditoriaRepository;
 import com.televisivo.repository.filters.RoleFilter;
 import com.televisivo.service.RoleService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
@@ -31,9 +27,6 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private UsuarioAuditoriaRepository usuarioAuditoriaRepository;
-
     @Override
 	@Transactional(readOnly = true)
     @PreAuthorize("hasPermission('ROLE','LEITURA')")
@@ -45,14 +38,12 @@ public class RoleServiceImpl implements RoleService {
     @PreAuthorize("hasPermission('ROLE','INSERIR')")
     public Role save(Role role) {
         role = roleRepository.save(role);
-        // saveUsuarioAuditoria(role, TelevisivoConfig.INCLUSAO);
         return role;
     }
 
     @Override
     @PreAuthorize("hasPermission('ROLE','ATUALIZAR')")
     public Role update(Role role) {
-        // saveUsuarioAuditoria(role, TelevisivoConfig.ALTERACAO);
         return save(role);
     }
 
@@ -73,7 +64,6 @@ public class RoleServiceImpl implements RoleService {
     @PreAuthorize("hasPermission('ROLE','EXCLUIR')")
     public void deleteById(Long id) {
         try {
-            // saveUsuarioAuditoria(getOne(id), TelevisivoConfig.EXCLUSAO);
             roleRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("A Role de código %d não pode ser removida.", id));
@@ -93,15 +83,4 @@ public class RoleServiceImpl implements RoleService {
     public Page<Role> listaComPaginacao(RoleFilter roleFilter, Pageable pageable) {
         return roleRepository.listaComPaginacao(roleFilter, pageable);
     }
-
-    @Override
-	@Transactional
-	public void saveUsuarioAuditoria(Role role, String operacao) {
-		UsuarioAuditoria usuarioAuditoria = new UsuarioAuditoria();
-		usuarioAuditoria.getAuditoria().setDataOperacao(new Date());
-		usuarioAuditoria.getAuditoria().setUsuario(TelevisivoConfig.pegarUsuario());
-		usuarioAuditoria.getAuditoria().setTipoOperacao(operacao);
-		usuarioAuditoria.setRole(role);
-        usuarioAuditoriaRepository.save(usuarioAuditoria);
-	}
 }

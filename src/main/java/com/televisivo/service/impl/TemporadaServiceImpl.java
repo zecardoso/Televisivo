@@ -14,14 +14,12 @@ import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@Secured("hasRole('ADMINISTRADOR')")
 public class TemporadaServiceImpl implements TemporadaService {
 
     @Autowired
@@ -143,7 +141,6 @@ public class TemporadaServiceImpl implements TemporadaService {
         episodioNew.setNumero(episodio.getNumero()+1);
         episodioNew.setDuracao(episodio.getDuracao());
         episodioNew.setEnredo(episodio.getEnredo());
-        episodioNew.setPublicacao(episodio.getPublicacao());
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodioNew);
         return temporada;

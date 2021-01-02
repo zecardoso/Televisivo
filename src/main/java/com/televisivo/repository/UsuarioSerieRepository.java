@@ -19,4 +19,7 @@ public interface UsuarioSerieRepository extends JpaRepository<UsuarioSerie, Usua
 
     @Query("SELECT count(u) FROM UsuarioSerie u WHERE u.arquivada = :arquivada AND u.usuario.id = :usuarioLogado")
     int qtd(@Param("usuarioLogado") Long usuarioLogado, @Param("arquivada") Boolean arquivada);
+
+    @Query("SELECT count(u) FROM UsuarioSerie u WHERE u.usuario.id = :usuarioLogado AND u.serie.id = :serie AND u.arquivada = :arquivada")
+    int salva(@Param("usuarioLogado") Long usuarioLogado, @Param("serie") Long serie, @Param("arquivada") Boolean arquivada);
 }

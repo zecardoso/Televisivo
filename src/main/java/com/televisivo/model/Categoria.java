@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@SequenceGenerator(name = "categoria_sequence", sequenceName = "categoria_sequence", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "categoria_sequence", sequenceName = "categoria_sequence", allocationSize = 1)
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = -495061248786573017L;
@@ -31,7 +31,7 @@ public class Categoria implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categoria_sequence")
-    @Column(name = "categoria_id")
+    @Column(name = "categoria_id", updatable = false)
     private Long id;
 
     @Size(min = 3, max = 40, message = "O nome deve ter entre {min} e {max} caracteres.")
@@ -39,9 +39,6 @@ public class Categoria implements Serializable {
 	@NotNull(message = "O nome deve ser informado.")
 	@Column(length = 40, nullable = false)
     private String nome;
-
-	@ManyToMany(mappedBy="categorias")
-    private List<Usuario> usuarios = new ArrayList<>();
 
 	@ManyToMany(mappedBy="categorias")
     private List<Serie> series = new ArrayList<>();
