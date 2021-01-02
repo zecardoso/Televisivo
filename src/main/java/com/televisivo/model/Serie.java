@@ -68,6 +68,16 @@ public class Serie implements Serializable {
     @Column(name = "qtd_seguidores")
     private int qtdSeguidores;
 
+    @Column(nullable = true, length = 64)
+    private String photos;
+
+    @Transient
+    public String getPhotoImagePath(){
+        if(photos == null || id == null ) return null;
+
+        return "/serie-imagem/" + id + "/" + photos;
+    }
+
     @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Temporada> temporadas = new ArrayList<>();
 

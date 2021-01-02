@@ -166,22 +166,38 @@ public class UsuarioSerieController {
 
     @PostMapping(value = "/series/{id}/temporada/{id}/detalhes", params = "marcar")
     public String marcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        usuarioEpisodioService.marcar(usuarioLogado, Long.parseLong(request.getParameter("marcar")));
-        attributes.addFlashAttribute(SUCCESS, "Episódio marcado com sucesso.");
-        return "redirect:./detalhes";
+        try {
+            usuarioEpisodioService.marcar(usuarioLogado, Long.parseLong(request.getParameter("marcar")));
+            attributes.addFlashAttribute(SUCCESS, "Episódio marcado com sucesso.");
+            return "redirect:./detalhes";
+        } catch (Exception e) {
+            return "redirect:./detalhes";
+        }
+        
     }
 
     @PostMapping(value = "/series/{id}/temporada/{id}/detalhes", params = "desmarcar")
     public String desmarcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
-        attributes.addFlashAttribute(SUCCESS, "Episódio desmarcado com sucesso.");
-        return "redirect:./detalhes";
+        try {
+            usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
+            attributes.addFlashAttribute(SUCCESS, "Episódio desmarcado com sucesso.");
+            return "redirect:./detalhes";
+        } catch (Exception e) {
+            return "redirect:./detalhes";
+        }
+        
     }
 
     @PostMapping(value = "/episodios", params = "desmarcar")
-    public String desmarcarHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
-        attributes.addFlashAttribute(SUCCESS, "Episódio desmarcado com sucesso.");
-        return "redirect:/episodios";
+    public String desmarcarHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {      
+        try {
+            usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
+            attributes.addFlashAttribute(SUCCESS, "Episódio desmarcado com sucesso.");
+            return "redirect:/episodios";
+        } catch (Exception e) {
+            return "redirect:/episodios";
+        }
+       
+       
     }
 }

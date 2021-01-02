@@ -1,7 +1,12 @@
 package com.televisivo.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +37,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +45,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -86,12 +93,30 @@ public class SerieController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, 
+    @RequestParam("fileImage") MultipartFile multipartFile ) throws IOException {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:/serie/cadastro";
         }
-        serieService.save(serie);
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        serie.setPhotos(fileName);
+        Serie saveSerie = serieService.save(serie);
+
+        String uploadDir = "serie-imagem/" + saveSerie.getId();
+
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)){
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()){
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e){
+            throw new IOException("Não foi possivel salvar a imagem :" + fileName);
+        }
         serieService.salvarTemporada(serie);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
         return "redirect:./" + serie.getId() + "/alterar";
