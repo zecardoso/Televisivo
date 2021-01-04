@@ -16,17 +16,22 @@
 		<div th:replace="fragments/alert"></div>
 		<div th:replace="fragments/widgets :: widgets"></div>
 		<form th:action="*{title} == 'salvas' ? @{/series/salva} : @{/series/arquivada}" method="POST">
-			<div class="card-columns">
+			<div class="card-columns" style="column-count: 5;">
 				<div class="card" th:each="usuarioSerie :${lista}">
+					<img class="card-img-top" th:src="@{${usuarioSerie.photoImagePath}}" alt="Card image cap" style="max-height: 400px;">
 					<div class="card-body">
-						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${usuarioSerie.id})}"><h5 class="card-title" th:text="*{usuarioSerie.nome}"></h5></a>
-						<p class="card-text" th:text="*{usuarioSerie.enredo}"></p>
-						<button th:class="*{title == 'salvas' ? 'btn btn-success' : 'btn btn-secondary'}" type="submit" th:name="*{title == 'salvas' ? 'arquivar' : 'desarquivar'}" th:value="*{usuarioSerie.id}" th:text="*{title == 'salvas'} ? 'Arquivar' : 'Desarquivar'"></button>
-						<button class="btn btn-danger" type="submit" name="remover" th:value="*{usuarioSerie.id}">Remover</button>
+						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${usuarioSerie.id})}"><h5 class="card-title" th:text="*{usuarioSerie.nome}  + ' - ' + *{usuarioSerie.ano}"></h5></a>
+						<div class="btn-group" th:each="categoria : *{usuarioSerie.categorias}">
+							<a th:href="@{/categoria/{id}(id=*{categoria.id})}" class="btn btn-primary btn-sm" th:text="*{categoria.nome}"></a>
+						</div>
+						<br>
+						<br>					
+						<button th:class="${usuarioSerie.salva} ? 'btn btn-secondary' : (${usuarioSerie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${usuarioSerie.salva} ? 'arquivar' : (${usuarioSerie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${usuarioSerie.id}" th:text="${usuarioSerie.salva} ? 'Arquivar' : (${usuarioSerie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>						
+						<button th:if="${usuarioSerie.salva} OR ${usuarioSerie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{usuarioSerie.id}">Remover</button>
 					</div>
 				</div>
 			</div>
-		</form>
+		</form>		
 	</section>
 	<th:block layout:fragment="javascript-extra">
 		<script>
