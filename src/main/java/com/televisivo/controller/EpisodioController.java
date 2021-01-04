@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Temporada;
 import com.televisivo.service.EpisodioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class EpisodioController {
             return "redirect:../.././episodio/" + id + "/alterar";
         }
         episodioService.update(episodio);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Episódio alterado com sucesso.");
         return DETALHES;
     }
 
@@ -78,8 +79,10 @@ public class EpisodioController {
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        Temporada temporada = episodioService.findTemporadaByIdEpisodio(id);
         episodioService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        episodioService.atualizarQtdEpisodios(temporada);
+        attributes.addFlashAttribute(SUCCESS, "Episódio removido com sucesso.");
         return REDIRECT_TEMPORADA;
     }
 

@@ -79,11 +79,11 @@
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label>Foto</label>
-                                <input type="file" name="fileImage" id="fileImage" accept="image/png, image/jpeg"/>                                
+                                <input class="form-control" type="file" name="fileImage" id="fileImage" accept="image/png, image/jpeg"/>
 							</div>
                         </div>
                         <img id="thumbnail" alt="Logo Preview" style="max-width: 100px;"/>
-                         <br/>   
+                        <br>
                         <label class="control-label">Categorias</label>
                         <div class="form-row">
                             <th:block th:each="categoria : ${categorias}">
@@ -125,7 +125,7 @@
             </div>
         </div>
     </section>
-    <th:block layout:fragment="javascript-extra">        
+    <th:block layout:fragment="javascript-extra">
 		<script th:src="@{/js/bootstrap-switch.min.js}"></script>
         <script type="text/javascript">
             $('.js-status').bootstrapSwitch();
@@ -133,14 +133,13 @@
             $(document).ready(function () {
             $('#fileImage').change(function () {
                 showImageThumbnail(this);
-            });            
+            });
            });
 
-          
-           function showImageThumbnail(fileInput) {           
+           function showImageThumbnail(fileInput) {
             file = fileInput.files[0];
             reader = new FileReader();
-           
+
             reader.onload = function(e){
                 $('#thumbnail').attr('src', e.target.result);
             };

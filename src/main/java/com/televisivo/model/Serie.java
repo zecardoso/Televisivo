@@ -92,9 +92,7 @@ public class Serie implements Serializable {
     @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
     private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
 
-    @Transient
     private boolean salva;
 
-    @Transient
     private boolean arquivada;
 }

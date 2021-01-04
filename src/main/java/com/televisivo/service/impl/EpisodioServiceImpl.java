@@ -66,7 +66,6 @@ public class EpisodioServiceImpl implements EpisodioService {
 		} catch (EmptyResultDataAccessException e){
 			throw new EpisodioNaoCadastradoException(String.format("O episodio com o código %d não foi encontrado!", id));
         }
-        atualizarQtdEpisodios(findTemporadaByIdEpisodio(id));
     }
 
     @Override

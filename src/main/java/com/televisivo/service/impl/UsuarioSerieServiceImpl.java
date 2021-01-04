@@ -2,11 +2,13 @@ package com.televisivo.service.impl;
 
 import java.util.List;
 
+import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.UsuarioSerie;
 import com.televisivo.model.UsuarioSerieId;
+import com.televisivo.repository.CategoriaRepository;
 import com.televisivo.repository.SerieRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.repository.UsuarioEpisodioRepository;
@@ -41,6 +43,9 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     @Autowired
     private SerieRepository serieRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
     @Override
     public Long findUsuario(UsuarioSistema usuarioLogado) {
         return usuarioLogado.getUsuario().getId();
@@ -62,6 +67,7 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         usuarioSerieRepository.save(usuarioSerie);
         atualizarQtdSeries(usuarioLogado);
         atualizarQtdSeriesArq(usuarioLogado);
+        atualizarQtdSeguidores(serie);
     }
 
     @Override
@@ -73,6 +79,7 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         usuarioSerie.setArquivada(arquivada);
         atualizarQtdSeries(usuarioLogado);
         atualizarQtdSeriesArq(usuarioLogado);
+        atualizarQtdSeguidores(serie);
     }
 
     @Override
@@ -83,6 +90,7 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
         usuarioSerieRepository.deleteById(id);
         atualizarQtdSeries(usuarioLogado);
         atualizarQtdSeriesArq(usuarioLogado);
+        atualizarQtdSeguidores(serie);
     }
 
     @Override
@@ -95,6 +103,11 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     public void atualizarQtdSeriesArq(UsuarioSistema usuarioLogado) {
         Usuario usuario = usuarioRepository.getOne(findUsuario(usuarioLogado));
         usuario.setQtdSeriesArq(usuarioSerieRepository.qtd(usuario.getId(), true));
+    }
+
+    @Override
+    public void atualizarQtdSeguidores(Long serie) {
+        serieRepository.getOne(serie).setQtdSeguidores(usuarioSerieRepository.qtdSeguidores(serie));
     }
 
     @Override
@@ -111,7 +124,8 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     public List<Episodio> episodios(UsuarioSistema usuarioLogado, Long temporada) {
         List<Episodio> lista = temporadaRepository.episodios(temporada);
         for (int i = 0; i < lista.size(); i++) {
-            lista.get(i).setMarcado(usuarioEpisodioRepository.marcado(findUsuario(usuarioLogado), lista.get(i).getId()) != 0);
+            lista.get(i).setMarcado(
+                    usuarioEpisodioRepository.marcado(findUsuario(usuarioLogado), lista.get(i).getId()) != 0);
         }
         return lista;
     }
@@ -120,9 +134,22 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     public Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable, UsuarioSistema usuarioLogado) {
         Page<Serie> lista = serieRepository.listaComPaginacao(serieFilter, pageable);
         for (int i = 0; i < lista.getContent().size(); i++) {
-            lista.getContent().get(i).setSalva(usuarioSerieRepository.salva(findUsuario(usuarioLogado), lista.getContent().get(i).getId(), false) != 0);
-            lista.getContent().get(i).setArquivada(usuarioSerieRepository.salva(findUsuario(usuarioLogado), lista.getContent().get(i).getId(), true) != 0);
+            lista.getContent().get(i).setSalva(usuarioSerieRepository.salva(findUsuario(usuarioLogado),
+                    lista.getContent().get(i).getId(), false) != 0);
+            lista.getContent().get(i).setArquivada(usuarioSerieRepository.salva(findUsuario(usuarioLogado),
+                    lista.getContent().get(i).getId(), true) != 0);
         }
         return lista;
+    }
+
+    @Override
+    public List<Serie> findAllSeriesCategoria(Long categoria) {
+        return serieRepository.series(categoria);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Categoria> findAll() {
+        return categoriaRepository.findAll();
     }
 }

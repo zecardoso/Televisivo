@@ -64,7 +64,7 @@ public class TemporadaController {
         temporadaService.salvarEpisodio(temporada);
         temporadaService.atualizarQtdEpisodios(temporada);
         temporadaService.update(temporada);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Temporada alterado com sucesso.");
         return REDIRECT_TEMPORADA;
     }
 
@@ -75,6 +75,7 @@ public class TemporadaController {
             return viewAlterar(id);
         }
         temporadaService.salvarEpisodio(temporada);
+        temporadaService.atualizarQtdEpisodios(temporada);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
         modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
@@ -85,8 +86,8 @@ public class TemporadaController {
     public ModelAndView removerEpisodio(@PathVariable("id") Long id, Temporada temporada, HttpServletRequest request) {
         Episodio episodio = temporadaService.findEpisodioByIdEpisodio(Long.parseLong(request.getParameter("removeRow")));
         temporadaService.removerEpisodio(episodio);
-        ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         temporadaService.atualizarQtdEpisodios(temporada);
+        ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, episodio.getTemporada());
         return modelAndView;
     }
@@ -117,7 +118,7 @@ public class TemporadaController {
         Serie serie = temporadaService.findSerieByIdTemporada(id);
         temporadaService.deleteById(id);
         temporadaService.atualizarQtdTemporadas(serie);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Temporada removido com sucesso.");
         return REDIRECT_SERIE;
     }
 

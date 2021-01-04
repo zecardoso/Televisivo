@@ -17,29 +17,36 @@
 		<div th:replace="fragments/widgets :: widgets"></div>
 		<div class="form-row">
 			<div class="form-group col-md-1">
-				<select class="form-control form-control-md" id="pageSizeSelect">
+				<select class="form-control form-control-md" onchange="javascript:window.location = '/?size='+this.value">
 					<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" th:selected="${pageSize} == ${size}"></option>
+				</select>
+			</div>
+			<div class="form-group col-md-1">
+				<select class="form-control form-control-md" onchange="javascript:window.location = this.value">
+					<option value="">Categoria</option>
+					<option th:each="categoria : ${categorias}" th:text="*{categoria.nome}" th:value="@{/categoria/{id}(id=*{categoria.id})}"></option>
 				</select>
 			</div>
 			<form method="GET" th:object="${serieFilter}">
 				<div class="input-group mb-5">
-					<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome" aria-label="Nome">					
+					<input type="text" class="form-control" name="nome" id="nome" th:field="*{nome}" placeholder="Nome" aria-label="Nome">
 					<div class="input-group-append">
 						<button class="input-group-text">Pesquisar</button>
 					</div>
 				</div>
 			</form>
 		</div>
-		<div class="card-columns"  style="column-count: 5;">
+		<div class="card-columns" style="column-count: 5;">
 			<div class="card" th:each="serie :${pagina.conteudo}">
 				<form th:action="@{/acao}" method="POST">
 					<img class="card-img-top" th:src="@{${serie.photoImagePath}}" alt="Card image cap" style="max-height: 400px;">
 					<div class="card-body">
-						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>						
-						<!-- <p class="card-text" th:text="*{serie.enredo}"></p> -->						
-						<button class="btn-secondary">Terror</button> <button class="btn-success">Ação</button>
-						<br/>
-						<br/>
+						<a class="card-link" th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
+						<div class="btn-group" th:each="categoria : *{serie.categorias}">
+							<a th:href="@{/categoria/{id}(id=*{categoria.id})}" class="btn btn-primary btn-sm" th:text="*{categoria.nome}"></a>
+						</div>
+						<br>
+						<br>
                         <button th:class="${serie.salva} ? 'btn btn-secondary' : (${serie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${serie.salva} ? 'arquivar' : (${serie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${serie.id}" th:text="${serie.salva} ? 'Arquivar' : (${serie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>
 						<button th:if="${serie.salva} OR ${serie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{serie.id}">Remover</button>
 					</div>
@@ -53,17 +60,6 @@
 		</div>
 	</section>
 	<th:block layout:fragment="javascript-extra">
-		<script>
-			$(document).ready(function(){
-				changePageAndSize();
-			});
-
-			function changePageAndSize(){
-				$('#pageSizeSelect').change(function(e){
-					window.location.replace("/?size="+this.value);
-				});
-			}
-		</script>
 	</th:block>
 </body>
 </html>

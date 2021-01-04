@@ -1,5 +1,6 @@
 package com.televisivo.controller;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
+import com.televisivo.model.Categoria;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
@@ -95,5 +97,10 @@ public class HomeController {
     @ModelAttribute("generos")
     public Genero[] getGeneros() {
         return Genero.values();
+    }
+
+    @ModelAttribute("categorias")
+	public List<Categoria> getCategorias() {
+		return usuarioSerieService.findAll();
     }
 }

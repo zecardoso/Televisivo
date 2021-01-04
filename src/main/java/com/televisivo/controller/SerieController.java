@@ -93,8 +93,7 @@ public class SerieController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, 
-    @RequestParam("fileImage") MultipartFile multipartFile ) throws IOException {
+    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:/serie/cadastro";
@@ -118,7 +117,7 @@ public class SerieController {
             throw new IOException("Não foi possivel salvar a imagem :" + fileName);
         }
         serieService.salvarTemporada(serie);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série adicionado com sucesso.");
         return "redirect:./" + serie.getId() + "/alterar";
     }
 
@@ -144,15 +143,34 @@ public class SerieController {
     }
 
     @PostMapping("/{id}/alterar")
-    public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
+    public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:./alterar";
         }
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        serie.setPhotos(fileName);
+
         serieService.salvarTemporada(serie);
         serieService.atualizarQtdTemporadas(serie);
-        serieService.update(serie);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+
+        Serie saveSerie = serieService.update(serie);
+
+        String uploadDir = "serie-imagem/" + saveSerie.getId();
+
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)){
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()){
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e){
+            throw new IOException("Não foi possivel salvar a imagem :" + fileName);
+        }
+        attributes.addFlashAttribute(SUCCESS, "Série alterado com sucesso.");
         return DETALHES;
     }
 
@@ -174,8 +192,8 @@ public class SerieController {
     public ModelAndView removerTemporada(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
         Temporada temporada = serieService.findTemporadaByIdTemporada(Long.parseLong(request.getParameter("removeRow")));
         serieService.removerTemporada(temporada);
-        ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         serieService.atualizarQtdTemporadas(serie);
+        ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, temporada.getSerie());
         return modelAndView;
     }
@@ -192,7 +210,7 @@ public class SerieController {
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         serieService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série removido com sucesso.");
         return "redirect:../lista";
     }
 

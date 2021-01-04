@@ -2,6 +2,7 @@ package com.televisivo.service;
 
 import java.util.List;
 
+import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.UsuarioSerie;
@@ -16,7 +17,11 @@ public interface UsuarioSerieService {
     Long findUsuario(UsuarioSistema usuarioLogado);
     void atualizarQtdSeries(UsuarioSistema usuarioLogado);
     void atualizarQtdSeriesArq(UsuarioSistema usuarioLogado);
+    void atualizarQtdSeguidores(Long serie);
     List<Serie> findAllSeries(UsuarioSistema usuarioLogado, Boolean arquivada);
+
+    List<Serie> findAllSeriesCategoria(Long categoria);
+    List<Categoria> findAll();
 
     int qtd(UsuarioSistema usuarioLogado);
 
