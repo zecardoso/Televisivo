@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -64,7 +65,7 @@ public class Episodio implements Serializable {
 	@JoinColumn(name = "temporada_id", nullable = false, referencedColumnName = "temporada_id", foreignKey = @ForeignKey(name = "FK_TEMPORADA_EPISODIO"))
     private Temporada temporada;
 
-    @OneToMany(mappedBy = "episodio", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "episodio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UsuarioEpisodio> usuarioEpisodios = new ArrayList<>();
 
     private boolean marcado;

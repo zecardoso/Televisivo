@@ -26,10 +26,6 @@ import com.televisivo.service.JasperReportsService;
 import com.televisivo.service.SerieService;
 import com.televisivo.service.ServicoService;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,12 +45,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 @Controller
 @RequestMapping("/serie")
 public class SerieController {
 
     private static final String SERIE = "serie";
-    private static final String TEMPORADA = "temporada";
     private static final String TEMPORADAS = "temporadas";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
@@ -117,7 +116,7 @@ public class SerieController {
             throw new IOException("Não foi possivel salvar a imagem :" + fileName);
         }
         serieService.salvarTemporada(serie);
-        attributes.addFlashAttribute(SUCCESS, "Série adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série adicionada com sucesso.");
         return "redirect:./" + serie.getId() + "/alterar";
     }
 
@@ -136,9 +135,6 @@ public class SerieController {
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serie);
         modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
-        if (serie.getTemporadas().isEmpty()) {
-            modelAndView.addObject(TEMPORADA, serieService.adicionarTemporada(serie));
-        }
         return modelAndView;
     }
 
@@ -170,7 +166,7 @@ public class SerieController {
         } catch (IOException e){
             throw new IOException("Não foi possivel salvar a imagem :" + fileName);
         }
-        attributes.addFlashAttribute(SUCCESS, "Série alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série alterada com sucesso.");
         return DETALHES;
     }
 
@@ -181,7 +177,6 @@ public class SerieController {
             return viewAlterar(id);
         }
         serieService.salvarTemporada(serie);
-        serieService.atualizarQtdTemporadas(serie);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serieService.adicionarTemporada(serie));
         modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
@@ -210,7 +205,7 @@ public class SerieController {
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         serieService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Série removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série removida com sucesso.");
         return "redirect:../lista";
     }
 

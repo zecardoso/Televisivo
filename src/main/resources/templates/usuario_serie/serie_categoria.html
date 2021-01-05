@@ -25,13 +25,13 @@
 							<a th:href="@{/categoria/{id}(id=*{categoria.id})}" class="btn btn-primary btn-sm" th:text="*{categoria.nome}"></a>
 						</div>
 						<br>
-						<br>					
-						<button th:class="${usuarioSerie.salva} ? 'btn btn-secondary' : (${usuarioSerie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${usuarioSerie.salva} ? 'arquivar' : (${usuarioSerie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${usuarioSerie.id}" th:text="${usuarioSerie.salva} ? 'Arquivar' : (${usuarioSerie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>						
+						<br>
+						<button th:class="${usuarioSerie.salva} ? 'btn btn-secondary' : (${usuarioSerie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${usuarioSerie.salva} ? 'arquivar' : (${usuarioSerie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${usuarioSerie.id}" th:text="${usuarioSerie.salva} ? 'Arquivar' : (${usuarioSerie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>
 						<button th:if="${usuarioSerie.salva} OR ${usuarioSerie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{usuarioSerie.id}">Remover</button>
 					</div>
 				</div>
 			</div>
-		</form>		
+		</form>
 	</section>
 	<th:block layout:fragment="javascript-extra">
 		<script>

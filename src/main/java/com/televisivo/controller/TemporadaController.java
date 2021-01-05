@@ -64,7 +64,7 @@ public class TemporadaController {
         temporadaService.salvarEpisodio(temporada);
         temporadaService.atualizarQtdEpisodios(temporada);
         temporadaService.update(temporada);
-        attributes.addFlashAttribute(SUCCESS, "Temporada alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Temporada alterada com sucesso.");
         return REDIRECT_TEMPORADA;
     }
 
@@ -118,7 +118,7 @@ public class TemporadaController {
         Serie serie = temporadaService.findSerieByIdTemporada(id);
         temporadaService.deleteById(id);
         temporadaService.atualizarQtdTemporadas(serie);
-        attributes.addFlashAttribute(SUCCESS, "Temporada removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Temporada removida com sucesso.");
         return REDIRECT_SERIE;
     }
 

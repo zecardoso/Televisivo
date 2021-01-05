@@ -89,7 +89,7 @@ public class Serie implements Serializable {
     @JoinTable(name = "serie_categoria", joinColumns = @JoinColumn(name = "serie_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UsuarioSerie> usuarioSeries = new ArrayList<>();
 
     private boolean salva;

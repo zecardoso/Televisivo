@@ -66,7 +66,6 @@
                             </div>
                             <div class="col-auto">
                                 <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
-                                <button th:if="*{episodios[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>
                             </div>
                             <div class="col-auto">
                                 <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-secondary mb-2" name="duplicateRow" th:value="*{episodios[__${rowStat.index}__].id}">Duplicar</button>

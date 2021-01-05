@@ -109,7 +109,6 @@
                                 </div>
                                 <div class="col-auto">
                                     <button th:if="*{temporadas[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{temporadas[__${rowStat.index}__].id}">Remover</button>
-                                    <button th:if="*{temporadas[__${rowStat.index}__].id} == null" type="reset" class="btn btn-danger mb-2">Remover</button>
                                 </div>
                             </div>
                             <div class="form-group">

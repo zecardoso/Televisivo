@@ -29,5 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
-.serie-imagem/
 mysql.session.sql
+
+serie-imagem/

@@ -113,6 +113,7 @@ public class SerieServiceImpl implements SerieService {
                 }
             }
         }
+        atualizarQtdTemporadas(serie);
     }
 
     @Override
