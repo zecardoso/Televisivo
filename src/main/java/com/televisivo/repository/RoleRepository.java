@@ -17,5 +17,5 @@ public interface RoleRepository extends JpaRepository<Role, Long>, RoleQuery {
     List<Role> buscarNome(@Param("nome") String nome);
 
     @Query("SELECT r FROM Role r LEFT JOIN r.usuarios ")
-	List<Role> findAllRoles();
+    List<Role> findAllRoles();
 }

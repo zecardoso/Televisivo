@@ -15,6 +15,7 @@ import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.security.UsuarioSistema;
+import com.televisivo.service.ContaService;
 import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.UsuarioService;
 
@@ -43,7 +44,7 @@ public class HomeController {
     private static final String USUARIO = "usuarioLogado";
 
     @Autowired
-    private UsuarioService contaService;
+    private ContaService contaService;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -83,15 +84,24 @@ public class HomeController {
         return modelAndView;
     }
 
+    @GetMapping("/signin")
+    public ModelAndView viewSalvar(Usuario usuario) {
+        ModelAndView modelAndView = new ModelAndView("signin");
+        modelAndView.addObject(USUARIO, usuario);
+        return modelAndView;
+    }
+
     @PostMapping("/salvar")
-    public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+    public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
-            return "redirect:/login";
+            return "redirect:/signin";
         }
         contaService.save(usuario);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
-        return "redirect:/";
+        model.addAttribute("email", usuario.getEmail());
+        model.addAttribute("password", usuario.getPassword());
+        return "redirect:/login";
     }
 
     @ModelAttribute("generos")

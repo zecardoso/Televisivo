@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Cadastrar</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type="text/css" th:href="@{css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+</head>
+<body>
+    <section class="material-half-bg">
+        <div class="cover"></div>
+    </section>
+    <section class="login-content">
+        <div class="logo">
+            <h1>Televisivo</h1>
+        </div>
+        <div th:replace="fragments/alert"></div>
+        <div class="login-box">
+            <form class="login-form" th:action="@{/salvar}" method="POST" th:object="${usuario}">
+                <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock" aria-hidden="true"></i>Cadastrar</h3>
+                <div class="form-group">
+                    <label class="control-label">Nome</label>
+                    <Input required class="form-control" type="text" autofocus placeholder="Nome" th:field="*{nome}" id="nome" name="nome" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                    <div class="invalid-feedback">
+                        <span th:errors="*{nome}"></span>
+                    </div>
+                    <label class="control-label">Sobrenome</label>
+                    <Input required class="form-control" type="text" placeholder="Sobrenome" th:field="*{sobrenome}" id="sobrenome" name="sobrenome" th:classappend="${#fields.hasErrors('sobrenome')} ? 'is-invalid'">
+                    <div class="invalid-feedback">
+                        <span th:errors="*{sobrenome}"></span>
+                    </div>
+                    <label class="control-label">Username</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="input_username">@</span>
+                        </div>
+                        <Input required class="form-control" type="text" placeholder="Username" aria-describedby="input_username" th:field="*{username}" id="username" name="username" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+                    </div>
+                    <div class="invalid-feedback">
+                        <span th:errors="*{username}"></span>
+                    </div>
+                    <label class="control-label">Email</label>
+                    <Input required class="form-control" type="email" placeholder="E-mail" th:field="*{email}" id="email" name="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                    <div class="invalid-feedback">
+                        <span th:errors="*{email}"></span>
+                    </div>
+                    <label class="control-label">Gênero</label>
+                    <select required class="form-control" th:field="*{genero}" id="genero" name="genero">
+                        <option value="">Selecione uma opção</option>
+                        <option th:each="genero : ${generos}" th:value="${genero}" th:text="${genero.descricao}" th:classappend="${#fields.hasErrors('genero')} ? 'is-invalid'"></option>
+                    </select>
+                    <label class="control-label">Senha</label>
+                    <Input class="form-control" type="password" placeholder="Senha" th:field="*{password}" id="password" name="password" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+                    <div class="invalid-feedback">
+                        <span th:errors="*{password}"></span>
+                    </div>
+                    <label class="control-label">Confirmar senha</label>
+                    <Input class="form-control" type="password" placeholder="Confirme a senha" th:field="*{contraSenha}" id="contraSenha" name="contraSenha" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
+                    <div class="invalid-feedback">
+                        <span th:errors="*{contraSenha}"></span>
+                    </div>
+                </div>
+                <div class="form-group btn-container">
+                    <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-unlock fa-lg fa-fw" aria-hidden="true"></i>Cadastrar</button>
+                </div>
+                <div class="form-group mt-3">
+                    <p class="semibold-text mb-0"><a href="/login"><i class="fa fa-angle-left fa-fw" aria-hidden="true"></i>Volte ao login</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

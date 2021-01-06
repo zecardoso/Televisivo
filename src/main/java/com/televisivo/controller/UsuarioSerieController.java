@@ -99,7 +99,7 @@ public class UsuarioSerieController {
 
 
     @GetMapping("/categoria/{id}")
-    public ModelAndView listaseriescCat(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model) {
+    public ModelAndView listaseriesCat(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/serie_categoria");
         List<Serie> lista = usuarioSerieService.findAllSeriesCategoria(categoria.getId());
         modelAndView.addObject(LISTA, lista);

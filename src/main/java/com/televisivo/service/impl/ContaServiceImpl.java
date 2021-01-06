@@ -1,8 +1,12 @@
 package com.televisivo.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.televisivo.model.Role;
 import com.televisivo.model.Usuario;
+import com.televisivo.repository.RoleRepository;
 import com.televisivo.repository.UsuarioRepository;
 import com.televisivo.service.ContaService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
@@ -20,6 +24,9 @@ public class ContaServiceImpl implements ContaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -42,6 +49,9 @@ public class ContaServiceImpl implements ContaService {
         }
         usuario.setPassword(encodePassword(usuario.getPassword()));
         usuario.setAtivo(Boolean.TRUE);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.getOne((long) 2));
+        usuario.setRoles(roles);
         return usuarioRepository.save(usuario);
     }
 
