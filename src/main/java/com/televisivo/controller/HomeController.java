@@ -86,7 +86,7 @@ public class HomeController {
 
     @GetMapping("/signin")
     public ModelAndView viewSalvar(Usuario usuario) {
-        ModelAndView modelAndView = new ModelAndView("signin");
+        ModelAndView modelAndView = new ModelAndView("signin-up");
         modelAndView.addObject(USUARIO, usuario);
         return modelAndView;
     }
