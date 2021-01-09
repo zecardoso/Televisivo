@@ -1,25 +1,69 @@
 <div class="row" th:fragment="widgets" th:object="${usuarioLogado}">
-    <div class="col-md-3">
-        <div class="widget-small info"><i class="icon fa fa-bookmark fa-3x" aria-hidden="true"></i>
-            <div class="info">
-                <a th:href="@{/series/salvas}"><h4 style="color: white;	">Séries salvas</h4></a>
-                <p><strong th:text="*{qtdSeries}"></strong></p>
+    <div class="col-12 col-sm-6 col-xxl d-flex">
+        <div class="card illustration flex-fill">
+            <div class="card-body p-0 d-flex flex-fill">
+                <div class="row no-gutters w-100">
+                    <div class="col-6">
+                        <div class="illustration-text p-3 m-1">
+                            <h4 class="illustration-text" th:text="'Olá, ' + *{nome} + '!'"></h4>
+                            <a href="/"><p class="mb-0">Descubra novas séries</p></a>
+                        </div>
+                    </div>
+                    <div class="col-6 align-self-end text-right">
+                        <img src="https://appstack.bootlab.io/img/illustrations/customer-support.png" alt="Customer Support" class="img-fluid illustration-img">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="widget-small warning"><i class="icon fa fa-archive fa-3x" aria-hidden="true"></i>
-            <div class="info">
-                <a th:href="@{/series/arquivadas}"><h4 style="color: white;">Arquivadas</h4></a>
-                <p><strong th:text="*{qtdSeriesArq}"></strong></p>
+    <div class="col-12 col-sm-6 col-xxl d-flex">
+        <div class="card flex-fill">
+            <div class="card-body py-4">
+                <div class="media">
+                    <div class="media-body">
+                        <h3 class="mb-2" th:text="*{qtdSeries}"></h3>
+                        <a th:href="@{/series/salvas}"><p class="mb-2">Séries salvas</p></a>
+                    </div>
+                    <div class="d-inline-block ml-3">
+                        <div class="stat">
+                            <em data-feather="bookmark"></em>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="widget-small danger"><i class="icon fa fa-star fa-3x" aria-hidden="true"></i>
-            <div class="info">
-                <a th:href="@{/episodios}"><h4 style="color: white;	">Episódios</h4></a>
-                <p><strong th:text="*{qtdEpisodios}"></strong></p>
+    <div class="col-12 col-sm-6 col-xxl d-flex">
+        <div class="card flex-fill">
+            <div class="card-body py-4">
+                <div class="media">
+                    <div class="media-body">
+                        <h3 class="mb-2" th:text="*{qtdSeriesArq}"></h3>
+                        <a th:href="@{/series/arquivadas}"><p class="mb-2">Séries arquivadas</p></a>
+                    </div>
+                    <div class="d-inline-block ml-3">
+                        <div class="stat">
+                            <em data-feather="archive"></em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xxl d-flex">
+        <div class="card flex-fill">
+            <div class="card-body py-4">
+                <div class="media">
+                    <div class="media-body">
+                        <h3 class="mb-2" th:text="*{qtdEpisodios}"></h3>
+                        <a th:href="@{/episodios}"><p class="mb-2">Episódios marcados</p></a>
+                    </div>
+                    <div class="d-inline-block ml-3">
+                        <div class="stat">
+                            <em data-feather="check"></em>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

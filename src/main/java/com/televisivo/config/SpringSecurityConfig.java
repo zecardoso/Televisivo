@@ -50,11 +50,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/css/**", "/fontawesome/**", "/js/**", "/login", "/signin", "/salvar").permitAll()
+            .antMatchers("/", "/css/**", "/fontawesome/**", "/js/**", "/sign-in", "/sign-up", "/salvar").permitAll()
             .anyRequest().authenticated();
 
         http.formLogin()
-            .loginPage("/login")
+            .loginPage("/sign-in")
             .usernameParameter("email")
             .passwordParameter("password")
             .successHandler(loginSuccessHandler)
@@ -79,12 +79,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionFixation()
             .newSession();
 
-        http.exceptionHandling()
-            .accessDeniedPage("/403");
-
         http.rememberMe()
-            .rememberMeCookieName("LEMBRARID")
-            .rememberMeParameter("checkRemenberMe")
+            .rememberMeCookieName("REMEMBERME")
+            .rememberMeParameter("remember-me")
             .tokenValiditySeconds(diasParaSegundo(12, 1))
             .tokenRepository(persistentTokenRepository);
     }

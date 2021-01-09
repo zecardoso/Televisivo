@@ -134,10 +134,8 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     public Page<Serie> listaComPaginacao(SerieFilter serieFilter, Pageable pageable, UsuarioSistema usuarioLogado) {
         Page<Serie> lista = serieRepository.listaComPaginacao(serieFilter, pageable);
         for (int i = 0; i < lista.getContent().size(); i++) {
-            lista.getContent().get(i).setSalva(usuarioSerieRepository.salva(findUsuario(usuarioLogado),
-                    lista.getContent().get(i).getId(), false) != 0);
-            lista.getContent().get(i).setArquivada(usuarioSerieRepository.salva(findUsuario(usuarioLogado),
-                    lista.getContent().get(i).getId(), true) != 0);
+            lista.getContent().get(i).setSalva(usuarioSerieRepository.salva(findUsuario(usuarioLogado), lista.getContent().get(i).getId(), false) != 0);
+            lista.getContent().get(i).setArquivada(usuarioSerieRepository.salva(findUsuario(usuarioLogado), lista.getContent().get(i).getId(), true) != 0);
         }
         return lista;
     }

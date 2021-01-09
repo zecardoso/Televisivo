@@ -21,6 +21,11 @@ public class ErrorListening implements ErrorViewResolver {
         ModelAndView model = new ModelAndView("/error");
         model.addObject("status", status.value());
         switch (status.value()) {
+            case 200:
+                model.addObject(ERROR, "Ocorreu um erro interno no servidor.");
+                model.addObject(MESSAGE, "Ocorreu um erro inexperado, tente mais tarde.");
+                model.addObject(TITLE, "Error 200 - Ocorreu um erro interno no servidor.");
+                break;
             case 400:
                 model.addObject(ERROR, "Ocorreu um erro interno no servidor.");
                 model.addObject(MESSAGE, "Ocorreu um erro inexperado, tente mais tarde.");

@@ -56,7 +56,7 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView lista(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter, HttpServletRequest httpServletRequest, @RequestParam(value = "page", required = false) Optional<Integer> page, @RequestParam(value = "size", required = false) Optional<Integer> size) {
         if (usuarioLogado == null) {
-            return new ModelAndView("login");
+            return new ModelAndView("sign-in");
         }
         Pageable pageable = PageRequest.of(page.orElse(TelevisivoConfig.INITIAL_PAGE), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         Pagina<Serie> pagina = new Pagina<>(usuarioSerieService.listaComPaginacao(serieFilter, pageable, usuarioLogado), size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE), httpServletRequest);
@@ -68,7 +68,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/sign-in", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView loginPage(Usuario usuario, @RequestParam(value = "mensagem", required = false) String mensagem, Model model) {
         if (Objects.isNull(mensagem)) {
             model.addAttribute("acao", false);
@@ -79,14 +79,14 @@ public class HomeController {
             model.addAttribute("acao", true);
             model.addAttribute("mensagem", mensagem);
         }
-        ModelAndView modelAndView = new ModelAndView("login");
+        ModelAndView modelAndView = new ModelAndView("sign-in");
         modelAndView.addObject(USUARIO, usuario);
         return modelAndView;
     }
 
-    @GetMapping("/signin")
+    @GetMapping("/sign-up")
     public ModelAndView viewSalvar(Usuario usuario) {
-        ModelAndView modelAndView = new ModelAndView("signin-up");
+        ModelAndView modelAndView = new ModelAndView("sign-up");
         modelAndView.addObject(USUARIO, usuario);
         return modelAndView;
     }
@@ -95,13 +95,13 @@ public class HomeController {
     public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
-            return "redirect:/signin";
+            return "redirect:/sign-up";
         }
         contaService.save(usuario);
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
         model.addAttribute("email", usuario.getEmail());
         model.addAttribute("password", usuario.getPassword());
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     @ModelAttribute("generos")

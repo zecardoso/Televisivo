@@ -56,13 +56,25 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         Usuario usuarioOrg = getOne(usuario.getId());
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
             throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
+        usuario.setPassword(encodePassword(usuario.getPassword()));
+        usuario.setQtdEpisodios(usuarioOrg.getQtdEpisodios());
+        usuario.setQtdSeries(usuarioOrg.getQtdSeries());
+        usuario.setQtdSeriesArq(usuarioOrg.getQtdSeriesArq());
+        usuario.setLastLogin(usuarioOrg.getLastLogin());
+        usuario.setAtivo(usuarioOrg.isAtivo());
+        usuario.setRoles(usuarioOrg.getRoles());
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Usuario updateSenha(Usuario usuario) {
+        Usuario usuarioOrg = getOne(usuario.getId());
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
             usuario.setPassword(usuarioOrg.getPassword());
         } else if (!usuario.getPassword().equals(usuario.getContraSenha())) {
@@ -70,6 +82,11 @@ public class ContaServiceImpl implements ContaService {
         } else {
             usuario.setPassword(encodePassword(usuario.getPassword()));
         }
+        usuario.setNome(usuarioOrg.getNome());
+        usuario.setSobrenome(usuarioOrg.getSobrenome());
+        usuario.setUsername(usuarioOrg.getUsername());
+        usuario.setEmail(usuarioOrg.getEmail());
+        usuario.setGenero(usuarioOrg.getGenero());
         usuario.setQtdEpisodios(usuarioOrg.getQtdEpisodios());
         usuario.setQtdSeries(usuarioOrg.getQtdSeries());
         usuario.setQtdSeriesArq(usuarioOrg.getQtdSeriesArq());

@@ -1,8 +1,16 @@
 package com.televisivo.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import com.televisivo.model.Categoria;
+import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
+import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.security.UsuarioSistema;
-import com.televisivo.service.UsuarioService;
+import com.televisivo.service.ContaService;
+import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
 
@@ -18,54 +26,75 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/conta")
+@RequestMapping("/perfil")
 public class ContaController {
 
     private static final String USUARIO = "usuarioLogado";
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String DETALHES = "redirect:/conta";
-    private static final String ALTERAR = "redirect:/conta/alterar";
+    private static final String DETALHES = "redirect:/perfil";
+    private static final String ALTERAR = "redirect:/perfil/configuracoes";
 
     @Autowired
-    private UsuarioService contaService;
+    private ContaService contaService;
 
-    @GetMapping("/alterar")
-    public ModelAndView viewAlterar(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("/conta/conta");
+    @Autowired
+    private UsuarioSerieService usuarioSerieService;
+
+    @GetMapping("/configuracoes")
+    public ModelAndView viewAlterar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
+        ModelAndView modelAndView = new ModelAndView("perfil/perfil");
         modelAndView.addObject(USUARIO, contaService.getOne(usuarioLogado.getUsuario().getId()));
         return modelAndView;
     }
 
     @GetMapping()
-    public ModelAndView detalhes(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
-        ModelAndView modelAndView = new ModelAndView("/conta/detalhes");
+    public ModelAndView detalhes(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
+        ModelAndView modelAndView = new ModelAndView("perfil/detalhes");
         modelAndView.addObject(USUARIO, contaService.getOne(usuarioLogado.getUsuario().getId()));
         return modelAndView;
     }
 
-    @PostMapping("/alterar")
-    public String alterar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, BindingResult result, RedirectAttributes attributes) {
+    @PostMapping("/conta")
+    public String alterar(@Valid Usuario usuario, @AuthenticationPrincipal UsuarioSistema usuarioLogado, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return ALTERAR;
         }
         try {
-			contaService.update(usuarioLogado.getUsuario());
+			contaService.update(usuario);
 		} catch(EmailCadastradoException e) {
 			result.rejectValue("email", e.getMessage());
 			return ALTERAR;
+        }
+        attributes.addFlashAttribute(SUCCESS, "Informações alteradas.");
+        return ALTERAR;
+    }
+
+    @PostMapping("/senha")
+    public String alterarSenha(@Valid Usuario usuario, @AuthenticationPrincipal UsuarioSistema usuarioLogado, BindingResult result, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+            return ALTERAR;
+        }
+        try {
+			contaService.updateSenha(usuarioLogado.getUsuario());
 		} catch (SenhaError e) {
             result.rejectValue("password", e.getMessage());
             return ALTERAR;
         }
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
-        return DETALHES;
+        attributes.addFlashAttribute(SUCCESS, "Senha alterada.");
+        return ALTERAR;
     }
 
     @ModelAttribute("generos")
     public Genero[] getGeneros() {
         return Genero.values();
+    }
+
+    @ModelAttribute("categorias")
+	public List<Categoria> getCategorias() {
+		return usuarioSerieService.findAll();
     }
 
     @PostMapping(value = "/alterar", params = "cancelar")

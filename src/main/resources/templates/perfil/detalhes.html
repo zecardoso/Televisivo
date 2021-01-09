@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}">
+<head>
+    <title th:object="${usuarioLogado}" th:text="*{nome} + ' ' + *{sobrenome}"></title>
+</head>
+<body>
+	<main layout:fragment="main">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">Perfil</li>
+			</ol>
+		</nav>
+		<div class="container-fluid p-0">
+			<h1 class="h3 mb-3">Perfil</h1>
+			<div th:replace="fragments/alert"></div>
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-header">
+							<h5 class="card-title mb-0">Detalhes do perfil</h5>
+						</div>
+						<div class="card-body" th:object="${usuarioLogado}">
+							<div class="tile-body tile-footer">
+								<label>Nome</label>
+								<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>
+								<label>Username</label>
+								<h4 th:text="*{username}"></h4>
+								<label>Email</label>
+								<h4 th:text="*{email}"></h4>
+								<label>Gênero</label>
+								<h4 th:text="*{genero.descricao}"></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<th:block layout:fragment="javascript-extra">
+	</th:block>
+</body>
+</html>

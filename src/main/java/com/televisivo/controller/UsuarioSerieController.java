@@ -8,6 +8,7 @@ import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
+import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.EpisodioService;
 import com.televisivo.service.SerieService;
@@ -21,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,15 +35,15 @@ public class UsuarioSerieController {
     private static final String SERIE = "serie";
     private static final String SUCCESS = "success";
     private static final String USUARIO = "usuarioLogado";
-    private static final String REMOVIDA = "Série removida com sucesso.";
+    private static final String REMOVIDA = "Série removida.";
     private static final String REMOVER = "remover";
-    private static final String REDIRECT = "redirect:/";
+    private static final String HOME = "redirect:/";
     private static final String DETALHES = "redirect:./detalhes";
     private static final String SALVAS = "redirect:/series/salvas";
     private static final String ARQUIVADAS = "redirect:/series/arquivadas";
-    private static final String DESMARCADO = "Episódio desmarcado com sucesso.";
-    private static final String DESARQUIVADA = "Série desarquivada com sucesso.";
-    private static final String ARQUIVADA = "Série arquivada com sucesso.";
+    private static final String DESMARCADO = "Episódio desmarcado.";
+    private static final String DESARQUIVADA = "Série desarquivada.";
+    private static final String ARQUIVADA = "Série arquivada.";
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;
@@ -62,16 +64,17 @@ public class UsuarioSerieController {
     private UsuarioService usuarioService;
 
     @GetMapping("/series/{id}/detalhes")
-    public ModelAndView detalharSerie(@PathVariable("id") Long id) {
+    public ModelAndView detalharSerie(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id, SerieFilter serieFilter) {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_serie");
         modelAndView.addObject(SERIE, serie);
         modelAndView.addObject("temporadas", serieService.temporadas(serie));
+        modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         return modelAndView;
     }
 
     @GetMapping("/series/{idSerie}/temporada/{id}/detalhes")
-    public ModelAndView detalharTemporada(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id) {
+    public ModelAndView detalharTemporada(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id, SerieFilter serieFilter) {
         Temporada temporada = temporadaService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_temporada");
         modelAndView.addObject("temporada", temporada);
@@ -80,7 +83,7 @@ public class UsuarioSerieController {
     }
 
     @GetMapping("/series/{idSerie}/temporada/{idTemporada}/episodio/{id}/detalhes")
-    public ModelAndView detalhesEpisodio(@PathVariable("id") Long id) {
+    public ModelAndView detalhesEpisodio(@PathVariable("id") Long id, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_episodio");
         Episodio episodio = episodioService.getOne(id);
         modelAndView.addObject("episodio", episodio);
@@ -88,7 +91,7 @@ public class UsuarioSerieController {
     }
 
     @GetMapping("/series/salvas")
-    public ModelAndView listaseries(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model) {
+    public ModelAndView listaseries(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/series");
         List<Serie> lista = usuarioSerieService.findAllSeries(usuarioLogado, false);
         modelAndView.addObject(LISTA, lista);
@@ -97,9 +100,8 @@ public class UsuarioSerieController {
         return modelAndView;
     }
 
-
     @GetMapping("/categoria/{id}")
-    public ModelAndView listaseriesCat(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model) {
+    public ModelAndView listaseriesCat(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/serie_categoria");
         List<Serie> lista = usuarioSerieService.findAllSeriesCategoria(categoria.getId());
         modelAndView.addObject(LISTA, lista);
@@ -108,9 +110,8 @@ public class UsuarioSerieController {
         return modelAndView;
     }
 
-
     @GetMapping("/series/arquivadas")
-    public ModelAndView listaseriesarq(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model) {
+    public ModelAndView listaseriesarq(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/series");
         List<Serie> lista = usuarioSerieService.findAllSeries(usuarioLogado, true);
         modelAndView.addObject(LISTA, lista);
@@ -120,7 +121,7 @@ public class UsuarioSerieController {
     }
 
     @GetMapping("/episodios")
-    public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+    public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_episodio/lista");
         List<Episodio> lista = usuarioEpisodioService.findAllEpisodios(usuarioLogado);
         modelAndView.addObject(LISTA, lista);
@@ -132,11 +133,11 @@ public class UsuarioSerieController {
     public String salvar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioSerieService.salvar(usuarioLogado, Long.parseLong(request.getParameter("salvar")));
-            attributes.addFlashAttribute(SUCCESS, "Série salva com sucesso.");
-            return REDIRECT;
+            attributes.addFlashAttribute(SUCCESS, "Série salva.");
+            return HOME;
         } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, "Série salva com sucesso.");
-            return REDIRECT;
+            attributes.addFlashAttribute(SUCCESS, "Série salva.");
+            return HOME;
         }
     }
 
@@ -145,10 +146,10 @@ public class UsuarioSerieController {
         try {
             usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter(REMOVER)));
             attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return REDIRECT;
+            return HOME;
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return REDIRECT;
+            return HOME;
         }
     }
 
@@ -157,10 +158,10 @@ public class UsuarioSerieController {
         try {
             usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("desarquivar")), false);
             attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return REDIRECT;
+            return HOME;
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return REDIRECT;
+            return HOME;
         }
     }
 
@@ -169,10 +170,10 @@ public class UsuarioSerieController {
         try {
             usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("arquivar")), true);
             attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return REDIRECT;
+            return HOME;
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return REDIRECT;
+            return HOME;
         }
     }
 
@@ -224,19 +225,19 @@ public class UsuarioSerieController {
         }
     }
 
-    @PostMapping(value = "/series/{id}/temporada/{id}/detalhes", params = "marcar")
+    @PostMapping(value = "/series/{id}/detalhes", params = "marcar")
     public String marcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioEpisodioService.marcar(usuarioLogado, Long.parseLong(request.getParameter("marcar")));
-            attributes.addFlashAttribute(SUCCESS, "Episódio marcado com sucesso.");
+            attributes.addFlashAttribute(SUCCESS, "Episódio marcado.");
             return DETALHES;
         } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, "Episódio marcado com sucesso.");
+            attributes.addFlashAttribute(SUCCESS, "Episódio marcado.");
             return DETALHES;
         }
     }
 
-    @PostMapping(value = "/series/{id}/temporada/{id}/detalhes", params = "desmarcar")
+    @PostMapping(value = "/series/{id}/detalhes", params = "desmarcar")
     public String desmarcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
@@ -258,5 +259,10 @@ public class UsuarioSerieController {
             attributes.addFlashAttribute(SUCCESS, DESMARCADO);
             return "redirect:/episodios";
         }
+    }
+
+    @ModelAttribute("categorias")
+	public List<Categoria> getCategorias() {
+		return usuarioSerieService.findAll();
     }
 }

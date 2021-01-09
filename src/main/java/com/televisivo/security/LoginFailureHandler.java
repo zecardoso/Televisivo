@@ -47,7 +47,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             mensagem  = exception.getMessage();
         }
 
-        request.getRequestDispatcher(String.format("/login?mensagem=%s", mensagem)).forward(request, response);
+        request.getRequestDispatcher(String.format("/sign-in?mensagem=%s", mensagem)).forward(request, response);
     }
 
     private void totalAcessoInvalidoUsuario(HttpServletRequest request) {

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}">
+<head>
+    <title>Configurações</title>
+</head>
+<body>
+	<main layout:fragment="main">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/perfil}">Perfil</a></li>
+                <li class="breadcrumb-item active">Configurações</li>
+			</ol>
+		</nav>
+		<div class="container-fluid p-0">
+			<h1 class="h3 mb-3">Configurações</h1>
+			<!-- <div th:replace="fragments/validation :: validation"></div> -->
+			<div th:replace="fragments/alert"></div>
+			<div class="row">
+				<div class="col-md-3 col-xl-2">
+					<div class="card">
+						<div class="card-header">
+							<h5 class="card-title mb-0">Configurações do perfil</h5>
+						</div>
+						<div class="list-group list-group-flush" role="tablist">
+							<a class="list-group-item list-group-item-action active" data-toggle="list" href="#account" role="tab">Conta</a>
+							<a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab">Senha</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9 col-xl-10">
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="account" role="tabpanel">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title mb-0">Informações</h5>
+								</div>
+								<div class="card-body">
+									<form th:action="@{./conta}" method="POST" th:object="${usuarioLogado}">
+										<input type="hidden" th:field="*{id}">
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="inputFirstName">Nome</label>
+												<input autofocus type="text" class="form-control" th:field="*{nome}" id="inputFirstName" placeholder="Digite seu nome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+												<div class="invalid-feedback">
+													<span th:errors="*{nome}"></span>
+												</div>
+											</div>
+											<div class="form-group col-md-6">
+												<label for="inputLastName">Sobrenome</label>
+												<input type="text" class="form-control" th:field="*{sobrenome}" id="inputLastName" placeholder="Digite seu sobrenome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('sobrenome')} ? 'is-invalid'">
+												<div class="invalid-feedback">
+													<span th:errors="*{sobrenome}"></span>
+												</div>
+											</div>
+										</div>
+										<div class="form-row">
+											<div class="form-group col-md-6">
+												<label for="inputEmail4">Email</label>
+												<input type="email" class="form-control" th:field="*{email}" id="inputEmail4" placeholder="Digite seu email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+												<div class="invalid-feedback">
+													<span th:errors="*{email}"></span>
+												</div>
+											</div>
+											<div class="form-group col-md-4">
+												<label for="inputUsername">Username</label>
+												<input type="text" class="form-control" th:field="*{username}" id="inputUsername" placeholder="Digite seu username" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+												<div class="invalid-feedback">
+													<span th:errors="*{username}"></span>
+												</div>
+											</div>
+											<div class="form-group col-md-2">
+												<label for="genero">Gênero</label>
+													<select required class="form-control" th:field="*{genero}" id="genero" name="genero">
+													<option value="" selected="">Selecione...</option>
+													<option th:each="genero : ${generos}" th:value="${genero}" th:text="${genero.descricao}" th:classappend="${#fields.hasErrors('genero')} ? 'is-invalid'"></option>
+												</select>
+												<div class="invalid-feedback">
+													<span th:errors="*{genero}"></span>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">Salvar</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="password" role="tabpanel">
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title mb-0">Senha</h5>
+								</div>
+								<div class="card-body">
+									<form th:action="@{./senha}" method="POST" th:object="${usuarioLogado}">
+										<div class="form-group">
+											<label for="inputPasswordNew">Nova senha</label>
+											<input type="password" class="form-control" th:field="*{password}" id="inputPasswordNew" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+											<div class="invalid-feedback">
+												<span th:errors="*{password}"></span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="inputPasswordNew2">Verifique a senha</label>
+											<input type="password" class="form-control" th:field="*{contraSenha}" id="inputPasswordNew2" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
+											<div class="invalid-feedback">
+												<span th:errors="*{contraSenha}"></span>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">Salvar</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<th:block layout:fragment="javascript-extra">
+	</th:block>
+</body>
+</html>
