@@ -7,12 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
-import com.televisivo.model.Temporada;
+import com.televisivo.model.Servico;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.security.UsuarioSistema;
-import com.televisivo.service.EpisodioService;
 import com.televisivo.service.SerieService;
-import com.televisivo.service.TemporadaService;
 import com.televisivo.service.UsuarioEpisodioService;
 import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.UsuarioService;
@@ -36,14 +34,15 @@ public class UsuarioSerieController {
     private static final String SUCCESS = "success";
     private static final String USUARIO = "usuarioLogado";
     private static final String REMOVIDA = "Série removida.";
+    private static final String SALVA = "Série salva.";
     private static final String REMOVER = "remover";
-    private static final String HOME = "redirect:/";
-    private static final String DETALHES = "redirect:./detalhes";
-    private static final String SALVAS = "redirect:/series/salvas";
-    private static final String ARQUIVADAS = "redirect:/series/arquivadas";
+    private static final String REDIRECT = "redirect:";
     private static final String DESMARCADO = "Episódio desmarcado.";
     private static final String DESARQUIVADA = "Série desarquivada.";
     private static final String ARQUIVADA = "Série arquivada.";
+    private static final String REFERER = "Referer";
+    private static final String ARQUIVAR = "arquivar";
+    private static final String DESARQUIVAR = "desarquivar";
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;
@@ -55,12 +54,6 @@ public class UsuarioSerieController {
     private SerieService serieService;
 
     @Autowired
-    private TemporadaService temporadaService;
-
-    @Autowired
-    private EpisodioService episodioService;
-
-    @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping("/series/{id}/detalhes")
@@ -69,24 +62,10 @@ public class UsuarioSerieController {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_serie");
         modelAndView.addObject(SERIE, serie);
         modelAndView.addObject("temporadas", serieService.temporadas(serie));
+        for (int i = 0; i < serieService.temporadas(serie).size(); i++) {
+            modelAndView.addObject("episodios", usuarioSerieService.episodios(usuarioLogado, serieService.temporadas(serie).get(i).getId()));
+        }
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
-        return modelAndView;
-    }
-
-    @GetMapping("/series/{idSerie}/temporada/{id}/detalhes")
-    public ModelAndView detalharTemporada(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id, SerieFilter serieFilter) {
-        Temporada temporada = temporadaService.getOne(id);
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_temporada");
-        modelAndView.addObject("temporada", temporada);
-        modelAndView.addObject("episodios", usuarioSerieService.episodios(usuarioLogado, id));
-        return modelAndView;
-    }
-
-    @GetMapping("/series/{idSerie}/temporada/{idTemporada}/episodio/{id}/detalhes")
-    public ModelAndView detalhesEpisodio(@PathVariable("id") Long id, SerieFilter serieFilter) {
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_episodio");
-        Episodio episodio = episodioService.getOne(id);
-        modelAndView.addObject("episodio", episodio);
         return modelAndView;
     }
 
@@ -101,12 +80,24 @@ public class UsuarioSerieController {
     }
 
     @GetMapping("/categoria/{id}")
-    public ModelAndView listaseriesCat(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
-        ModelAndView modelAndView = new ModelAndView("/usuario_serie/serie_categoria");
-        List<Serie> lista = usuarioSerieService.findAllSeriesCategoria(categoria.getId());
+    public ModelAndView listaseriesCategoria(@PathVariable("id") Categoria categoria, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
+        ModelAndView modelAndView = new ModelAndView("/usuario_serie/atributo");
+        List<Serie> lista = usuarioSerieService.findAllSeriesBy(categoria.getSeries(), usuarioLogado);
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
-        model.addAttribute("title", categoria.getNome());
+        model.addAttribute("atributo", categoria);
+        model.addAttribute("breadcrumb", "Categoria");
+        return modelAndView;
+    }
+
+    @GetMapping("/servico/{id}")
+    public ModelAndView listaseriesServico(@PathVariable("id") Servico servico, @AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
+        ModelAndView modelAndView = new ModelAndView("/usuario_serie/atributo");
+        List<Serie> lista = usuarioSerieService.findAllSeriesBy(servico.getSeries(), usuarioLogado);
+        modelAndView.addObject(LISTA, lista);
+        modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        model.addAttribute("atributo", servico);
+        model.addAttribute("breadcrumb", "Serviço");
         return modelAndView;
     }
 
@@ -133,136 +124,81 @@ public class UsuarioSerieController {
     public String salvar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioSerieService.salvar(usuarioLogado, Long.parseLong(request.getParameter("salvar")));
-            attributes.addFlashAttribute(SUCCESS, "Série salva.");
-            return HOME;
+            attributes.addFlashAttribute(SUCCESS, SALVA);
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, "Série salva.");
-            return HOME;
+            attributes.addFlashAttribute(SUCCESS, SALVA);
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
     @PostMapping(value = "/acao", params = REMOVER)
-    public String removerHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
+    public String remover(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter(REMOVER)));
             attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return HOME;
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return HOME;
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
-    @PostMapping(value = "/acao", params = "desarquivar")
-    public String desarquivarHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        try {
-            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("desarquivar")), false);
-            attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return HOME;
-        } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return HOME;
-        }
-    }
-
-    @PostMapping(value = "/acao", params = "arquivar")
-    public String arquivarHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        try {
-            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("arquivar")), true);
-            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return HOME;
-        } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return HOME;
-        }
-    }
-
-    @PostMapping(value = "/series/salva", params = "arquivar")
-    public String arquivar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        try {
-            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("arquivar")), true);
-            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return SALVAS;
-        } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
-            return SALVAS;
-        }
-    }
-
-    @PostMapping(value = "/series/salva", params = REMOVER)
-    public String removerSal(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        try {
-            usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter(REMOVER)));
-            attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return SALVAS;
-        } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return SALVAS;
-        }
-    }
-
-    @PostMapping(value = "/series/arquivada", params = "desarquivar")
+    @PostMapping(value = "/acao", params = DESARQUIVAR)
     public String desarquivar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
-            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter("desarquivar")), false);
+            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter(DESARQUIVAR)), false);
             attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return ARQUIVADAS;
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, DESARQUIVADA);
-            return ARQUIVADAS;
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
-    @PostMapping(value = "/series/arquivada", params = REMOVER)
-    public String removerArq(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
+    @PostMapping(value = "/acao", params = ARQUIVAR)
+    public String arquivar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
-            usuarioSerieService.remover(usuarioLogado, Long.parseLong(request.getParameter(REMOVER)));
-            attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return ARQUIVADAS;
+            usuarioSerieService.arquivada(usuarioLogado, Long.parseLong(request.getParameter(ARQUIVAR)), true);
+            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, REMOVIDA);
-            return ARQUIVADAS;
+            attributes.addFlashAttribute(SUCCESS, ARQUIVADA);
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
-    @PostMapping(value = "/series/{id}/detalhes", params = "marcar")
+    @PostMapping(value = "/acao", params = "marcar")
     public String marcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioEpisodioService.marcar(usuarioLogado, Long.parseLong(request.getParameter("marcar")));
             attributes.addFlashAttribute(SUCCESS, "Episódio marcado.");
-            return DETALHES;
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, "Episódio marcado.");
-            return DETALHES;
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
-    @PostMapping(value = "/series/{id}/detalhes", params = "desmarcar")
+    @PostMapping(value = "/acao", params = "desmarcar")
     public String desmarcar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
         try {
             usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
             attributes.addFlashAttribute(SUCCESS, DESMARCADO);
-            return DETALHES;
+            return REDIRECT + request.getHeader(REFERER);
         } catch (Exception e) {
             attributes.addFlashAttribute(SUCCESS, DESMARCADO);
-            return DETALHES;
-        }
-    }
-
-    @PostMapping(value = "/episodios", params = "desmarcar")
-    public String desmarcarHome(@AuthenticationPrincipal UsuarioSistema usuarioLogado, HttpServletRequest request, RedirectAttributes attributes) {
-        try {
-            usuarioEpisodioService.desmarcar(usuarioLogado, Long.parseLong(request.getParameter("desmarcar")));
-            attributes.addFlashAttribute(SUCCESS, DESMARCADO);
-            return "redirect:/episodios";
-        } catch (Exception e) {
-            attributes.addFlashAttribute(SUCCESS, DESMARCADO);
-            return "redirect:/episodios";
+            return REDIRECT + request.getHeader(REFERER);
         }
     }
 
     @ModelAttribute("categorias")
 	public List<Categoria> getCategorias() {
-		return usuarioSerieService.findAll();
+		return usuarioSerieService.findAllCategorias();
+    }
+
+    @ModelAttribute("servicos")
+	public List<Servico> getServicos() {
+		return usuarioSerieService.findAllServicos();
     }
 }

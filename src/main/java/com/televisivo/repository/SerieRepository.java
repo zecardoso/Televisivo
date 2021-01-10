@@ -19,7 +19,4 @@ public interface SerieRepository extends JpaRepository<Serie, Long>, SerieQuery 
 
     @Query("SELECT t FROM Temporada t WHERE t.serie.id = :id ORDER BY t.numero")
     List<Temporada> temporadas(@Param("id") Long id);
-
-    @Query("SELECT s FROM Serie s JOIN s.categorias c WHERE c.id = :id")
-    List<Serie> series(@Param("id") Long categoria);
 }

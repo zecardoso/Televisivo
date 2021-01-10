@@ -8,18 +8,18 @@
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/">Home</a></li>
+				<li class="breadcrumb-item"><a>Série</a></li>
                 <li class="breadcrumb-item active" th:text="*{nome}"></li>
 			</ol>
 		</nav>
 		<div class="container-fluid p-0">
-			<h1 class="h3 mb-3">Explorar</h1>
+			<h1 class="h3 mb-3" th:text="*{nome}"></h1>
 			<div th:replace="fragments/alert"></div>
 			<div class="row">
                 <div class="col-md-4 col-xl-3">
                     <div class="card mb-3">
                         <div class="card-body text-center">
-                            <img th:src="@{*{photoImagePath}}" alt="Stacie Hall" class="card-img-top rounded mr-2 mb-2 hoverZoomLink" width="128">
-                            <h5 class="card-title mb-0" th:text="*{nome}"></h5>
+                            <img th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Stacie Hall" class="card-img-top rounded mr-2 mb-2">
                         </div>
                         <hr class="my-0">
                         <div class="card-body">
@@ -73,33 +73,33 @@
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-9">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card" th:each="temporada : ${temporadas}">
-                            <div class="card-header" id="headingOne">
-                                <h5 class="card-title my-2">
-                                    <a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" th:text="'Temporada ' + ${temporada.numero}"></a>
-                                </h5>
-                            </div>
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
-                                <div class="card-body">
-                                    <form th:action="@{./detalhes}" method="POST">
-                                        <table class="table table-borderless table-hover" aria-describedby="Listagem de episódios">
+                    <form th:action="@{/acao}" method="POST">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card" th:each="temporada : ${temporadas}">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="card-title mb-0">
+                                        <a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" th:text="'Temporada ' + ${temporada.numero}"></a>
+                                    </h5>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                    <div class="card-body">
+                                        <table class="table table-hover" aria-describedby="Listagem de episódios">
                                             <tbody>
                                                 <tr th:each="episodio : ${temporada.episodios}">
-                                                    <th scope="row" th:text="${episodio.numero}"></th>
-                                                    <td th:text="${episodio.nome}"></td>
-                                                    <td th:text="${episodio.duracao} + ' min.'"></td>
+                                                    <th style="width:10%;" scope="row" th:text="'Episódio ' + ${episodio.numero}"></th>
+                                                    <td style="width:15%" th:text="${episodio.nome}"></td>
+                                                    <td style="width:10%" th:text="${episodio.duracao} + ' min.'"></td>
                                                     <td>
                                                         <button th:class="${episodio.marcado ? 'btn badge badge-danger' : 'btn badge badge-success'}" type="submit" th:name="${episodio.marcado ? 'desmarcar' : 'marcar'}" th:value="${episodio.id}" th:text="${episodio.marcado ? 'Desmarcar' : 'Marcar'}"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 		</div>

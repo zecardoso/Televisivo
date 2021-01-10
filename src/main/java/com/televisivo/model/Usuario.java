@@ -121,7 +121,7 @@ public class Usuario implements UserDetails {
 
     @JsonIgnore
     @Size(min = 1, message = "Selecione pelo menos um grupo")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 

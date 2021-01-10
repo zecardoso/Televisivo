@@ -2,26 +2,26 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{template}">
 <head>
-    <title th:text="*{title}"></title>
+    <title th:text="*{atributo.nome}"></title>
 </head>
 <body>
 	<main layout:fragment="main">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="/">Home</a></li>
-				<li class="breadcrumb-item"><a >Categoria</a></li>
-                <li class="breadcrumb-item active" th:text="*{title}"></li>
+				<li class="breadcrumb-item"><a th:text="${breadcrumb}">Categoria</a></li>
+                <li class="breadcrumb-item active" th:text="*{atributo.nome}"></li>
 			</ol>
 		</nav>
 		<div class="container-fluid p-0">
-			<h1 class="h3 mb-3" th:text="*{title}"></h1>
+			<h1 class="h3 mb-3" th:text="*{atributo.nome}"></h1>
 			<div th:replace="fragments/alert"></div>
 			<div th:replace="fragments/widgets :: widgets"></div>
-			<div class="row">
-				<div class="col-12 col-md-6 col-lg-2" th:each="serie :${lista}">
-					<form th:action="@{/acao}" method="POST">
+			<form th:action="@{/acao}" method="POST">
+				<div class="row">
+					<div class="col-12 col-md-6 col-lg-2" th:each="serie :${lista}">
 						<div class="card">
-							<!-- <img class="card-img-top" th:src="@{${serie.photoImagePath}}" alt="Capa"> -->
+							<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Capa">
 							<div class="card-header px-4 pt-4">
 								<a th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
 								<a class="badge badge-primary mr-1 my-1" th:each="categoria : *{serie.categorias}" th:href="@{/categoria/{id}(id=*{categoria.id})}" th:text="*{categoria.nome}"></a>
@@ -31,9 +31,9 @@
 								<button th:if="${serie.salva} OR ${serie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{serie.id}">Remover</button>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</main>
 	<th:block layout:fragment="javascript-extra">

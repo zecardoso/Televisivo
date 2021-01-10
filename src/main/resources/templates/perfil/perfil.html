@@ -14,7 +14,6 @@
 		</nav>
 		<div class="container-fluid p-0">
 			<h1 class="h3 mb-3">Configurações</h1>
-			<!-- <div th:replace="fragments/validation :: validation"></div> -->
 			<div th:replace="fragments/alert"></div>
 			<div class="row">
 				<div class="col-md-3 col-xl-2">
@@ -36,19 +35,19 @@
 									<h5 class="card-title mb-0">Informações</h5>
 								</div>
 								<div class="card-body">
-									<form th:action="@{./conta}" method="POST" th:object="${usuarioLogado}">
+									<form th:action="@{./conta}" method="POST" th:object="${usuario}">
 										<input type="hidden" th:field="*{id}">
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label for="inputFirstName">Nome</label>
-												<input autofocus type="text" class="form-control" th:field="*{nome}" id="inputFirstName" placeholder="Digite seu nome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+												<input required autofocus type="text" class="form-control" th:field="*{nome}" id="inputFirstName" placeholder="Digite seu nome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
 												<div class="invalid-feedback">
 													<span th:errors="*{nome}"></span>
 												</div>
 											</div>
 											<div class="form-group col-md-6">
 												<label for="inputLastName">Sobrenome</label>
-												<input type="text" class="form-control" th:field="*{sobrenome}" id="inputLastName" placeholder="Digite seu sobrenome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('sobrenome')} ? 'is-invalid'">
+												<input required type="text" class="form-control" th:field="*{sobrenome}" id="inputLastName" placeholder="Digite seu sobrenome" spellcheck="false" data-ms-editor="true" th:classappend="${#fields.hasErrors('sobrenome')} ? 'is-invalid'">
 												<div class="invalid-feedback">
 													<span th:errors="*{sobrenome}"></span>
 												</div>
@@ -57,14 +56,14 @@
 										<div class="form-row">
 											<div class="form-group col-md-6">
 												<label for="inputEmail4">Email</label>
-												<input type="email" class="form-control" th:field="*{email}" id="inputEmail4" placeholder="Digite seu email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+												<input required type="email" class="form-control" th:field="*{email}" id="inputEmail4" placeholder="Digite seu email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
 												<div class="invalid-feedback">
 													<span th:errors="*{email}"></span>
 												</div>
 											</div>
 											<div class="form-group col-md-4">
 												<label for="inputUsername">Username</label>
-												<input type="text" class="form-control" th:field="*{username}" id="inputUsername" placeholder="Digite seu username" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+												<input required type="text" class="form-control" th:field="*{username}" id="inputUsername" placeholder="Digite seu username" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
 												<div class="invalid-feedback">
 													<span th:errors="*{username}"></span>
 												</div>
@@ -91,17 +90,18 @@
 									<h5 class="card-title mb-0">Senha</h5>
 								</div>
 								<div class="card-body">
-									<form th:action="@{./senha}" method="POST" th:object="${usuarioLogado}">
+									<form th:action="@{./senha}" method="POST" th:object="${usuario}">
+										<input type="hidden" th:field="*{id}">
 										<div class="form-group">
 											<label for="inputPasswordNew">Nova senha</label>
-											<input type="password" class="form-control" th:field="*{password}" id="inputPasswordNew" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+											<input required type="password" class="form-control" th:field="*{password}" id="inputPasswordNew" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
 											<div class="invalid-feedback">
 												<span th:errors="*{password}"></span>
 											</div>
 										</div>
 										<div class="form-group">
 											<label for="inputPasswordNew2">Verifique a senha</label>
-											<input type="password" class="form-control" th:field="*{contraSenha}" id="inputPasswordNew2" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
+											<input required type="password" class="form-control" th:field="*{contraSenha}" id="inputPasswordNew2" th:classappend="${#fields.hasErrors('contraSenha')} ? 'is-invalid'">
 											<div class="invalid-feedback">
 												<span th:errors="*{contraSenha}"></span>
 											</div>

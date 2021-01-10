@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Categoria;
 import com.televisivo.model.Serie;
+import com.televisivo.model.Servico;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
 import com.televisivo.repository.filters.SerieFilter;
@@ -111,6 +112,11 @@ public class HomeController {
 
     @ModelAttribute("categorias")
 	public List<Categoria> getCategorias() {
-		return usuarioSerieService.findAll();
+		return usuarioSerieService.findAllCategorias();
+    }
+
+    @ModelAttribute("servicos")
+	public List<Servico> getServicos() {
+		return usuarioSerieService.findAllServicos();
     }
 }

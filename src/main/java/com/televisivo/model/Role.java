@@ -42,7 +42,7 @@ public class Role implements Serializable {
 	@Column(length = 40, nullable = false)
     private String nome;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<Usuario> usuarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)

@@ -5,6 +5,7 @@ import java.util.List;
 import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
+import com.televisivo.model.Servico;
 import com.televisivo.model.UsuarioSerie;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.security.UsuarioSistema;
@@ -20,8 +21,9 @@ public interface UsuarioSerieService {
     void atualizarQtdSeguidores(Long serie);
     List<Serie> findAllSeries(UsuarioSistema usuarioLogado, Boolean arquivada);
 
-    List<Serie> findAllSeriesCategoria(Long categoria);
-    List<Categoria> findAll();
+	List<Serie> findAllSeriesBy(List<Serie> lista, UsuarioSistema usuarioLogado);
+    List<Categoria> findAllCategorias();
+    List<Servico> findAllServicos();
 
     int qtd(UsuarioSistema usuarioLogado);
 

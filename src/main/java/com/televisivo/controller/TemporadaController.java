@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
-import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.service.TemporadaService;
 
@@ -49,9 +48,6 @@ public class TemporadaController {
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, temporada);
         modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
-        // if (temporada.getEpisodios().isEmpty()) {
-        //     modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
-        // }
         return modelAndView;
     }
 
@@ -62,7 +58,6 @@ public class TemporadaController {
             return "redirect:./alterar";
         }
         temporadaService.salvarEpisodio(temporada);
-        temporadaService.atualizarQtdEpisodios(temporada);
         temporadaService.update(temporada);
         attributes.addFlashAttribute(SUCCESS, "Temporada alterada com sucesso.");
         return REDIRECT_TEMPORADA;
@@ -75,7 +70,6 @@ public class TemporadaController {
             return viewAlterar(id);
         }
         temporadaService.salvarEpisodio(temporada);
-        temporadaService.atualizarQtdEpisodios(temporada);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
         modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
@@ -86,7 +80,6 @@ public class TemporadaController {
     public ModelAndView removerEpisodio(@PathVariable("id") Long id, Temporada temporada, HttpServletRequest request) {
         Episodio episodio = temporadaService.findEpisodioByIdEpisodio(Long.parseLong(request.getParameter("removeRow")));
         temporadaService.removerEpisodio(episodio);
-        temporadaService.atualizarQtdEpisodios(temporada);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, episodio.getTemporada());
         return modelAndView;
@@ -115,9 +108,7 @@ public class TemporadaController {
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
-        Serie serie = temporadaService.findSerieByIdTemporada(id);
         temporadaService.deleteById(id);
-        temporadaService.atualizarQtdTemporadas(serie);
         attributes.addFlashAttribute(SUCCESS, "Temporada removida com sucesso.");
         return REDIRECT_SERIE;
     }

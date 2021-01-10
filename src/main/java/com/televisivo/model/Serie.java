@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -71,10 +70,8 @@ public class Serie implements Serializable {
     @Column(nullable = true, length = 64)
     private String photos;
 
-    @Transient
-    public String getPhotoImagePath(){
-        if(photos == null || id == null ) return null;
-
+    public String getPhotoImagePath() {
+        if (photos == null || id == null ) return null;
         return "/serie-imagem/" + id + "/" + photos;
     }
 

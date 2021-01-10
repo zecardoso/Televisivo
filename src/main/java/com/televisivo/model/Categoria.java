@@ -40,6 +40,6 @@ public class Categoria implements Serializable {
 	@Column(length = 40, nullable = false)
     private String nome;
 
-	@ManyToMany(mappedBy="categorias")
+	@ManyToMany(mappedBy = "categorias")
     private List<Serie> series = new ArrayList<>();
 }

@@ -63,6 +63,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void deleteById(Long id) {
+        Serie serie = findSerieByIdTemporada(id);
 		try {
 			temporadaRepository.deleteById(id);
 		} catch(DataIntegrityViolationException e) {
@@ -70,6 +71,7 @@ public class TemporadaServiceImpl implements TemporadaService {
 		} catch (EmptyResultDataAccessException e){
 			throw new TemporadaNaoCadastradaException(String.format("O temporada com o código %d não foi encontrada!", id));
 		}
+        atualizarQtdTemporadas(serie);
     }
 
     @Override
@@ -114,6 +116,7 @@ public class TemporadaServiceImpl implements TemporadaService {
                 }
             }
         }
+        atualizarQtdEpisodios(temporada);
     }
 
     @Override
@@ -122,15 +125,18 @@ public class TemporadaServiceImpl implements TemporadaService {
         Episodio episodio = new Episodio();
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodio);
+        atualizarQtdEpisodios(temporada);
         return temporada;
     }
 
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void removerEpisodio(Episodio episodio) {
+        Temporada temporada = episodio.getTemporada();
         if (episodio.getId() != null) {
             episodioRepository.deleteById(episodio.getId());
         }
+        atualizarQtdEpisodios(temporada);
     }
 
     @Override
@@ -143,6 +149,7 @@ public class TemporadaServiceImpl implements TemporadaService {
         episodioNew.setEnredo(episodio.getEnredo());
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodioNew);
+        atualizarQtdEpisodios(temporada);
         return temporada;
     }
 }

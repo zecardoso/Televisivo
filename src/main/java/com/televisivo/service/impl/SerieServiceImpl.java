@@ -122,14 +122,17 @@ public class SerieServiceImpl implements SerieService {
         Temporada temporada = new Temporada();
         temporada.setSerie(serie);
         serie.getTemporadas().add(temporada);
+        atualizarQtdTemporadas(serie);
         return serie;
     }
 
     @Override
     @PreAuthorize("hasPermission('SERIE','EXCLUIR')")
     public void removerTemporada(Temporada temporada) {
+        Serie serie = temporada.getSerie();
         if (temporada.getId() != null) {
             temporadaRepository.deleteById(temporada.getId());
         }
+        atualizarQtdTemporadas(serie);
     }
 }

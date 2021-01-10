@@ -57,12 +57,12 @@ public class ContaServiceImpl implements ContaService {
 
     @Override
     public Usuario update(Usuario usuario) {
-        Usuario usuarioOrg = getOne(usuario.getId());
+        Usuario usuarioOrg = getOne(usuario);
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
             throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
         }
-        usuario.setPassword(encodePassword(usuario.getPassword()));
+        usuario.setPassword(encodePassword(usuarioOrg.getPassword()));
         usuario.setQtdEpisodios(usuarioOrg.getQtdEpisodios());
         usuario.setQtdSeries(usuarioOrg.getQtdSeries());
         usuario.setQtdSeriesArq(usuarioOrg.getQtdSeriesArq());
@@ -74,9 +74,9 @@ public class ContaServiceImpl implements ContaService {
 
     @Override
     public Usuario updateSenha(Usuario usuario) {
-        Usuario usuarioOrg = getOne(usuario.getId());
+        Usuario usuarioOrg = getOne(usuario);
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
-            usuario.setPassword(usuarioOrg.getPassword());
+            throw new SenhaError("Digite a senha");
         } else if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new SenhaError("Senha incorreta.");
         } else {
@@ -99,8 +99,8 @@ public class ContaServiceImpl implements ContaService {
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasPermission('USUARIO','LEITURA')")
-    public Usuario getOne(Long id) {
-        return usuarioRepository.getOne(id);
+    public Usuario getOne(Usuario usuario) {
+        return usuarioRepository.getOne(usuario.getId());
     }
 
     @Override
