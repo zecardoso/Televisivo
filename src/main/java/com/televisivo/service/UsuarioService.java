@@ -15,6 +15,7 @@ public interface UsuarioService extends GenericService<Usuario, Long> {
     List<Usuario> buscarNome(String nome);
 
     Optional<Usuario> findUsuarioByEmail(String email);
+    Optional<Usuario> findUsuarioByUsername(String username);
     Optional<Usuario> loginUsuarioByEmail(String email);
 	void updateLoginUsuario(Usuario usuario);
 	void blockedUsuario(Usuario usuario);

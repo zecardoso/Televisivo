@@ -20,6 +20,10 @@ import com.televisivo.service.ContaService;
 import com.televisivo.service.UsuarioEpisodioService;
 import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.UsuarioService;
+import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
+import com.televisivo.service.exceptions.EmailCadastradoException;
+import com.televisivo.service.exceptions.SenhaError;
+import com.televisivo.service.exceptions.UsernameCadastradoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +48,7 @@ public class HomeController {
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private static final String USUARIO = "usuario";
+    private static final String SIGNUP = "redirect:/sign-up";
 
     @Autowired
     private ContaService contaService;
@@ -101,9 +106,28 @@ public class HomeController {
     public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
-            return "redirect:/sign-up";
+            return SIGNUP;
         }
-        contaService.save(usuario);
+        try {
+            contaService.save(usuario);
+        } catch (EmailCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("email", e.getMessage());
+            return SIGNUP;
+        } catch (UsernameCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("username", e.getMessage());
+            return SIGNUP;
+        } catch (SenhaError e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("password", e.getMessage());
+            return SIGNUP;
+        } catch (ConfirmeSenhaNaoInformadaException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("contraSenha", e.getMessage());
+            return SIGNUP;
+        }
+
         attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         model.addAttribute("email", usuario.getEmail());
         model.addAttribute("password", usuario.getPassword());

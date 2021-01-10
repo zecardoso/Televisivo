@@ -11,6 +11,7 @@ import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
+import com.televisivo.service.exceptions.UsernameCadastradoException;
 import com.televisivo.service.exceptions.UsuarioNaoCadastradoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @PreAuthorize("hasPermission('USUARIO','INSERIR')")
     public Usuario save(Usuario usuario) {
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
+        Optional<Usuario> usernameCadastrado = findUsuarioByUsername(usuario.getUsername());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(String.format("O email %s já está cadastrado no sistema.", usuario.getEmail()));
+        }
+        if (usernameCadastrado.isPresent() && !usernameCadastrado.get().equals(usuario)) {
+            throw new EmailCadastradoException(String.format("O username %s já está cadastrado no sistema.", usuario.getUsername()));
         }
         if (!usuario.getPassword().equals(usuario.getContraSenha())) {
             throw new ConfirmeSenhaNaoInformadaException("Senha incorreta.");
@@ -66,8 +71,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario update(Usuario usuario) {
         Usuario usuarioOrg = findById(usuario.getId());
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
+        Optional<Usuario> usernameCadastrado = findUsuarioByUsername(usuario.getUsername());
         if (usuarioCadastrado.isPresent() && !usuarioCadastrado.get().equals(usuario)) {
-            throw new EmailCadastradoException(String.format("O E-mail %s já está cadastrado no sistema.", usuario.getEmail()));
+            throw new EmailCadastradoException(String.format("O email %s já está cadastrado no sistema.", usuario.getEmail()));
+        }
+        if (usernameCadastrado.isPresent() && !usernameCadastrado.get().equals(usuario)) {
+            throw new UsernameCadastradoException(String.format("O username %s já está cadastrado no sistema.", usuario.getUsername()));
         }
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {
             usuario.setPassword(usuarioOrg.getPassword());
@@ -121,6 +130,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Optional<Usuario> findUsuarioByEmail(String email) {
         return usuarioRepository.findUsuarioByEmail(email);
+    }
+
+    @Override
+    public Optional<Usuario> findUsuarioByUsername(String username) {
+        return usuarioRepository.findUsuarioByUsername(username);
     }
 
     @Override

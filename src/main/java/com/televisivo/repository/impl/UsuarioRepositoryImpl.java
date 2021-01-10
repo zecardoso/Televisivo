@@ -100,6 +100,12 @@ public class UsuarioRepositoryImpl implements UsuarioQuery {
     }
 
     @Override
+    public Optional<Usuario> findUsuarioByUsername(String username) {
+		TypedQuery<Usuario> query = entityManager.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.username =:username", Usuario.class);
+		return query.setParameter("username", username).setMaxResults(1).getResultList().stream().findFirst();
+    }
+
+    @Override
     public Optional<Usuario> loginUsuarioByEmail(String email) {
 		return findUsuarioByEmail(email);
     }

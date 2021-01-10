@@ -21,6 +21,7 @@ import com.televisivo.service.UsuarioService;
 import com.televisivo.service.exceptions.ConfirmeSenhaNaoInformadaException;
 import com.televisivo.service.exceptions.EmailCadastradoException;
 import com.televisivo.service.exceptions.SenhaError;
+import com.televisivo.service.exceptions.UsernameCadastradoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -109,12 +110,19 @@ public class UsuarioController {
         try {
             usuarioService.save(usuario);
         } catch (EmailCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
             result.rejectValue("email", e.getMessage());
             return CADASTRO;
+        }   catch (UsernameCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("username", e.getMessage());
+            return CADASTRO;
         } catch (SenhaError e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
             result.rejectValue("password", e.getMessage());
             return CADASTRO;
         } catch (ConfirmeSenhaNaoInformadaException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
             result.rejectValue("contraSenha", e.getMessage());
             return CADASTRO;
         }
@@ -130,11 +138,21 @@ public class UsuarioController {
         }
         try {
 			usuarioService.update(usuario);
-		} catch(EmailCadastradoException e) {
-			result.rejectValue("email", e.getMessage());
-			return ALTERAR;
-		} catch (SenhaError e) {
+		} catch (EmailCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("email", e.getMessage());
+            return ALTERAR;
+        }   catch (UsernameCadastradoException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("username", e.getMessage());
+            return ALTERAR;
+        } catch (SenhaError e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
             result.rejectValue("password", e.getMessage());
+            return ALTERAR;
+        } catch (ConfirmeSenhaNaoInformadaException e) {
+            attributes.addFlashAttribute(FAIL, e.getMessage());
+            result.rejectValue("contraSenha", e.getMessage());
             return ALTERAR;
         }
         attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
