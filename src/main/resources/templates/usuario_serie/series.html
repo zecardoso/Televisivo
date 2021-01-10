@@ -21,7 +21,7 @@
 						<div class="card">
 							<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Capa">
 							<div class="card-header px-4 pt-4">
-								<a th:href="@{/series/{id}/detalhes(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
+								<a th:href="@{/serie/{id}(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
 								<a class="badge badge-primary mr-1 my-1" th:each="categoria : *{serie.categorias}" th:href="@{/categoria/{id}(id=*{categoria.id})}" th:text="*{categoria.nome}"></a>
 							</div>
 							<div class="card-body">

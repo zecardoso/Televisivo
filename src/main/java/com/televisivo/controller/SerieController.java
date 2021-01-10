@@ -33,7 +33,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,7 +49,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
-@RequestMapping("/serie")
+@RequestMapping("admin/serie")
 public class SerieController {
 
     private static final String SERIE = "serie";
@@ -60,6 +59,8 @@ public class SerieController {
     private static final String MESSAGE = "Verifique os campos!";
     private static final String DETALHES = "redirect:./detalhes";
     private static final String HTML_SERIE = "/serie/serie";
+    private static final String ALTERAR = "redirect:./alterar";
+    private static final String POSSIVEL = "Não foi possivel salvar ";
 
     @Autowired
     private SerieService serieService;
@@ -92,31 +93,34 @@ public class SerieController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+    public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
             return "redirect:/serie/cadastro";
         }
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        serie.setPhotos(fileName);
-        Serie saveSerie = serieService.save(serie);
-
-        String uploadDir = "serie-imagem/" + saveSerie.getId();
-
-        Path uploadPath = Paths.get(uploadDir);
+        String fileName = multipartFile.getOriginalFilename();
+        Path uploadPath = Paths.get("serie-imagem/" + serie.getId());
 
         if (!Files.exists(uploadPath)){
-            Files.createDirectories(uploadPath);
+            try {
+                Files.createDirectories(uploadPath);
+            } catch (Exception e) {
+                attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
+                return ALTERAR;
+            }
         }
 
         try (InputStream inputStream = multipartFile.getInputStream()){
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e){
-            throw new IOException("Não foi possivel salvar a imagem :" + fileName);
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
+            return ALTERAR;
         }
+        serie.setPhotos(fileName);
+        serieService.save(serie);
         serieService.salvarTemporada(serie);
-        attributes.addFlashAttribute(SUCCESS, "Série adicionada com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série adicionada.");
         return "redirect:./" + serie.getId() + "/alterar";
     }
 
@@ -133,19 +137,46 @@ public class SerieController {
     public ModelAndView viewAlterar(@PathVariable("id") Long id) {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
+        serieService.atualizarQtdTemporadas(serie);
         modelAndView.addObject(SERIE, serie);
         modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
         return modelAndView;
     }
 
     @PostMapping("/{id}/alterar")
-    public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes) {
+    public String alterar(@PathVariable("id") Long id, @Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
-            return "redirect:./alterar";
+            return ALTERAR;
+        }
+        Serie serieOrg = serieService.getOne(id);
+        if (multipartFile.isEmpty()) {
+            serie.setPhotos(serieOrg.getPhotos());
+        } else {
+            String fileName = multipartFile.getOriginalFilename();
+            Path uploadPath = Paths.get("serie-imagem/" + id);
+
+            if (!Files.exists(uploadPath)){
+                try {
+                    Files.createDirectories(uploadPath);
+                } catch (Exception e) {
+                    attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
+                    return ALTERAR;
+                }
+            }
+
+            try (InputStream inputStream = multipartFile.getInputStream()){
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception e) {
+                attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
+                return ALTERAR;
+            }
+            serie.setPhotos(fileName);
         }
         serieService.salvarTemporada(serie);
-        attributes.addFlashAttribute(SUCCESS, "Série alterada com sucesso.");
+        serieService.update(serie);
+        attributes.addFlashAttribute(SUCCESS, "Série alterada.");
         return DETALHES;
     }
 
@@ -163,7 +194,11 @@ public class SerieController {
     }
 
     @PostMapping(value = "/{id}/alterar", params = "removeRow")
-    public ModelAndView removerTemporada(@PathVariable("id") Long id, Serie serie, HttpServletRequest request) {
+    public ModelAndView removerTemporada(@PathVariable("id") Long id, Serie serie,  BindingResult result, HttpServletRequest request, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute(FAIL, MESSAGE);
+            return viewAlterar(id);
+        }
         Temporada temporada = serieService.findTemporadaByIdTemporada(Long.parseLong(request.getParameter("removeRow")));
         serieService.removerTemporada(temporada);
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
@@ -183,7 +218,7 @@ public class SerieController {
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         serieService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Série removida com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Série removida.");
         return "redirect:../lista";
     }
 
@@ -221,7 +256,7 @@ public class SerieController {
 		}
     }
 
-    @GetMapping("/series")
+    @GetMapping("/serie")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
     	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(SERIE);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);

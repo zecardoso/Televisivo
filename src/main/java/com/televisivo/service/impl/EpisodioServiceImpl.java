@@ -33,7 +33,6 @@ public class EpisodioServiceImpl implements EpisodioService {
     @Override
     @PreAuthorize("hasPermission('EPISODIO','INSERIR')")
     public Episodio save(Episodio episodio) {
-        atualizarQtdEpisodios(episodio.getTemporada());
         return episodioRepository.save(episodio);
     }
 
@@ -59,7 +58,6 @@ public class EpisodioServiceImpl implements EpisodioService {
     @Override
     @PreAuthorize("hasPermission('EPISODIO','EXCLUIR')")
     public void deleteById(Long id) {
-        Temporada temporada = findTemporadaByIdEpisodio(id);
 		try {
 			episodioRepository.deleteById(id);
 		} catch(DataIntegrityViolationException e) {
@@ -67,7 +65,6 @@ public class EpisodioServiceImpl implements EpisodioService {
 		} catch (EmptyResultDataAccessException e){
 			throw new EpisodioNaoCadastradoException(String.format("O episodio com o código %d não foi encontrado!", id));
         }
-        atualizarQtdEpisodios(temporada);
     }
 
     @Override

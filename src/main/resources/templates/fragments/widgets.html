@@ -1,4 +1,4 @@
-<div class="row" th:fragment="widgets" th:object="${usuarioLogado}">
+<div class="row" th:fragment="widgets" th:object="${usuario}">
     <div class="col-12 col-sm-6 col-xxl d-flex">
         <div class="card illustration flex-fill">
             <div class="card-body p-0 d-flex flex-fill">
@@ -22,7 +22,7 @@
                 <div class="media">
                     <div class="media-body">
                         <h3 class="mb-2" th:text="*{qtdSeries}"></h3>
-                        <a th:href="@{/series/salvas}"><p class="mb-2">Séries salvas</p></a>
+                        <a th:href="@{/serie/salvas}"><p class="mb-2">Séries salvas</p></a>
                     </div>
                     <div class="d-inline-block ml-3">
                         <div class="stat">
@@ -39,7 +39,7 @@
                 <div class="media">
                     <div class="media-body">
                         <h3 class="mb-2" th:text="*{qtdSeriesArq}"></h3>
-                        <a th:href="@{/series/arquivadas}"><p class="mb-2">Séries arquivadas</p></a>
+                        <a th:href="@{/serie/arquivadas}"><p class="mb-2">Séries arquivadas</p></a>
                     </div>
                     <div class="d-inline-block ml-3">
                         <div class="stat">
@@ -56,7 +56,7 @@
                 <div class="media">
                     <div class="media-body">
                         <h3 class="mb-2" th:text="*{qtdEpisodios}"></h3>
-                        <a th:href="@{/episodios}"><p class="mb-2">Episódios marcados</p></a>
+                        <a th:href="@{/episodio/marcados}"><p class="mb-2">Episódios marcados</p></a>
                     </div>
                     <div class="d-inline-block ml-3">
                         <div class="stat">

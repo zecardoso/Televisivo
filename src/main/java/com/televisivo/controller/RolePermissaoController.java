@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/direito")
+@RequestMapping("admin/direito")
 public class RolePermissaoController {
 
     private static final String SUCCESS = "success";
@@ -72,7 +72,7 @@ public class RolePermissaoController {
         id.setEscopo(rolePermissao.getEscopo().getId());
         rolePermissao.setId(id);
         rolePermissaoService.save(rolePermissao);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -95,7 +95,7 @@ public class RolePermissaoController {
         id.setPermissao(permissaoId);
         id.setEscopo(escopoId);
         rolePermissaoService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../../../lista";
     }
 

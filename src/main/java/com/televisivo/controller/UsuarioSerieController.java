@@ -32,7 +32,7 @@ public class UsuarioSerieController {
     private static final String LISTA = "lista";
     private static final String SERIE = "serie";
     private static final String SUCCESS = "success";
-    private static final String USUARIO = "usuarioLogado";
+    private static final String USUARIO = "usuario";
     private static final String REMOVIDA = "Série removida.";
     private static final String SALVA = "Série salva.";
     private static final String REMOVER = "remover";
@@ -56,7 +56,7 @@ public class UsuarioSerieController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/series/{id}/detalhes")
+    @GetMapping("/serie/{id}")
     public ModelAndView detalharSerie(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id, SerieFilter serieFilter) {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_serie");
@@ -69,13 +69,14 @@ public class UsuarioSerieController {
         return modelAndView;
     }
 
-    @GetMapping("/series/salvas")
+    @GetMapping("/serie/salvas")
     public ModelAndView listaseries(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/series");
         List<Serie> lista = usuarioSerieService.findAllSeries(usuarioLogado, false);
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("title", "salvas");
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
@@ -87,6 +88,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("atributo", categoria);
         model.addAttribute("breadcrumb", "Categoria");
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
@@ -98,25 +100,28 @@ public class UsuarioSerieController {
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("atributo", servico);
         model.addAttribute("breadcrumb", "Serviço");
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
-    @GetMapping("/series/arquivadas")
+    @GetMapping("/serie/arquivadas")
     public ModelAndView listaseriesarq(@AuthenticationPrincipal UsuarioSistema usuarioLogado, Model model, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/series");
         List<Serie> lista = usuarioSerieService.findAllSeries(usuarioLogado, true);
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("title", "arquivadas");
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
-    @GetMapping("/episodios")
+    @GetMapping("/episodio/marcados")
     public ModelAndView listaepisodios(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("/usuario_episodio/lista");
         List<Episodio> lista = usuarioEpisodioService.findAllEpisodios(usuarioLogado);
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
@@ -200,5 +205,11 @@ public class UsuarioSerieController {
     @ModelAttribute("servicos")
 	public List<Servico> getServicos() {
 		return usuarioSerieService.findAllServicos();
+    }
+
+    public void atualiza(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
+        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
+        usuarioEpisodioService.atualizarQtdEpisodios(usuarioLogado);
     }
 }

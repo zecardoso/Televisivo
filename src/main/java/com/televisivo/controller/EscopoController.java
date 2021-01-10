@@ -25,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/escopo")
+@RequestMapping("admin/escopo")
 public class EscopoController {
 
     private static final String ESCOPO = "escopo";
@@ -81,7 +81,7 @@ public class EscopoController {
             return "redirect:./cadastro";
         }
         escopoService.save(escopo);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -92,14 +92,14 @@ public class EscopoController {
             return "redirect:./alterar";
         }
         escopoService.update(escopo);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         escopoService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
 

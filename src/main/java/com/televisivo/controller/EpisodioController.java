@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/serie/{id}/temporada/{id}/episodio")
+@RequestMapping("admin/serie/{id}/temporada/{id}/episodio")
 public class EpisodioController {
 
     private static final String EPISODIO = "episodio";
@@ -65,7 +65,7 @@ public class EpisodioController {
             return "redirect:../.././episodio/" + id + "/alterar";
         }
         episodioService.update(episodio);
-        attributes.addFlashAttribute(SUCCESS, "Episódio alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Episódio alterado.");
         return DETALHES;
     }
 
@@ -82,7 +82,7 @@ public class EpisodioController {
         Temporada temporada = episodioService.findTemporadaByIdEpisodio(id);
         episodioService.deleteById(id);
         episodioService.atualizarQtdEpisodios(temporada);
-        attributes.addFlashAttribute(SUCCESS, "Episódio removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Episódio removido.");
         return REDIRECT_TEMPORADA;
     }
 

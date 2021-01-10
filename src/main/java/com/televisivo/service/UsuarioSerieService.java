@@ -25,8 +25,6 @@ public interface UsuarioSerieService {
     List<Categoria> findAllCategorias();
     List<Servico> findAllServicos();
 
-    int qtd(UsuarioSistema usuarioLogado);
-
     UsuarioSerie save(UsuarioSerie usuarioSerie);
     void salvar(UsuarioSistema usuarioLogado, Long serie);
     void arquivada(UsuarioSistema usuarioLogado, Long serie, Boolean arquivada);

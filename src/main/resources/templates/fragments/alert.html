@@ -1,4 +1,4 @@
-<div class="alert alert-success alert-dismissible" role="alert" th:if="${success} != null">
+<div class="alert alert-success alert-dismissible" role="alert" th:if="${success} != NULL">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
     </button>
@@ -7,11 +7,20 @@
     </div>
 </div>
 
-<div class="alert alert-danger alert-dismissible" role="alert" th:if="${fail} != null">
+<div class="alert alert-danger alert-dismissible" role="alert" th:if="${fail} != NULL">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
     </button>
     <div class="alert-message">
         <strong>Falha!</strong><span th:text="' ' + ${fail}"></span>
+    </div>
+</div>
+
+<div class="alert alert-danger alert-dismissible" role="alert" th:if="${acao} != NULL AND ${mensagem} != NULL">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <div class="alert-message">
+        <strong>Falha!</strong><span th:text="' ' + ${mensagem}"></span>
     </div>
 </div>

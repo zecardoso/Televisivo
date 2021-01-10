@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/permissao")
+@RequestMapping("admin/permissao")
 public class PermissaoController {
 
     private static final String PERMISSAO = "permissao";
@@ -82,7 +82,7 @@ public class PermissaoController {
             return "redirect:./cadastro";
         }
         permissaoService.save(permissao);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -93,14 +93,14 @@ public class PermissaoController {
             return "redirect:./alterar";
         }
         permissaoService.update(permissao);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         permissaoService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
 

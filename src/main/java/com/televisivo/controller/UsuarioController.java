@@ -44,7 +44,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
-@RequestMapping("/usuario")
+@RequestMapping("admin/usuario")
 public class UsuarioController {
 
     private static final String USUARIO = "usuario";
@@ -118,7 +118,7 @@ public class UsuarioController {
             result.rejectValue("contraSenha", e.getMessage());
             return CADASTRO;
         }
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -137,14 +137,14 @@ public class UsuarioController {
             result.rejectValue("password", e.getMessage());
             return ALTERAR;
         }
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         usuarioService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
 

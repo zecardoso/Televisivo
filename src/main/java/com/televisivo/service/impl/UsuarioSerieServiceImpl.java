@@ -121,11 +121,6 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     }
 
     @Override
-    public int qtd(UsuarioSistema usuarioLogado) {
-        return usuarioSerieRepository.qtd(findUsuario(usuarioLogado), false);
-    }
-
-    @Override
     public List<Episodio> episodios(UsuarioSistema usuarioLogado, Long temporada) {
         List<Episodio> lista = temporadaRepository.episodios(temporada);
         for (int i = 0; i < lista.size(); i++) {

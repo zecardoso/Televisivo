@@ -27,6 +27,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String ADMINISTRADOR = "ADMINISTRADOR";
+
     @Autowired
     private LoginAuthenticationProvider loginAuthenticationProvider;
 
@@ -51,6 +53,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/", "/css/**", "/fontawesome/**", "/js/**", "/sign-in", "/sign-up", "/salvar").permitAll()
+            .antMatchers("/admin/**").hasRole(ADMINISTRADOR)
             .anyRequest().authenticated();
 
         http.formLogin()

@@ -17,6 +17,7 @@ import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.repository.pagination.Pagina;
 import com.televisivo.security.UsuarioSistema;
 import com.televisivo.service.ContaService;
+import com.televisivo.service.UsuarioEpisodioService;
 import com.televisivo.service.UsuarioSerieService;
 import com.televisivo.service.UsuarioService;
 
@@ -42,7 +43,7 @@ public class HomeController {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String USUARIO = "usuarioLogado";
+    private static final String USUARIO = "usuario";
 
     @Autowired
     private ContaService contaService;
@@ -52,6 +53,9 @@ public class HomeController {
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;
+
+    @Autowired
+    private UsuarioEpisodioService usuarioEpisodioService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
@@ -66,6 +70,7 @@ public class HomeController {
         modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", pagina);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 
@@ -99,7 +104,7 @@ public class HomeController {
             return "redirect:/sign-up";
         }
         contaService.save(usuario);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         model.addAttribute("email", usuario.getEmail());
         model.addAttribute("password", usuario.getPassword());
         return "redirect:/";
@@ -118,5 +123,11 @@ public class HomeController {
     @ModelAttribute("servicos")
 	public List<Servico> getServicos() {
 		return usuarioSerieService.findAllServicos();
+    }
+
+    public void atualiza(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        usuarioSerieService.atualizarQtdSeries(usuarioLogado);
+        usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
+        usuarioEpisodioService.atualizarQtdEpisodios(usuarioLogado);
     }
 }

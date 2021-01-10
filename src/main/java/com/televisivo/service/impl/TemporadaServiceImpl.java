@@ -9,6 +9,7 @@ import com.televisivo.repository.EpisodioRepository;
 import com.televisivo.repository.TemporadaRepository;
 import com.televisivo.service.TemporadaService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
+import com.televisivo.service.exceptions.EpisodioNaoCadastradoException;
 import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class TemporadaServiceImpl implements TemporadaService {
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','ATUALIZAR')")
     public Temporada update(Temporada temporada) {
+        atualizarQtdEpisodios(temporada);
         return save(temporada);
     }
 
@@ -63,15 +65,13 @@ public class TemporadaServiceImpl implements TemporadaService {
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void deleteById(Long id) {
-        Serie serie = findSerieByIdTemporada(id);
 		try {
 			temporadaRepository.deleteById(id);
 		} catch(DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(String.format("A temporada de código %d não pode ser removida!", id));
 		} catch (EmptyResultDataAccessException e){
-			throw new TemporadaNaoCadastradaException(String.format("O temporada com o código %d não foi encontrada!", id));
+			throw new TemporadaNaoCadastradaException(String.format("A temporada com o código %d não foi encontrada!", id));
 		}
-        atualizarQtdTemporadas(serie);
     }
 
     @Override
@@ -108,15 +108,12 @@ public class TemporadaServiceImpl implements TemporadaService {
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','INSERIR')")
     public void salvarEpisodio(Temporada temporada) {
-        if (temporada.getEpisodios().size() != -1) {
-            for (Episodio episodio: temporada.getEpisodios()) {
-                episodio.setTemporada(temporada);
-                if (!episodio.getNome().isEmpty() && episodio.getNumero() != 0){
-                    episodioRepository.save(episodio);
-                }
+        for (Episodio episodio : temporada.getEpisodios()) {
+            episodio.setTemporada(temporada);
+            if (!episodio.getNome().isEmpty() || episodio.getNumero() != 0){
+                episodioRepository.save(episodio);
             }
         }
-        atualizarQtdEpisodios(temporada);
     }
 
     @Override
@@ -125,18 +122,19 @@ public class TemporadaServiceImpl implements TemporadaService {
         Episodio episodio = new Episodio();
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodio);
-        atualizarQtdEpisodios(temporada);
         return temporada;
     }
 
     @Override
     @PreAuthorize("hasPermission('TEMPORADA','EXCLUIR')")
     public void removerEpisodio(Episodio episodio) {
-        Temporada temporada = episodio.getTemporada();
-        if (episodio.getId() != null) {
-            episodioRepository.deleteById(episodio.getId());
+        try {
+			episodioRepository.deleteById(episodio.getId());
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("O episodio de código %d não pode ser removido!", episodio.getId()));
+		} catch (EmptyResultDataAccessException e){
+			throw new EpisodioNaoCadastradoException(String.format("O episodio com o código %d não foi encontrado!", episodio.getId()));
         }
-        atualizarQtdEpisodios(temporada);
     }
 
     @Override
@@ -149,7 +147,6 @@ public class TemporadaServiceImpl implements TemporadaService {
         episodioNew.setEnredo(episodio.getEnredo());
         episodio.setTemporada(temporada);
         temporada.getEpisodios().add(episodioNew);
-        atualizarQtdEpisodios(temporada);
         return temporada;
     }
 }

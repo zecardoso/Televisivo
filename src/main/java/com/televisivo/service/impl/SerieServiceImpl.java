@@ -10,6 +10,7 @@ import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.service.SerieService;
 import com.televisivo.service.exceptions.EntidadeEmUsoException;
 import com.televisivo.service.exceptions.SerieNaoCadastradaException;
+import com.televisivo.service.exceptions.TemporadaNaoCadastradaException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,6 +47,7 @@ public class SerieServiceImpl implements SerieService {
     @Override
     @PreAuthorize("hasPermission('SERIE','ATUALIZAR')")
     public Serie update(Serie serie) {
+        atualizarQtdTemporadas(serie);
         return save(serie);
     }
 
@@ -105,15 +107,12 @@ public class SerieServiceImpl implements SerieService {
     @Override
     @PreAuthorize("hasPermission('SERIE','INSERIR')")
     public void salvarTemporada(Serie serie) {
-        if (serie.getTemporadas().size() != -1) {
-            for (Temporada temporada: serie.getTemporadas()) {
-                temporada.setSerie(serie);
-                if (temporada.getAno() != 0 && temporada.getNumero() != 0) {
-                    temporadaRepository.save(temporada);
-                }
+        for (Temporada temporada : serie.getTemporadas()) {
+            temporada.setSerie(serie);
+            if (temporada.getAno() != 0 || temporada.getNumero() != 0) {
+                temporadaRepository.save(temporada);
             }
         }
-        atualizarQtdTemporadas(serie);
     }
 
     @Override
@@ -122,17 +121,18 @@ public class SerieServiceImpl implements SerieService {
         Temporada temporada = new Temporada();
         temporada.setSerie(serie);
         serie.getTemporadas().add(temporada);
-        atualizarQtdTemporadas(serie);
         return serie;
     }
 
     @Override
     @PreAuthorize("hasPermission('SERIE','EXCLUIR')")
     public void removerTemporada(Temporada temporada) {
-        Serie serie = temporada.getSerie();
-        if (temporada.getId() != null) {
-            temporadaRepository.deleteById(temporada.getId());
-        }
-        atualizarQtdTemporadas(serie);
+        try {
+			temporadaRepository.deleteById(temporada.getId());
+		} catch(DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(String.format("A temporada de código %d não pode ser removida!", temporada.getId()));
+		} catch (EmptyResultDataAccessException e){
+			throw new TemporadaNaoCadastradaException(String.format("O temporada com o código %d não foi encontrada!", temporada.getId()));
+		}
     }
 }

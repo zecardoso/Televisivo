@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br" layout:decorate="~{template}">
 <head>
-    <title th:object="${usuarioLogado}" th:text="*{nome} + ' ' + *{sobrenome}"></title>
+    <title th:object="${usuario}" th:text="*{nome} + ' ' + *{sobrenome}"></title>
 </head>
 <body>
 	<main layout:fragment="main">
@@ -20,7 +20,7 @@
 						<div class="card-header">
 							<h5 class="card-title mb-0">Detalhes do perfil</h5>
 						</div>
-						<div class="card-body" th:object="${usuarioLogado}">
+						<div class="card-body" th:object="${usuario}">
 							<div class="tile-body tile-footer">
 								<label>Nome</label>
 								<h4 th:text="*{nome} + ' ' + *{sobrenome}"></h4>

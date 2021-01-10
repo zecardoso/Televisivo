@@ -40,12 +40,12 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
             throw new UsernameNotFoundException("E-mail não está cadastrado!");
         }
         if (Boolean.FALSE.equals(email.equals(usuario.get().getEmail()) && usuario.get().isAtivo())) {
-            throw new LockedException("Usuario bloqueado no sistema!");
+            throw new LockedException("Sua conta foi bolequeada!");
         }
         if (email.equals(usuario.get().getEmail()) && BCrypt.checkpw(password, usuario.get().getPassword())) {
             token = new UsernamePasswordAuthenticationToken(new UsuarioSistema(usuario.get()), usuario.get().getPassword(), usuario.get().getAuthorities());
         } else {
-            throw new BadCredentialsException("A senha informada e invalida!");
+            throw new BadCredentialsException("Senha inválida!");
         }
         return token;
     }

@@ -26,7 +26,7 @@
                 </div>
 				<h3 class="tile-title" th:text="*{id == null} ? 'Nova série' : *{nome}"></h3>
                 <div class="tile-body tile-footer">
-                    <form onkeydown="return event.key != 'Enter';" th:action="*{id == null} ? @{./salvar} : @{./alterar}" method="POST" enctype="multipart/form-data">
+                    <form th:action="*{id == null} ? @{./salvar} : @{./alterar}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{id}">
                         <div class="form-row">
 							<div class="col-md-4 mb-3">
@@ -76,12 +76,12 @@
                                 </div>
 							</div>
                         </div>
-                        <!-- <div class="form-row">
+                        <div class="form-row">
 							<div class="col-md-4 mb-3">
                                 <label>Foto</label>
-                                <input class="form-control" th:field="*{photos}" type="file" name="fileImage" th:id="*{photos}" accept="image/png, image/jpeg"/>
+                                <input class="form-control" type="file" name="fileImage" th:id="*{photos}" accept="image/png, image/jpeg"/>
 							</div>
-                        </div> -->
+                        </div>
                         <img id="thumbnail" alt="Logo Preview" style="max-width: 100px;"/>
                         <br>
                         <label class="control-label">Categorias</label>

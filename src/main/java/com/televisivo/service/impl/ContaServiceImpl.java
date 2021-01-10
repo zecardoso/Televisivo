@@ -56,6 +56,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario update(Usuario usuario) {
         Usuario usuarioOrg = getOne(usuario);
         Optional<Usuario> usuarioCadastrado = findUsuarioByEmail(usuario.getEmail());
@@ -73,6 +74,7 @@ public class ContaServiceImpl implements ContaService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('USUARIO','ATUALIZAR')")
     public Usuario updateSenha(Usuario usuario) {
         Usuario usuarioOrg = getOne(usuario);
         if (usuario.getPassword().isBlank() && (usuario.getContraSenha()).isBlank()) {

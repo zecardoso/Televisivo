@@ -25,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/role")
+@RequestMapping("admin/role")
 public class RoleController {
 
     private static final String ROLE = "role";
@@ -80,7 +80,7 @@ public class RoleController {
             return "redirect:./cadastro";
         }
         roleService.save(role);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -91,14 +91,14 @@ public class RoleController {
             return "redirect:./alterar";
         }
         roleService.update(role);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         roleService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
     @PostMapping(value = { "/{id}/alterar", "/{id}/remover" }, params = "cancelar")

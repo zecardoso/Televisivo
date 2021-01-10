@@ -36,7 +36,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
-@RequestMapping("/categoria")
+@RequestMapping("admin/categoria")
 public class CategoriaController {
 
     private static final String CATEGORIA = "categoria";
@@ -94,7 +94,7 @@ public class CategoriaController {
             return "redirect:./cadastro";
         }
         categoriaService.save(categoria);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -105,14 +105,14 @@ public class CategoriaController {
             return "redirect:./alterar";
         }
         categoriaService.update(categoria);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         categoriaService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
 

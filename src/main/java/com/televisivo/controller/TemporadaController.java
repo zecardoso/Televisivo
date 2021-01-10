@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Serie;
 import com.televisivo.model.Temporada;
 import com.televisivo.service.TemporadaService;
 
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/serie/{id}/temporada")
+@RequestMapping("admin/serie/{id}/temporada")
 public class TemporadaController {
 
     private static final String TEMPORADA = "temporada";
@@ -46,6 +47,7 @@ public class TemporadaController {
     public ModelAndView viewAlterar(@PathVariable("id") Long id) {
         Temporada temporada = temporadaService.getOne(id);
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
+        temporadaService.atualizarQtdEpisodios(temporada);
         modelAndView.addObject(TEMPORADA, temporada);
         modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));
         return modelAndView;
@@ -59,7 +61,7 @@ public class TemporadaController {
         }
         temporadaService.salvarEpisodio(temporada);
         temporadaService.update(temporada);
-        attributes.addFlashAttribute(SUCCESS, "Temporada alterada com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Temporada alterada.");
         return REDIRECT_TEMPORADA;
     }
 
@@ -108,8 +110,10 @@ public class TemporadaController {
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
+        Serie serie = temporadaService.findSerieByIdTemporada(id);
         temporadaService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Temporada removida com sucesso.");
+        temporadaService.atualizarQtdTemporadas(serie);
+        attributes.addFlashAttribute(SUCCESS, "Temporada removida.");
         return REDIRECT_SERIE;
     }
 

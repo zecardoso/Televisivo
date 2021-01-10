@@ -36,7 +36,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
-@RequestMapping("/servico")
+@RequestMapping("admin/servico")
 public class ServicoController {
 
     private static final String SERVICO = "servico";
@@ -94,7 +94,7 @@ public class ServicoController {
             return "redirect:./cadastro";
         }
         servicoService.save(servico);
-        attributes.addFlashAttribute(SUCCESS, "Registro adicionado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro adicionado.");
         return "redirect:./lista";
     }
 
@@ -105,14 +105,14 @@ public class ServicoController {
             return "redirect:./alterar";
         }
         servicoService.update(servico);
-        attributes.addFlashAttribute(SUCCESS, "Registro alterado com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro alterado.");
         return DETALHES;
     }
 
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable("id") Long id, RedirectAttributes attributes) {
         servicoService.deleteById(id);
-        attributes.addFlashAttribute(SUCCESS, "Registro removido com sucesso.");
+        attributes.addFlashAttribute(SUCCESS, "Registro removido.");
         return "redirect:../lista";
     }
 

@@ -65,7 +65,7 @@ public class ContaController {
         try {
 			contaService.update(usuario);
 		} catch(EmailCadastradoException e) {
-			result.rejectValue("email", e.getMessage());
+            attributes.addFlashAttribute(FAIL, e.getMessage());
 			return ALTERAR;
         }
         attributes.addFlashAttribute(SUCCESS, "Informações alteradas.");
