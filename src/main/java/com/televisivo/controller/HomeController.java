@@ -79,6 +79,11 @@ public class HomeController {
         return modelAndView;
     }
 
+    @GetMapping("/admin")
+    public ModelAndView homeAdmin() {
+        return new ModelAndView("home_admin");
+    }
+
     @RequestMapping(value = "/sign-in", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView loginPage(Usuario usuario, @RequestParam(value = "mensagem", required = false) String mensagem, Model model) {
         if (Objects.isNull(mensagem)) {

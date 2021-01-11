@@ -16,44 +16,44 @@
             </ul>
         </div>
         <div class="container">
-			<div class="tile" th:object="${temporada}">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div th:replace="fragments/validation :: validation"></div>
-                        <div th:replace="fragments/alert"></div>
+            <form th:action="@{./alterar}" method="POST">
+                <div class="tile" th:object="${temporada}">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div th:replace="fragments/validation :: validation"></div>
+                            <div th:replace="fragments/alert"></div>
+                        </div>
                     </div>
-                </div>
-				<h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
-                <div class="tile-body tile-footer">
-                    <form th:action="@{./alterar}" method="POST">
+                    <h3 class="tile-title" th:text="'Temporada ' + *{numero}"></h3>
+                    <div class="tile-body tile-footer">
                         <div class="form-row">
-							<div class="col-md-4 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <Input hidden th:field="*{serie}">
                                 <label for="numero">Numero</label>
                                 <Input required class="form-control" type="text" placeholder="Enter numero" th:field="*{numero}" id="numero" name="numero" th:classappend="${#fields.hasErrors('numero')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{numero}"></span>
                                 </div>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="col-md-4 mb-3">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
                                 <label for="ano">Ano</label>
                                 <Input required class="form-control" type="text" placeholder="Enter ano" th:field="*{ano}" id="ano" name="ano" th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
                                 <div class="invalid-feedback">
                                     <span th:errors="*{ano}"></span>
                                 </div>
-							</div>
-						</div>
+                            </div>
+                        </div>
                         <label class="control-label">Episodios</label>
                         <div class="form-row align-items-center" th:each="episodios, rowStat :*{episodios}">
                             <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
                             <div class="col-auto">
-                                <label class="sr-only" for="numero">Número da temporada</label>
+                                <label class="sr-only" for="numero">Número do episódio</label>
                                 <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
-                                <label class="sr-only" for="nome">Nome do episodio</label>
+                                <label class="sr-only" for="nome">Nome do episódio</label>
                                 <input required type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
                             </div>
                             <div class="col-auto">
@@ -75,12 +75,12 @@
                             <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
                         </div>
                         <div id="salvar" class="tile-footer">
-							<button class="btn btn-success" type="submit">Salvar</button>
-							<button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar" formnovalidate>Cancelar</button>
-						</div>
-                    </form>
+                            <button class="btn btn-success" type="submit">Salvar</button>
+                            <button class="btn btn-secondary" type="submit" name="cancelar" value="cancelar" formnovalidate>Cancelar</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </section>
 </body>

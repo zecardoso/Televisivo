@@ -150,6 +150,13 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     }
 
     @Override
+    public Serie verifica(Serie serie, UsuarioSistema usuarioLogado) {
+        serie.setSalva(usuarioSerieRepository.salva(findUsuario(usuarioLogado),serie.getId(), false) != 0);
+        serie.setArquivada(usuarioSerieRepository.salva(findUsuario(usuarioLogado),serie.getId(), true) != 0);
+        return serie;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Categoria> findAllCategorias() {
         return categoriaRepository.findAll();

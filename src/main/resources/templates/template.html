@@ -11,7 +11,6 @@
 </head>
 <body data-theme="colored" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
 	<div class="wrapper">
-		<nav class="sidebar" aria-label="Site menu" th:replace="fragments/sidebar_2 :: sidebar_2"></nav>
 		<div class="main">
 			<nav class="navbar navbar-expand navbar-light navbar-bg" aria-label="Site navbar" th:replace="fragments/navbar :: navbar"></nav>
 			<main class="content" layout:fragment="main" sec:authorize="isAuthenticated()"></main>

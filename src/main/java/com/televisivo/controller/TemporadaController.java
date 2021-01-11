@@ -30,6 +30,7 @@ public class TemporadaController {
     private static final String REDIRECT_SERIE = "redirect:../../detalhes";
     private static final String REDIRECT_TEMPORADA = "redirect:./detalhes";
     private static final String HTML_TEMPORADA = "/temporada/temporada";
+    private static final String VERIFIQUE = "Verifique os campos!";
 
     @Autowired
     private TemporadaService temporadaService;
@@ -56,11 +57,16 @@ public class TemporadaController {
     @PostMapping("/{id}/alterar")
     public String alterar(@PathVariable("id") Long id, @Valid Temporada temporada, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+            attributes.addFlashAttribute(FAIL, VERIFIQUE);
             return "redirect:./alterar";
         }
-        temporadaService.salvarEpisodio(temporada);
-        temporadaService.update(temporada);
+        try {
+            temporadaService.salvarEpisodio(temporada);
+            temporadaService.update(temporada);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, VERIFIQUE);
+            return "redirect:./alterar";
+        }
         attributes.addFlashAttribute(SUCCESS, "Temporada alterada.");
         return REDIRECT_TEMPORADA;
     }
@@ -68,10 +74,15 @@ public class TemporadaController {
     @PostMapping(value = "/{id}/alterar", params = "addRow")
     public ModelAndView adicionarEpisodio(@PathVariable("id") Long id, Temporada temporada, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute(FAIL, "Verifique os campos!");
+            attributes.addFlashAttribute(FAIL, VERIFIQUE);
             return viewAlterar(id);
         }
-        temporadaService.salvarEpisodio(temporada);
+        try {
+            temporadaService.salvarEpisodio(temporada);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, VERIFIQUE);
+            return viewAlterar(id);
+        }
         ModelAndView modelAndView = new ModelAndView(HTML_TEMPORADA);
         modelAndView.addObject(TEMPORADA, temporadaService.adicionarEpisodio(temporada));
         modelAndView.addObject(EPISODIOS, temporadaService.episodios(id));

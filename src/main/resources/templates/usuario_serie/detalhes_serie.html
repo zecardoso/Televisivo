@@ -13,14 +13,16 @@
 			</ol>
 		</nav>
 		<div class="container-fluid p-0">
-			<h1 class="h3 mb-3" th:text="*{nome}"></h1>
+			<h1 class="h3 mb-3" th:text="*{nome} + ' - ' + *{ano}"></h1>
 			<div th:replace="fragments/alert"></div>
 			<div class="row">
-                <div class="col-md-4 col-xl-3">
-                    <div class="card mb-3">
-                        <div class="card-body text-center">
-                            <img th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Stacie Hall" class="card-img-top rounded mr-2 mb-2">
-                        </div>
+                <div class="col-md-3 col-xl-3">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{*{photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Poster da série">
+                        <form class="card-header" th:action="@{/acao}" method="POST">
+                            <button th:class="*{salva} ? 'btn btn-secondary' : (*{arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="*{salva} ? 'arquivar' : (*{arquivada} ? 'desarquivar' : 'salvar')" th:value="*{id}" th:text="*{salva} ? 'Arquivar' : (*{arquivada} ? 'Desarquivar' : 'Salvar')"></button>
+                            <button th:if="*{salva} OR *{arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{id}">Remover</button>
+                        </form>
                         <hr class="my-0">
                         <div class="card-body">
                             <h5 class="h6 card-title">Categorias</h5>
@@ -28,45 +30,31 @@
                         </div>
                         <hr class="my-0">
                         <div class="card-body">
-                            <h5 class="h6 card-title">About</h5>
+                            <h5 class="h6 card-title">Sobre</h5>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home feather-sm mr-1"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Lives in
-                                    <a href="#">San Francisco, SA</a>
+                                    Restrição de
+                                    <span th:text="*{restricao}"></span>
+                                    anos
                                 </li>
                                 <li class="mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase feather-sm mr-1"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Works at
-                                    <a href="#">GitHub</a>
+                                    Serviço
+                                    <a th:href="@{/servico/{id}(id=*{servico.id})}" th:text="*{servico.nome}"></a>
                                 </li>
                                 <li class="mb-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin feather-sm mr-1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> From
-                                    <a href="#">Boston</a>
+                                    <span th:text="*{qtdTemporadas} > 1 ? *{qtdTemporadas} + ' temporadas' : (*{qtdTemporadas} == 0 ? 'Nenhuma temporada' : *{qtdTemporadas} + ' temporada')"></span>
+                                </li>
+                                <li class="mb-1">
+                                    <span th:text="*{qtdSeguidores} > 1 ? *{qtdSeguidores} + ' seguidores' : (*{qtdSeguidores} == 0 ? 'Nenhum seguidor' : *{qtdSeguidores} + ' seguidor')"></span>
                                 </li>
                             </ul>
                         </div>
                         <hr class="my-0">
                         <div class="card-body">
-                            <h5 class="h6 card-title">Elsewhere</h5>
+                            <h5 class="h6 card-title">Enredo</h5>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-1">
-                                    <span class="fas fa-globe fa-fw mr-1"></span>
-                                    <a href="#">staciehall.co</a>
-                                </li>
-                                <li class="mb-1">
-                                    <span class="fab fa-twitter fa-fw mr-1"></span>
-                                    <a href="#">Twitter</a>
-                                </li>
-                                <li class="mb-1">
-                                    <span class="fab fa-facebook fa-fw mr-1"></span>
-                                    <a href="#">Facebook</a>
-                                </li>
-                                <li class="mb-1">
-                                    <span class="fab fa-instagram fa-fw mr-1"></span>
-                                    <a href="#">Instagram</a>
-                                </li>
-                                <li class="mb-1">
-                                    <span class="fab fa-linkedin fa-fw mr-1"></span>
-                                    <a href="#">LinkedIn</a>
+                                    <p th:text="*{enredo}"></p>
                                 </li>
                             </ul>
                         </div>
@@ -76,21 +64,21 @@
                     <form th:action="@{/acao}" method="POST">
                         <div class="accordion" id="accordionExample">
                             <div class="card" th:each="temporada : ${temporadas}">
-                                <div class="card-header" id="headingOne">
+                                <div class="card-header" th:id="'heading' + ${temporada.id}">
                                     <h5 class="card-title mb-0">
-                                        <a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed" th:text="'Temporada ' + ${temporada.numero}"></a>
+                                        <a data-toggle="collapse" th:data-target="'#collapse' + ${temporada.id}" aria-expanded="" th:aria-controls="'collapse' + ${temporada.id}" class="" th:text="'Temporada ' + ${temporada.numero}"></a>
                                     </h5>
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                <div th:id="'collapse' + ${temporada.id}" class="collapse" th:aria-labelledby="'collapse' + ${temporada.id}" data-parent="#accordionExample" style="">
                                     <div class="card-body">
                                         <table class="table table-hover" aria-describedby="Listagem de episódios">
                                             <tbody>
                                                 <tr th:each="episodio : ${temporada.episodios}">
-                                                    <th style="width:10%;" scope="row" th:text="'Episódio ' + ${episodio.numero}"></th>
-                                                    <td style="width:15%" th:text="${episodio.nome}"></td>
-                                                    <td style="width:10%" th:text="${episodio.duracao} + ' min.'"></td>
+                                                    <th style="width:15%;" scope="row" th:text="'Episódio ' + ${episodio.numero}"></th>
+                                                    <td style="width:20%" th:text="${episodio.nome}"></td>
+                                                    <td style="width:15%" th:text="${episodio.duracao} + ' min.'"></td>
                                                     <td>
-                                                        <button th:class="${episodio.marcado ? 'btn badge badge-danger' : 'btn badge badge-success'}" type="submit" th:name="${episodio.marcado ? 'desmarcar' : 'marcar'}" th:value="${episodio.id}" th:text="${episodio.marcado ? 'Desmarcar' : 'Marcar'}"></button>
+                                                        <button th:class="${episodio.marcado ? 'btn badge badge-danger text-white' : 'btn badge badge-success text-white'}" type="submit" th:name="${episodio.marcado ? 'desmarcar' : 'marcar'}" th:value="${episodio.id}" th:text="${episodio.marcado ? 'Desmarcar' : 'Marcar'}"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -108,31 +96,3 @@
 	</th:block>
 </body>
 </html>
-
-
-
-            <!-- <h3 class="tile-title" th:text="*{nome}">Série</h3>
-            <div class="tile-body tile-footer">
-                <label class="control-label">Enredo</label>
-                <h4 th:text="*{enredo}"></h4>
-                <label class="control-label">Ano</label>
-                <h4 th:text="*{ano}"></h4>
-                <label class="control-label">Restrição de idade</label>
-                <h4 th:text="*{restricao}"></h4>
-                <label class="control-label">Serviço</label>
-                <h4 th:text="*{servico.nome}"></h4>
-                <label class="control-label">Quantidade de temporadas</label>
-                <h4 th:text="*{qtdTemporadas}"></h4>
-                <label class="control-label">Quantidade de seguidores</label>
-                <h4 th:text="*{qtdSeguidores}"></h4>
-                <label class="control-label">Categorias</label>
-                <div th:each="categoria : *{categorias}">
-                    <h4 th:text="${categoria.nome}"></h4>
-                </div>
-            </div>
-            <label class="control-label">Temporadas</label>
-            <div class="form-row" th:each="temporada : ${temporadas}">
-                <div class="col-md-5 mb-1">
-                    <a th:href="@{./temporada/{idTemporada}/detalhes(idTemporada=${temporada.id})}" type="button" class="btn btn-primary">Temporada <span class="badge badge-light" th:text="${temporada.numero}"></span></a>
-                    <a type="button" class="btn btn-primary">Ano <span class="badge badge-light" th:text="${temporada.ano}"></span></a>
-                </div> -->

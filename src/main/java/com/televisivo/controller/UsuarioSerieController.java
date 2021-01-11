@@ -60,12 +60,13 @@ public class UsuarioSerieController {
     public ModelAndView detalharSerie(@AuthenticationPrincipal UsuarioSistema usuarioLogado, @PathVariable("id") Long id, SerieFilter serieFilter) {
         Serie serie = serieService.getOne(id);
         ModelAndView modelAndView = new ModelAndView("/usuario_serie/detalhes_serie");
-        modelAndView.addObject(SERIE, serie);
+        modelAndView.addObject(SERIE, usuarioSerieService.verifica(serie, usuarioLogado));
         modelAndView.addObject("temporadas", serieService.temporadas(serie));
         for (int i = 0; i < serieService.temporadas(serie).size(); i++) {
             modelAndView.addObject("episodios", usuarioSerieService.episodios(usuarioLogado, serieService.temporadas(serie).get(i).getId()));
         }
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        atualiza(usuarioLogado);
         return modelAndView;
     }
 

@@ -17,13 +17,9 @@
 			<div class="card">
 				<ul class="navbar-nav">
 					<li class="nav-item px-2 dropdown">
-						<a class="nav-link dropdown-toggle" id="paginacaoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Paginação</a>
-						<div class="dropdown-menu dropdown-menu-left dropdown-mega" aria-labelledby="paginacaoDropdown">
-							<div class="d-md-flex align-items-start justify-content-start">
-								<div class="dropdown-mega-list">
-									<a class="dropdown-item" th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:href="@{/?size={id}(id=${pageSize})}"></a>
-								</div>
-							</div>
+						<a class="nav-link dropdown-toggle" id="paginacaoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Paginação </a>
+						<div class="dropdown-menu dropdown-menu-left" aria-labelledby="paginacaoDropdown">
+							<a class="dropdown-item" th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:href="@{/?size={id}(id=${pageSize})}"></a>
 						</div>
 					</li>
 				</ul>
@@ -32,7 +28,7 @@
 				<div class="col-12 col-md-6 col-lg-2" th:each="serie :${pagina.conteudo}">
 					<form th:action="@{/acao}" method="POST">
 						<div class="card">
-							<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Capa">
+							<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Poster da série">
 							<div class="card-header px-4 pt-4">
 								<a th:href="@{/serie/{id}(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
 								<a class="badge badge-primary mr-1 my-1" th:each="categoria : *{serie.categorias}" th:href="@{/categoria/{id}(id=*{categoria.id})}" th:text="*{categoria.nome}"></a>

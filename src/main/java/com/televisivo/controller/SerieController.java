@@ -61,6 +61,7 @@ public class SerieController {
     private static final String HTML_SERIE = "/serie/serie";
     private static final String ALTERAR = "redirect:./alterar";
     private static final String POSSIVEL = "Não foi possivel salvar ";
+    private static final String CADASTRO = "redirect:./cadastro";
 
     @Autowired
     private SerieService serieService;
@@ -96,7 +97,7 @@ public class SerieController {
     public String salvar(@Valid Serie serie, BindingResult result, RedirectAttributes attributes, @RequestParam("fileImage") MultipartFile multipartFile) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, MESSAGE);
-            return "redirect:/serie/cadastro";
+            return CADASTRO;
         }
         String fileName = multipartFile.getOriginalFilename();
         Path uploadPath = Paths.get("serie-imagem/" + serie.getId());
@@ -106,7 +107,7 @@ public class SerieController {
                 Files.createDirectories(uploadPath);
             } catch (Exception e) {
                 attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
-                return ALTERAR;
+                return CADASTRO;
             }
         }
 
@@ -115,11 +116,17 @@ public class SerieController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
-            return ALTERAR;
+            return CADASTRO;
         }
-        serie.setPhotos(fileName);
-        serieService.save(serie);
-        serieService.salvarTemporada(serie);
+
+        try {
+            serie.setPhotos(fileName);
+            serieService.save(serie);
+            serieService.salvarTemporada(serie);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, MESSAGE);
+            return CADASTRO;
+        }
         attributes.addFlashAttribute(SUCCESS, "Série adicionada.");
         return "redirect:./" + serie.getId() + "/alterar";
     }
@@ -174,8 +181,13 @@ public class SerieController {
             }
             serie.setPhotos(fileName);
         }
-        serieService.salvarTemporada(serie);
-        serieService.update(serie);
+        try {
+            serieService.salvarTemporada(serie);
+            serieService.update(serie);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, MESSAGE);
+            return ALTERAR;
+        }
         attributes.addFlashAttribute(SUCCESS, "Série alterada.");
         return DETALHES;
     }
@@ -186,7 +198,12 @@ public class SerieController {
             attributes.addFlashAttribute(FAIL, MESSAGE);
             return viewAlterar(id);
         }
-        serieService.salvarTemporada(serie);
+        try {
+            serieService.salvarTemporada(serie);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, MESSAGE);
+            return viewAlterar(id);
+        }
         ModelAndView modelAndView = new ModelAndView(HTML_SERIE);
         modelAndView.addObject(SERIE, serieService.adicionarTemporada(serie));
         modelAndView.addObject(TEMPORADAS, serieService.temporadas(serie));
@@ -256,7 +273,7 @@ public class SerieController {
 		}
     }
 
-    @GetMapping("/serie")
+    @GetMapping("/series")
     public ResponseEntity<byte[]> imprimeRelatorioPdf() {
     	byte[] relatorio = jasperReportsService.imprimeRelatorioNoNavegador(SERIE);
     	return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(relatorio);

@@ -71,7 +71,7 @@
 											<div class="form-group col-md-2">
 												<label for="genero">Gênero</label>
 													<select required class="form-control" th:field="*{genero}" id="genero" name="genero">
-													<option value="" selected="">Selecione...</option>
+													<option value="" selected="">Selecione ...</option>
 													<option th:each="genero : ${generos}" th:value="${genero}" th:text="${genero.descricao}" th:classappend="${#fields.hasErrors('genero')} ? 'is-invalid'"></option>
 												</select>
 												<div class="invalid-feedback">
