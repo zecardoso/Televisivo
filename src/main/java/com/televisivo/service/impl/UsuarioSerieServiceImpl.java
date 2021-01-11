@@ -116,11 +116,6 @@ public class UsuarioSerieServiceImpl implements UsuarioSerieService {
     }
 
     @Override
-    public UsuarioSerie save(UsuarioSerie usuarioSerie) {
-        return usuarioSerieRepository.save(usuarioSerie);
-    }
-
-    @Override
     public List<Episodio> episodios(UsuarioSistema usuarioLogado, Long temporada) {
         List<Episodio> lista = temporadaRepository.episodios(temporada);
         for (int i = 0; i < lista.size(); i++) {

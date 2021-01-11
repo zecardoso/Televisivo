@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
+import com.televisivo.model.Role;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Servico;
 import com.televisivo.repository.filters.SerieFilter;
@@ -43,6 +44,7 @@ public class UsuarioSerieController {
     private static final String REFERER = "Referer";
     private static final String ARQUIVAR = "arquivar";
     private static final String DESARQUIVAR = "desarquivar";
+    private static final String ADMIN = "admin";
 
     @Autowired
     private UsuarioSerieService usuarioSerieService;
@@ -66,6 +68,7 @@ public class UsuarioSerieController {
             modelAndView.addObject("episodios", usuarioSerieService.episodios(usuarioLogado, serieService.temporadas(serie).get(i).getId()));
         }
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -77,6 +80,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("title", "salvas");
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -89,6 +93,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("atributo", categoria);
         model.addAttribute("breadcrumb", "Categoria");
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -101,6 +106,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("atributo", servico);
         model.addAttribute("breadcrumb", "Serviço");
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -112,6 +118,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         model.addAttribute("title", "arquivadas");
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -123,6 +130,7 @@ public class UsuarioSerieController {
         modelAndView.addObject(LISTA, lista);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
         atualiza(usuarioLogado);
+        modelAndView.addObject(ADMIN, admin(usuarioLogado));
         return modelAndView;
     }
 
@@ -212,5 +220,14 @@ public class UsuarioSerieController {
         usuarioSerieService.atualizarQtdSeries(usuarioLogado);
         usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         usuarioEpisodioService.atualizarQtdEpisodios(usuarioLogado);
+    }
+
+    public Boolean admin(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        for (Role role : usuarioLogado.getUsuario().getRoles()) {
+            if (role.getNome().equals("ADMINISTRADOR")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

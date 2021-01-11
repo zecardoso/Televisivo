@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.televisivo.config.TelevisivoConfig;
 import com.televisivo.model.Categoria;
+import com.televisivo.model.Role;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Servico;
 import com.televisivo.model.Usuario;
@@ -75,6 +76,7 @@ public class HomeController {
         modelAndView.addObject("size", size.orElse(TelevisivoConfig.INITIAL_PAGE_SIZE));
         modelAndView.addObject("pagina", pagina);
         modelAndView.addObject(USUARIO, usuarioService.getOne(usuarioLogado.getUsuario().getId()));
+        modelAndView.addObject("admin", admin(usuarioLogado));
         atualiza(usuarioLogado);
         return modelAndView;
     }
@@ -158,5 +160,14 @@ public class HomeController {
         usuarioSerieService.atualizarQtdSeries(usuarioLogado);
         usuarioSerieService.atualizarQtdSeriesArq(usuarioLogado);
         usuarioEpisodioService.atualizarQtdEpisodios(usuarioLogado);
+    }
+
+    public Boolean admin(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        for (Role role : usuarioLogado.getUsuario().getRoles()) {
+            if (role.getNome().equals("ADMINISTRADOR")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

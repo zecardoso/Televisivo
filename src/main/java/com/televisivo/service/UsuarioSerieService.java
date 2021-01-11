@@ -6,7 +6,6 @@ import com.televisivo.model.Categoria;
 import com.televisivo.model.Episodio;
 import com.televisivo.model.Serie;
 import com.televisivo.model.Servico;
-import com.televisivo.model.UsuarioSerie;
 import com.televisivo.repository.filters.SerieFilter;
 import com.televisivo.security.UsuarioSistema;
 
@@ -26,7 +25,6 @@ public interface UsuarioSerieService {
     List<Servico> findAllServicos();
 
     Serie verifica(Serie serie, UsuarioSistema usuarioLogado);
-    UsuarioSerie save(UsuarioSerie usuarioSerie);
     void salvar(UsuarioSistema usuarioLogado, Long serie);
     void arquivada(UsuarioSistema usuarioLogado, Long serie, Boolean arquivada);
     void remover(UsuarioSistema usuarioLogado, Long serie);

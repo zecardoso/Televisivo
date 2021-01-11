@@ -25,19 +25,21 @@
 				</ul>
 			</div>
 			<div class="row">
-				<div class="col-12 col-md-6 col-lg-2" th:each="serie :${pagina.conteudo}">
+				<div class="col-12 col-md-6 col-lg-2" th:each="serie : ${pagina.conteudo}">
 					<form th:action="@{/acao}" method="POST">
-						<div class="card">
-							<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Poster da série">
-							<div class="card-header px-4 pt-4">
-								<a th:href="@{/serie/{id}(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
-								<a class="badge badge-primary mr-1 my-1" th:each="categoria : *{serie.categorias}" th:href="@{/categoria/{id}(id=*{categoria.id})}" th:text="*{categoria.nome}"></a>
+						<a th:href="@{/serie/{id}(id=${serie.id})}">
+							<div class="card">
+								<img class="card-img-top" th:src="@{${serie.photoImagePath}}" onerror="src='/img/serie.jpg'" alt="Poster da série">
+								<div class="card-header px-4 pt-4">
+									<a th:href="@{/serie/{id}(id=${serie.id})}"><h5 class="h6 card-title" th:text="*{serie.nome} + ' - ' + *{serie.ano}"></h5></a>
+									<a class="badge badge-primary mr-1 my-1" th:each="categoria : *{serie.categorias}" th:href="@{/categoria/{id}(id=*{categoria.id})}" th:text="*{categoria.nome}"></a>
+								</div>
+								<div class="card-body">
+									<button th:class="${serie.salva} ? 'btn btn-secondary' : (${serie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${serie.salva} ? 'arquivar' : (${serie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${serie.id}" th:text="${serie.salva} ? 'Arquivar' : (${serie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>
+									<button th:if="${serie.salva} OR ${serie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{serie.id}">Remover</button>
+								</div>
 							</div>
-							<div class="card-body">
-								<button th:class="${serie.salva} ? 'btn btn-secondary' : (${serie.arquivada} ? 'btn btn-secondary' : 'btn btn-success')" type="submit" th:name="${serie.salva} ? 'arquivar' : (${serie.arquivada} ? 'desarquivar' : 'salvar')" th:value="${serie.id}" th:text="${serie.salva} ? 'Arquivar' : (${serie.arquivada} ? 'Desarquivar' : 'Salvar')"></button>
-								<button th:if="${serie.salva} OR ${serie.arquivada}" class="btn btn-danger" type="submit" name="remover" th:value="*{serie.id}">Remover</button>
-							</div>
-						</div>
+						</a>
 					</form>
 				</div>
 			</div>

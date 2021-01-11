@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.televisivo.model.Categoria;
+import com.televisivo.model.Role;
 import com.televisivo.model.Servico;
 import com.televisivo.model.Usuario;
 import com.televisivo.model.enumerate.Genero;
@@ -18,7 +19,6 @@ import com.televisivo.service.exceptions.SenhaError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,6 +46,7 @@ public class ContaController {
     public ModelAndView viewAlterar(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("perfil/perfil");
         modelAndView.addObject(USUARIO, contaService.getOne(usuarioLogado.getUsuario()));
+        modelAndView.addObject("admin", admin(usuarioLogado));
         return modelAndView;
     }
 
@@ -53,11 +54,12 @@ public class ContaController {
     public ModelAndView detalhes(@AuthenticationPrincipal UsuarioSistema usuarioLogado, SerieFilter serieFilter) {
         ModelAndView modelAndView = new ModelAndView("perfil/detalhes");
         modelAndView.addObject(USUARIO, contaService.getOne(usuarioLogado.getUsuario()));
+        modelAndView.addObject("admin", admin(usuarioLogado));
         return modelAndView;
     }
 
     @PostMapping("/conta")
-    public String alterar(@Valid Usuario usuario, BindingResult result, Model model, @AuthenticationPrincipal UsuarioSistema usuarioLogado, RedirectAttributes attributes) {
+    public String alterar(@Valid Usuario usuario, BindingResult result, @AuthenticationPrincipal UsuarioSistema usuarioLogado, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute(FAIL, "Verifique os campos!");
             return ALTERAR;
@@ -101,5 +103,14 @@ public class ContaController {
     @ModelAttribute("servicos")
 	public List<Servico> getServicos() {
 		return usuarioSerieService.findAllServicos();
+    }
+
+    public Boolean admin(@AuthenticationPrincipal UsuarioSistema usuarioLogado) {
+        for (Role role : usuarioLogado.getUsuario().getRoles()) {
+            if (role.getNome().equals("ADMINISTRADOR")) {
+                return true;
+            }
+        }
+        return false;
     }
 }
