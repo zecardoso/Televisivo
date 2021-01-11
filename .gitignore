@@ -31,4 +31,4 @@ build/
 .vscode/
 mysql.session.sql
 
-/serie-imagem/**
+!**/serie-imagem/**
