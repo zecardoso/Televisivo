@@ -100,6 +100,17 @@ public class SerieController {
             return CADASTRO;
         }
         String fileName = multipartFile.getOriginalFilename();
+
+        serie.setPhotos(fileName);
+
+        try {
+            serieService.save(serie);
+            serieService.salvarTemporada(serie);
+        } catch (Exception e) {
+            attributes.addFlashAttribute(FAIL, MESSAGE);
+            return CADASTRO;
+        }
+
         Path uploadPath = Paths.get("serie-imagem/" + serie.getId());
 
         if (!Files.exists(uploadPath)){
@@ -116,15 +127,6 @@ public class SerieController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             attributes.addFlashAttribute(FAIL, POSSIVEL + fileName);
-            return CADASTRO;
-        }
-
-        try {
-            serie.setPhotos(fileName);
-            serieService.save(serie);
-            serieService.salvarTemporada(serie);
-        } catch (Exception e) {
-            attributes.addFlashAttribute(FAIL, MESSAGE);
             return CADASTRO;
         }
         attributes.addFlashAttribute(SUCCESS, "Série adicionada.");
