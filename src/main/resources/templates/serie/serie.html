@@ -97,19 +97,24 @@
                         </div>
                         <div th:if="${id} != null">
                             <label class="control-label">Temporadas</label>
-                            <div class="form-row align-items-center" th:each="temporadas, rowStat :*{temporadas}">
-                                <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
-                                <div class="col-auto">
-                                    <label class="sr-only" for="numero">Número</label>
-                                    <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
-                                </div>
-                                <div class="col-auto">
-                                    <label class="sr-only" for="ano">Ano</label>
-                                    <input required type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
-                                </div>
-                                <div class="col-auto">
-                                    <button th:if="*{temporadas[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{temporadas[__${rowStat.index}__].id}">Remover</button>
-                                </div>
+                            <table class="form-row align-items-center">
+                                <tr>
+                                  <th>Número</th>
+                                  <th>Ano</th>
+                                </tr>
+                                <tr th:each="temporadas, rowStat :*{temporadas}">
+                                    <input type="hidden" th:field="*{temporadas[__${rowStat.index}__].id}"/>
+                                    <td>
+                                        <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{temporadas[__${rowStat.index}__].numero}"/>
+                                    </td>
+                                    <td>
+                                        <input required type="number" class="form-control mb-2" placeholder="Ano" th:field="*{temporadas[__${rowStat.index}__].ano}"/>
+                                    </td>
+                                    <td>
+                                        <button th:if="*{temporadas[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{temporadas[__${rowStat.index}__].id}">Remover</button>
+                                    </td>
+                                </tr>
+                            </table>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>

@@ -46,31 +46,35 @@
                             </div>
                         </div>
                         <label class="control-label">Episodios</label>
-                        <div class="form-row align-items-center" th:each="episodios, rowStat :*{episodios}">
-                            <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
-                            <div class="col-auto">
-                                <label class="sr-only" for="numero">Número do episódio</label>
-                                <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
-                            </div>
-                            <div class="col-auto">
-                                <label class="sr-only" for="nome">Nome do episódio</label>
-                                <input required type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
-                            </div>
-                            <div class="col-auto">
-                                <label class="sr-only" for="enredo">Enredo</label>
-                                <input required type="text" class="form-control mb-2" placeholder="Enredo" th:field="*{episodios[__${rowStat.index}__].enredo}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].enredo')} ? 'is-invalid'">
-                            </div>
-                            <div class="col-auto">
-                                <label class="sr-only" for="duracao">Duração</label>
-                                <input required type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
-                            </div>
-                            <div class="col-auto">
-                                <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
-                            </div>
-                            <div class="col-auto">
-                                <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-secondary mb-2" name="duplicateRow" th:value="*{episodios[__${rowStat.index}__].id}">Duplicar</button>
-                            </div>
-                        </div>
+                        <table class="form-row align-items-center">
+                            <tr>
+                              <th>Número</th>
+                              <th>Nome</th>
+                              <th>Enredo</th>
+                              <th>Duração</th>
+                            </tr>
+                            <tr th:each="episodios, rowStat :*{episodios}">
+                                <input type="hidden" th:field="*{episodios[__${rowStat.index}__].id}"/>
+                                <td>
+                                    <input required type="number" class="form-control mb-2" placeholder="Número" th:field="*{episodios[__${rowStat.index}__].numero}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].numero')} ? 'is-invalid'">
+                                </td>
+                                <td>
+                                    <input required type="text" class="form-control mb-2" placeholder="Nome" th:field="*{episodios[__${rowStat.index}__].nome}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].nome')} ? 'is-invalid'">
+                                </td>
+                                <td>
+                                    <input required type="text" class="form-control mb-2" placeholder="Enredo" th:field="*{episodios[__${rowStat.index}__].enredo}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].enredo')} ? 'is-invalid'">
+                                </td>
+                                <td>
+                                    <input required type="number" class="form-control mb-2" placeholder="Duração" th:field="*{episodios[__${rowStat.index}__].duracao}" th:classappend="${#fields.hasErrors('episodios[__${rowStat.index}__].duracao')} ? 'is-invalid'">
+                                </td>
+                                <td>
+                                    <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-danger mb-2" name="removeRow" th:value="*{episodios[__${rowStat.index}__].id}">Remover</button>
+                                </td>
+                                <td>
+                                    <button th:if="*{episodios[__${rowStat.index}__].id} != null" type="submit" class="btn btn-secondary mb-2" name="duplicateRow" th:value="*{episodios[__${rowStat.index}__].id}">Duplicar</button>
+                                </td>
+                            </tr>
+                        </table>
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit" name="addRow" value="addRow">Adicionar</button>
                         </div>
